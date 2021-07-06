@@ -102,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.green,
         // elevation: 0,
         onPressed: () {
           Navigator.push(
