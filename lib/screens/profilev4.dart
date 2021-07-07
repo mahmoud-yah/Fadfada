@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_app/app_localizations.dart';
+
 // import 'package:intro_app/data/data.dart';
 // import 'package:intro_app/models/models.dart';
 // import 'package:intro_app/widgets/post_container.dart';
@@ -35,7 +36,8 @@ class ProfileV4 extends StatelessWidget {
       endDrawer: Drawer(
         // elevation: 10.0,
         child: Container(
-          color: Colors.black,
+          // color: Colors.black,
+          color: Theme.of(context).backgroundColor,
           // margin: EdgeInsets.only(top: 25.0),
           padding: EdgeInsets.only(top: 30.0),
           child: Column(
@@ -43,12 +45,17 @@ class ProfileV4 extends StatelessWidget {
               ListTile(
                 leading: Icon(
                   Icons.edit_outlined,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
                 title: Text(
                   // 'Edit Profile',
                   AppLocalizations.of(context).translate("editProfile"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(
@@ -64,71 +71,99 @@ class ProfileV4 extends StatelessWidget {
                 // tileColor: Colors.grey,
               ),
               ListTile(
-                leading: Icon(
-                  Icons.bookmarks,
-                  color: Colors.white,
-                ),
+                leading: Icon(Icons.bookmarks,
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor),
                 title: Text(
                   // 'Saved',
                   AppLocalizations.of(context).translate("saved"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
               ListTile(
                 leading: Icon(
                   Icons.settings,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
                 title: Text(
                   // 'Settings',
                   AppLocalizations.of(context).translate("settings"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
               ListTile(
                 leading: Icon(
                   Icons.privacy_tip_outlined,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
                 title: Text(
                   // 'Privacy',
                   AppLocalizations.of(context).translate("privacy"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
               ListTile(
                 leading: Icon(
                   Icons.help_outline,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
                 title: Text(
                   // 'Help',
                   AppLocalizations.of(context).translate("help"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
               Expanded(
                 child: ListTile(
                   leading: Icon(
                     Icons.contact_page_outlined,
-                    color: Colors.white,
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                   ),
                   title: Text(
                     // 'About',
                     AppLocalizations.of(context).translate("about"),
-                    style: TextStyle(color: Colors.white, fontSize: 18.0),
+                    style: TextStyle(
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                    ),
                   ),
                 ),
               ),
               ListTile(
                 leading: Icon(
                   Icons.logout,
-                  color: Colors.white,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
                 ),
                 title: Text(
                   // 'Logout',
                   AppLocalizations.of(context).translate("logout"),
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                  style: TextStyle(
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                    fontSize: 18.0,
+                  ),
                 ),
               ),
             ],
@@ -147,11 +182,9 @@ class ProfileV4 extends StatelessWidget {
             print('img');
           },
           child:
-          // CachedNetworkImage(imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',fit: BoxFit.cover,)
-          Image(
-            image: AssetImage(
-              'images/David.jpg'
-            ),
+              // CachedNetworkImage(imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',fit: BoxFit.cover,)
+              Image(
+            image: AssetImage('images/David.jpg'),
             fit: BoxFit.cover,
           ),
         ),
@@ -171,7 +204,8 @@ class ProfileV4 extends StatelessWidget {
                         Text(
                           '17',
                           style: TextStyle(
-                            color: Colors.white,
+                            // color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -183,7 +217,8 @@ class ProfileV4 extends StatelessWidget {
                           // 'Posts',
                           AppLocalizations.of(context).translate("posts"),
                           style: TextStyle(
-                            color: Colors.white,
+                            // color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -195,7 +230,8 @@ class ProfileV4 extends StatelessWidget {
                         Text(
                           '1473',
                           style: TextStyle(
-                            color: Colors.white,
+                            // color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -207,7 +243,8 @@ class ProfileV4 extends StatelessWidget {
                           // 'Followers',
                           AppLocalizations.of(context).translate("followers"),
                           style: TextStyle(
-                            color: Colors.white,
+                            // color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                             fontSize: 15.0,
                             fontWeight: FontWeight.bold,
                           ),
@@ -261,7 +298,8 @@ class ProfileV4 extends StatelessWidget {
                                 Text(
                                   'David Brooks',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    // color: Colors.white,
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 15.0,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -272,7 +310,8 @@ class ProfileV4 extends StatelessWidget {
                                 Text(
                                   'Damascus, SY',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    // color: Colors.white,
+                                    color: Theme.of(context).primaryColor,
                                     fontSize: 14.0,
                                   ),
                                 ),
@@ -288,13 +327,18 @@ class ProfileV4 extends StatelessWidget {
                               },
                               child: Text(
                                 // 'Edit Profile',
-                                AppLocalizations.of(context).translate("editProfile"),
+                                AppLocalizations.of(context)
+                                    .translate("editProfile"),
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               style: OutlinedButton.styleFrom(
-                                  primary: Colors.blueAccent,
+                                  // primary: Colors.blueAccent,
+                                  primary: Theme.of(context).accentColor,
                                   side: BorderSide(
-                                      color: Colors.blueAccent, width: 0.4)),
+                                    // color: Colors.blueAccent,
+                                    color: Theme.of(context).accentColor,
+                                    width: 0.4,
+                                  )),
                             ),
                           ],
                         ),
@@ -310,7 +354,8 @@ class ProfileV4 extends StatelessWidget {
                               // 'Syrian..\n19 Years old\nAIU Arab International University\Love Music, Art, Swimming, and rkoob al5el',
                               'Syrian..\n18 Years old\nAIU Arab International University\nLove Music, Art, Swimming, and rkoob al5el\nOld enough to know better 😶\nEvery day brings an opportunity to do something legendary.\n"Where\'s your will to be weird?" - Jim Morrison',
                               style: TextStyle(
-                                color: Colors.white,
+                                // color: Colors.white,
+                                color: Theme.of(context).primaryColor,
                                 letterSpacing: 0.5,
                                 fontSize: 14.5,
                                 height: 1.25,
@@ -338,10 +383,12 @@ class ProfileV4 extends StatelessWidget {
                                 },
                                 child: Text(
                                   // 'User posts',
-                                  AppLocalizations.of(context).translate("userPosts"),
+                                  AppLocalizations.of(context)
+                                      .translate("userPosts"),
                                   style: TextStyle(fontSize: 20.0),
                                 ),
                                 style: ElevatedButton.styleFrom(
+                                    primary: Theme.of(context).accentColor,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(28.0),

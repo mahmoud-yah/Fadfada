@@ -50,7 +50,8 @@ class _ChatScreenState extends State<ChatScreen> {
               Text(
                 message.time,
                 style: TextStyle(
-                    color: Colors.white,
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     fontSize: 11.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -112,26 +113,32 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(
               Icons.photo,
-              // color: Theme.of(context).primaryColor,
-              color: Colors.white,
+              color: Theme.of(context).accentColor,
+              // color: Colors.white,
             ),
             iconSize: 25.0,
             onPressed: () {},
           ),
           Expanded(
               child: TextField(
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              // color: Theme.of(context).primaryColor,
+            ),
             decoration: InputDecoration.collapsed(
               // hintText: 'Send a message...',
               hintText: AppLocalizations.of(context).translate("sendMessage"),
-              hintStyle: TextStyle(color: Colors.white),
+              hintStyle: TextStyle(
+                // color: Colors.white,
+                color: Theme.of(context).accentColor,
+              ),
             ),
           )),
           IconButton(
             icon: Icon(
               Icons.send,
-              // color: Theme.of(context).primaryColor,
-              color: Colors.white,
+              color: Theme.of(context).accentColor,
+              // color: Colors.white,
             ),
             iconSize: 25.0,
             onPressed: () {},
@@ -145,32 +152,44 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
+        brightness: Theme.of(context).brightness,
         elevation: 0,
         // backgroundColor: Theme.of(context).primaryColor,
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.keyboard_backspace_rounded),
+          icon: Icon(
+            Icons.keyboard_backspace_rounded,
+            color: Theme.of(context).primaryColor,
+            size: 35.0,
+          ),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
         title: Text(
           widget.user.name,
-          style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Theme.of(context).accentColor,
+            fontSize: 28.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(
             icon: Icon(Icons.more_horiz),
             iconSize: 30.0,
-            color: Colors.white,
+            // color: Colors.white,
+            color: Theme.of(context).primaryColor,
             onPressed: () {},
           ),
         ],
       ),
-      // backgroundColor: Theme.of(context).primaryColor,
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
+      // backgroundColor: Colors.black,
+
       body: Column(
         children: [
           Expanded(

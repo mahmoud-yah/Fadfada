@@ -7,6 +7,8 @@ import 'package:intro_app/screens/create_post.dart';
 // import 'package:intro_app/widgets/favorite_contacts.dart';
 import 'package:intro_app/widgets/widgets.dart';
 import 'package:intro_app/widgets/storiesv2.dart';
+// import 'package:stacked_themes/stacked_themes.dart';
+
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -29,13 +31,17 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      backgroundColor: Color(0xFF242526),
+      // backgroundColor: Color(0xFF242526),
       // backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            brightness: Brightness.dark,
-            backgroundColor: Colors.black,
+            iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+            // brightness: Brightness.dark,
+            brightness: Theme.of(context).brightness,
+            // backgroundColor: Colors.black,
+            backgroundColor: Theme.of(context).backgroundColor,
             title: Text(
               AppLocalizations.of(context).translate('logo'),
               // 'fadfada',
@@ -49,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
             leadingWidth: 0,
             leading: Container(),
             floating: true,
+            // actions: [IconButton(onPressed: ()=>Scaffold.of(context).openEndDrawer(), icon: Icon(Icons.ac_unit))],
             // actions: [
             //   // Container(
             //   //   margin: EdgeInsets.all(6.0),
@@ -102,13 +109,18 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green,
+        backgroundColor: Theme.of(context).accentColor,
         // elevation: 0,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => CreatePost()),
-          );
+          // setState(() {
+          //   getThemeManager(context).selectThemeAtIndex(0
+          //   );
+          // });
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => CreatePost()),
+            );
         },
         // child: Text('Post',style: TextStyle(color: Colors.white),),
         child: Icon(

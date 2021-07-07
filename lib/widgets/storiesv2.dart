@@ -36,16 +36,19 @@ class StoriesTest extends StatelessWidget {
             //     ],
             //   ),
             // ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 25.0),
-              child: Text(
-                AppLocalizations.of(context).translate("stories"),
-                // 'Stories',
-                style: TextStyle(
-                  color: Colors.blueGrey,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.0,
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  AppLocalizations.of(context).translate("stories"),
+                  // 'Stories',
+                  style: TextStyle(
+                    // color: Colors.blueGrey,
+                    color: Theme.of(context).accentColor,
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.0,
+                  ),
                 ),
               ),
             ),

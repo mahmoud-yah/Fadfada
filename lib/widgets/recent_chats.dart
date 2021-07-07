@@ -119,12 +119,13 @@ class RecentChats extends StatelessWidget {
                                       'NEW',
                                       style: TextStyle(
                                           fontSize: 11.0,
-                                          color: Colors.white,
+                                          // color: Colors.white,
+                                          color: Theme.of(context).primaryColor,
                                           fontWeight: FontWeight.w600),
                                     ),
                                     decoration: BoxDecoration(
                                       // color: Colors.deepOrange,
-                                      color: Theme.of(context).primaryColor,
+                                      color: Theme.of(context).accentColor,
                                       borderRadius: BorderRadius.circular(30.0),
                                     ),
                                     width: 40.0,

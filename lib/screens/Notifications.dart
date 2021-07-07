@@ -8,20 +8,24 @@ class Notifications extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        brightness: Brightness.dark,
+        // brightness: Brightness.dark,
+        brightness: Theme.of(context).brightness,
         title: Text(
           // 'Notifications',
           AppLocalizations.of(context).translate("notifications"),
           style: TextStyle(
             fontSize: 24.0,
+            color: Theme.of(context).accentColor,
           ),
         ),
-        backgroundColor: Colors.black,
+        // backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
         actions: [
           IconButton(
             icon: Icon(Icons.search),
             onPressed: () {},
-            color: Colors.white,
+            // color: Colors.white,
+            color: Theme.of(context).primaryColor,
             iconSize: 30.0,
           )
         ],

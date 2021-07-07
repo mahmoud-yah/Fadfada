@@ -13,7 +13,8 @@ class PostContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // height: 100.0,
-      color: Colors.black,
+      // color: Colors.black,
+      color: Theme.of(context).backgroundColor,
       // decoration: BoxConstraints,
       margin: const EdgeInsets.symmetric(vertical: 0.5),
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -29,7 +30,8 @@ class PostContainer extends StatelessWidget {
                 Text(
                   post.caption,
                   style: TextStyle(
-                    color: Colors.white,
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
                     height: 1.25,
                     letterSpacing: 0.5,
                   ),
@@ -44,17 +46,17 @@ class PostContainer extends StatelessWidget {
           ),
           post.imageUrl != null
               ?
-          // Padding(
-          //         padding: const EdgeInsets.symmetric(vertical: 8.0),
-          //         child: CachedNetworkImage(imageUrl: post.imageUrl),
-          //       )
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              child: CachedNetworkImage(imageUrl: post.imageUrl),
-            ),
-          )
+              // Padding(
+              //         padding: const EdgeInsets.symmetric(vertical: 8.0),
+              //         child: CachedNetworkImage(imageUrl: post.imageUrl),
+              //       )
+              Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    child: CachedNetworkImage(imageUrl: post.imageUrl),
+                  ),
+                )
               // Container(
               //   decoration: BoxDecoration(image: DecorationImage(image: NetworkImage(post.imageUrl),fit: BoxFit.cover)),
               //   constraints: BoxConstraints(maxHeight: 400.0),
@@ -84,7 +86,7 @@ class PostContainer extends StatelessWidget {
           //   ],
           // ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -92,17 +94,26 @@ class PostContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   // crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(post.isLiked?Icons.favorite:Icons.favorite_border,color:post.isLiked? Colors.red.shade800:Colors.white,),
-                    SizedBox(height: 3.0 ,),
+                    Icon(
+                      post.isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: post.isLiked
+                          ? Colors.red.shade800
+                          : Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      height: 3.0,
+                    ),
                     Text(
                       post.likes.toString(),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     // Text(
                     //   'Likes',
                     //   style: TextStyle(color: Colors.white),
                     // ),
-
                   ],
                 ),
                 // OutlinedButton(
@@ -125,17 +136,25 @@ class PostContainer extends StatelessWidget {
                 //     )),
                 Column(
                   children: [
-                    Icon(Icons.mode_comment,color: Colors.white,),
-                    SizedBox(height: 3.0 ,),
+                    Icon(
+                      Icons.mode_comment,
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    SizedBox(
+                      height: 3.0,
+                    ),
                     Text(
                       post.comments.toString(),
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     // Text(
                     //   'Comments',
                     //   style: TextStyle(color: Colors.white),
                     // ),
-
                   ],
                 ),
               ],
@@ -171,8 +190,11 @@ class _PostHeader extends StatelessWidget {
             children: [
               Text(
                 post.user.name,
-                style:
-                    TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  // color: Colors.white,
+                  color: Theme.of(context).primaryColor,
+                ),
               ),
               SizedBox(
                 height: 2.0,
@@ -199,7 +221,8 @@ class _PostHeader extends StatelessWidget {
         IconButton(
           icon: Icon(
             Icons.more_vert,
-            color: Colors.white,
+            // color: Colors.white,
+            color: Theme.of(context).primaryColor,
           ),
           onPressed: () => print('more'),
         ),

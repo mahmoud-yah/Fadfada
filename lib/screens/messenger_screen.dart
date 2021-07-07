@@ -15,10 +15,13 @@ class _MessengerScreenState extends State<MessengerScreen> {
       // backgroundColor: Theme
       //     .of(context)
       //     .primaryColor,
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        brightness: Brightness.dark,
-        backgroundColor: Colors.black,
+        // brightness: Brightness.light,
+        brightness: Theme.of(context).brightness,
+        // backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
         // centerTitle: true,
         // leading: IconButton(
         //   icon: Icon(Icons.menu),
@@ -31,6 +34,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
           AppLocalizations.of(context).translate("chats"),
           // textAlign: TextAlign.center,
           style: TextStyle(
+            color: Theme.of(context).accentColor,
             fontSize: 24,
             fontWeight: FontWeight.bold,
           ),
@@ -45,12 +49,12 @@ class _MessengerScreenState extends State<MessengerScreen> {
           ),
         ],
       ),
-      drawer: Drawer(
-        // elevation: 10.0,
-        child: Container(
-          color: Colors.black,
-        ),
-      ),
+      // drawer: Drawer(
+      //   // elevation: 10.0,
+      //   child: Container(
+      //     color: Colors.black,
+      //   ),
+      // ),
       body: Column(
         children: <Widget>[
           // CategorySelector(),

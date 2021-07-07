@@ -63,12 +63,15 @@ class _NavScreenState extends State<NavScreen> {
         //   onTap: (index) => setState(() => _selectedIndex = index),
         // ),
         bottomNavigationBar: BottomNavigationBar(
+          iconSize: 28,
+          fixedColor: Theme.of(context).accentColor,
           currentIndex: _selectedIndex,
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: AppLocalizations.of(context).translate("home"),
-              backgroundColor: Colors.black,
+              // backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).backgroundColor,
             ),
 
             // BottomNavigationBarItem(
@@ -79,20 +82,23 @@ class _NavScreenState extends State<NavScreen> {
             BottomNavigationBarItem(
               icon: Icon(MdiIcons.bellOutline),
               label: AppLocalizations.of(context).translate("notifications"),
-              backgroundColor: Colors.black,
+              // backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).backgroundColor,
             ),
 
             BottomNavigationBarItem(
               // icon: Icon(MdiIcons.facebookMessenger),
               icon: Icon(Icons.mail_outline),
               label: AppLocalizations.of(context).translate("messages"),
-              backgroundColor: Colors.black,
+              // backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).backgroundColor,
             ),
 
             BottomNavigationBarItem(
               icon: Icon(MdiIcons.accountCircleOutline),
               label: AppLocalizations.of(context).translate("profile"),
-              backgroundColor: Colors.black,
+              // backgroundColor: Colors.black,
+              backgroundColor: Theme.of(context).backgroundColor,
             ),
           ],
           onTap: (index) {

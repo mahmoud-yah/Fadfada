@@ -8,27 +8,34 @@ class CreatePost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        brightness: Brightness.dark,
-        backgroundColor: Colors.black,
+        // brightness: Brightness.dark,
+        brightness: Theme.of(context).brightness,
+        // backgroundColor: Colors.black,
+        backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
           AppLocalizations.of(context).translate("createPost"),
           // 'Create Post',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            // color: Colors.white,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.close_rounded,
             size: 30.0,
-            color: Colors.blueAccent,
+            // color: Colors.blueAccent,
+            color: Theme.of(context).accentColor,
           ),
           onPressed: () => Navigator.pop(context),
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 8.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
             child: ElevatedButton(
               onPressed: () {},
               child: Text(
@@ -37,11 +44,12 @@ class CreatePost extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.blueAccent,
+                // primary: Colors.blueAccent,
+                primary: Theme.of(context).accentColor,
                 shape: new RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20.0))),
                 elevation: 0,
-                padding: EdgeInsets.symmetric(horizontal: 20.0,vertical: 10.0),
+                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
               ),
             ),
           ),
@@ -72,14 +80,16 @@ class CreatePost extends StatelessWidget {
                         Text(
                           'David Brooks',
                           style: TextStyle(
-                              color: Colors.white,
+                              // color: Colors.white,
+                            color: Theme.of(context).primaryColor,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 3.0),
                           child: Text(
-                            AppLocalizations.of(context).translate("postMotive"),
+                            AppLocalizations.of(context)
+                                .translate("postMotive"),
                             // 'Express your feelings, you are not alone\nWe are all here with you',
                             style: TextStyle(
                               height: 1.15,
@@ -100,7 +110,8 @@ class CreatePost extends StatelessWidget {
                   children: [
                     TextField(
                       decoration: InputDecoration(
-                        hintText: AppLocalizations.of(context).translate("whatsHappening"),
+                        hintText: AppLocalizations.of(context)
+                            .translate("whatsHappening"),
                         // hintText: 'What\'s happening?',
                         hintStyle: TextStyle(
                           color: Colors.grey,

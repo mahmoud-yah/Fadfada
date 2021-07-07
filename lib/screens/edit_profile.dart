@@ -7,17 +7,21 @@ class EditProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        brightness: Brightness.dark,
-        backgroundColor: Colors.transparent,
+        // brightness: Brightness.dark,
+        brightness: Theme.of(context).brightness,
+        // backgroundColor: Colors.transparent,
+        backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.close,
             size: 35.0,
           ),
-          color: Colors.white,
+          // color: Colors.white,
+          color: Theme.of(context).primaryColor,
           onPressed: () {
             Navigator.pop(context);
           },
@@ -30,7 +34,8 @@ class EditProfile extends StatelessWidget {
                 Icons.check,
                 size: 35.0,
               ),
-              color: Colors.blueAccent,
+              // color: Colors.blueAccent,
+              color: Theme.of(context).accentColor,
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -40,7 +45,10 @@ class EditProfile extends StatelessWidget {
         title: Text(
           // 'Edit Profile',
           AppLocalizations.of(context).translate("editProfile"),
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            // color: Colors.white,
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
       body: Column(
@@ -61,8 +69,11 @@ class EditProfile extends StatelessWidget {
                     child: Text(
                       // 'Change Profile Image',
                       AppLocalizations.of(context).translate("changeImage"),
-                      style:
-                          TextStyle(color: Colors.blueAccent, fontSize: 20.0),
+                      style: TextStyle(
+                        // color: Colors.blueAccent,
+                        color: Theme.of(context).accentColor,
+                        fontSize: 20.0,
+                      ),
                     ),
                   ),
                 ]),
