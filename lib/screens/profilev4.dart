@@ -2,6 +2,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/screens/Privacy.dart';
+import 'package:intro_app/screens/about.dart';
+import 'package:intro_app/screens/help.dart';
+import 'package:intro_app/screens/saved.dart';
+import 'package:intro_app/screens/settings.dart';
 
 // import 'package:intro_app/data/data.dart';
 // import 'package:intro_app/models/models.dart';
@@ -39,109 +44,146 @@ class ProfileV4 extends StatelessWidget {
           // color: Colors.black,
           color: Theme.of(context).backgroundColor,
           // margin: EdgeInsets.only(top: 25.0),
-          padding: EdgeInsets.only(top: 30.0),
-          child: Column(
-            children: [
-              ListTile(
-                leading: Icon(
-                  Icons.edit_outlined,
-                  // color: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  // 'Edit Profile',
-                  AppLocalizations.of(context).translate("editProfile"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditProfile()),
-                  );
-                },
-                hoverColor: Colors.grey,
-                focusColor: Colors.grey,
-                selectedTileColor: Colors.grey,
-                enabled: true,
-
-                // tileColor: Colors.grey,
-              ),
-              ListTile(
-                leading: Icon(Icons.bookmarks,
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor),
-                title: Text(
-                  // 'Saved',
-                  AppLocalizations.of(context).translate("saved"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.settings,
-                  // color: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  // 'Settings',
-                  AppLocalizations.of(context).translate("settings"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.privacy_tip_outlined,
-                  // color: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  // 'Privacy',
-                  AppLocalizations.of(context).translate("privacy"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.help_outline,
-                  // color: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  // 'Help',
-                  AppLocalizations.of(context).translate("help"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: ListTile(
+          // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.066),
+          child: SafeArea(
+            child: Column(
+              children: [
+                ListTile(
                   leading: Icon(
-                    Icons.contact_page_outlined,
+                    Icons.edit_outlined,
                     // color: Colors.white,
                     color: Theme.of(context).primaryColor,
                   ),
                   title: Text(
-                    // 'About',
-                    AppLocalizations.of(context).translate("about"),
+                    // 'Edit Profile',
+                    AppLocalizations.of(context).translate("editProfile"),
+                    style: TextStyle(
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 18.0,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => EditProfile()),
+                    );
+                  },
+                  hoverColor: Colors.grey,
+                  focusColor: Colors.grey,
+                  selectedTileColor: Colors.grey,
+                  enabled: true,
+
+                  // tileColor: Colors.grey,
+                ),
+                GestureDetector(
+                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Saved()));},
+                  child: ListTile(
+                    leading: Icon(Icons.bookmarks,
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor),
+                    title: Text(
+                      // 'Saved',
+                      AppLocalizations.of(context).translate("saved"),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));},
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(
+                      // 'Settings',
+                      AppLocalizations.of(context).translate("settings"),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Privacy()));},
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.privacy_tip_outlined,
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(
+                      // 'Privacy',
+                      AppLocalizations.of(context).translate("privacy"),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Help()));
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.help_outline,
+                      // color: Colors.white,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    title: Text(
+                      // 'Help',
+                      AppLocalizations.of(context).translate("help"),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                    },
+                    child: ListTile(
+                      leading: Icon(
+                        Icons.contact_page_outlined,
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      title: Text(
+                        // 'About',
+                        AppLocalizations.of(context).translate("about"),
+                        style: TextStyle(
+                          // color: Colors.white,
+                          color: Theme.of(context).primaryColor,
+                          fontSize: 18.0,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.logout,
+                    // color: Colors.white,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  title: Text(
+                    // 'Logout',
+                    AppLocalizations.of(context).translate("logout"),
                     style: TextStyle(
                       // color: Colors.white,
                       color: Theme.of(context).primaryColor,
@@ -149,24 +191,8 @@ class ProfileV4 extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.logout,
-                  // color: Colors.white,
-                  color: Theme.of(context).primaryColor,
-                ),
-                title: Text(
-                  // 'Logout',
-                  AppLocalizations.of(context).translate("logout"),
-                  style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 18.0,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

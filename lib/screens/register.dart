@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'login.dart';
 // import 'package:intro_app/screens/login.dart';
-import '../textField.dart';
+// import '../textField.dart';
 import 'screens.dart';
 
 class Register extends StatefulWidget {
@@ -11,6 +11,10 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController cPasswordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -82,21 +86,89 @@ class _RegisterState extends State<Register> {
                   //     ),
                   //   ),
                   // ),
-                  MyTextField(
-                    hintText: 'Name',
-                    isPassword: false,
+                  // MyTextField(
+                  //   hintText: 'Name',
+                  //   isPassword: false,
+                  // ),
+                  // MyTextField(
+                  //   hintText: 'E-mail',
+                  //   isPassword: false,
+                  // ),
+                  // MyTextField(
+                  //   hintText: 'Password',
+                  //   isPassword: true,
+                  // ),
+                  // MyTextField(
+                  //   hintText: 'Confirm Password',
+                  //   isPassword: true,
+                  // ),
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                    ),
+                    child: TextField(
+                      controller: nameController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Name',
+                        hintStyle: TextStyle(
+                          color: Colors.blueGrey,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  MyTextField(
-                    hintText: 'E-mail',
-                    isPassword: false,
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                    ),
+                    child: TextField(
+                      controller: emailController,
+                      obscureText: false,
+                      decoration: InputDecoration(
+                        hintText: 'Email',
+                        hintStyle: TextStyle(
+                          color: Colors.blueGrey,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  MyTextField(
-                    hintText: 'Password',
-                    isPassword: true,
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                    ),
+                    child: TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Password',
+                        hintStyle: TextStyle(
+                          color: Colors.blueGrey,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
-                  MyTextField(
-                    hintText: 'Confirm Password',
-                    isPassword: true,
+                  Container(
+                    padding: EdgeInsets.all(8.0),
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                    ),
+                    child: TextField(
+                      controller: cPasswordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: 'Confirm Password',
+                        hintStyle: TextStyle(
+                          color: Colors.blueGrey,
+                        ),
+                        border: InputBorder.none,
+                      ),
+                    ),
                   ),
                   // Padding(
                   //   padding: const EdgeInsets.all(8.0),
@@ -109,6 +181,10 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.all(25.0),
                     child: TextButton(
                       onPressed: () {
+                        print(nameController.text);
+                        print(emailController.text);
+                        print(passwordController.text);
+                        print(cPasswordController.text);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

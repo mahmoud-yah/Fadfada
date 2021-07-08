@@ -1,5 +1,10 @@
+// import 'dart:html';
+
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/models/message_model.dart';
 import 'package:intro_app/models/user_model.dart';
@@ -91,6 +96,12 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   _buildMessageComposer() {
+    File _image;
+    final _picker = ImagePicker();
+    Future getImage() async{
+      final image = await _picker.getImage(source: ImageSource.gallery);
+      // _image=image;
+    }
     return Container(
       // margin: EdgeInsets.symmetric(horizontal: 50.0,vertical: 25.0),
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -117,7 +128,9 @@ class _ChatScreenState extends State<ChatScreen> {
               // color: Colors.white,
             ),
             iconSize: 25.0,
-            onPressed: () {},
+            onPressed: () {
+              getImage();
+            },
           ),
           Expanded(
               child: TextField(
@@ -141,7 +154,8 @@ class _ChatScreenState extends State<ChatScreen> {
               // color: Colors.white,
             ),
             iconSize: 25.0,
-            onPressed: () {},
+            onPressed: () {
+            },
           ),
         ],
       ),

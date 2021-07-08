@@ -46,7 +46,7 @@ class MyApp extends StatelessWidget {
           }
           return supportedLocales.first;
         },
-        home: NavScreen(),
+        home: Register(),
       ),
     );
 
