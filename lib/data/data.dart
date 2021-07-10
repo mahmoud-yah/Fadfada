@@ -164,8 +164,8 @@ final List<Story> stories = [
   ),
 ];
 
-final List<Post> profilePosts = [
-  Post(
+final List<TestPost> profilePosts = [
+  TestPost(
     user: onlineUsers[0],
     caption: 'Check out these cool puppers',
     timeAgo: '58m',
@@ -175,7 +175,7 @@ final List<Post> profilePosts = [
     shares: 96,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption:
         'Please enjoy this placeholder text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
@@ -186,7 +186,7 @@ final List<Post> profilePosts = [
     shares: 18,
     isLiked: true,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption: 'This is a very good boi.',
     timeAgo: '8hr',
@@ -197,7 +197,7 @@ final List<Post> profilePosts = [
     shares: 27,
     isLiked: true,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption: 'Adventure 🏔',
     timeAgo: '15hr',
@@ -208,7 +208,7 @@ final List<Post> profilePosts = [
     shares: 42,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption:
         'More placeholder text for the soul: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
@@ -219,7 +219,7 @@ final List<Post> profilePosts = [
     shares: 9,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption: 'A classic.',
     timeAgo: '1d',
@@ -233,8 +233,8 @@ final List<Post> profilePosts = [
 ];
 
 
-final List<Post> posts = [
-  Post(
+final List<TestPost> posts = [
+  TestPost(
     user: currentUser,
     caption: 'Check out these cool puppers',
     timeAgo: '58m',
@@ -244,7 +244,7 @@ final List<Post> posts = [
     shares: 96,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[5],
     caption:
     'Please enjoy this placeholder text: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
@@ -255,7 +255,7 @@ final List<Post> posts = [
     shares: 18,
     isLiked: true,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[4],
     caption: 'This is a very good boi.',
     timeAgo: '8hr',
@@ -266,7 +266,7 @@ final List<Post> posts = [
     shares: 27,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[3],
     caption: 'Adventure 🏔',
     timeAgo: '15hr',
@@ -277,7 +277,7 @@ final List<Post> posts = [
     shares: 42,
     isLiked: false,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[0],
     caption:
     'More placeholder text for the soul: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
@@ -288,7 +288,7 @@ final List<Post> posts = [
     shares: 9,
     isLiked: true,
   ),
-  Post(
+  TestPost(
     user: onlineUsers[9],
     caption: 'A classic.',
     timeAgo: '1d',

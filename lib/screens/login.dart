@@ -1,20 +1,52 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intro_app/config/controller.dart';
 // import 'package:intro_app/screens/nav_screen.dart';
 // import 'file:///C:/Users/m-y-6/StudioProjects/intro_app/lib/screens/register.dart';
 // import '../textField.dart';
 import 'package:intro_app/textField.dart';
 // import 'register.dart';
 import 'package:intro_app/screens/screens.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
+  final ctrl = Get.put(Controller());
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  bool inProgress=false;
+  // Controller ctrl = Get.find();
+
+  var url = Uri.parse('http://10.0.2.2:8000/api/login');
+
+  Future getData(email,password) async{
+    setState(() {
+      inProgress=true;
+    });
+    print('hello');
+    http.Response response = await http.post(url,body:{'email':'$email', 'password':'$password'} );
+    // print(response.body);
+    var token = jsonDecode(response.body)['data']['token'];
+    ctrl.setTokenValue(token);
+    // print('ok');
+    if(jsonDecode(response.body)['success']==true){
+      setState(() {
+        inProgress=false;
+      });
+      Get.to(()=>NavScreen());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return inProgress? Scaffold(backgroundColor: Theme.of(context).backgroundColor,body: Center(child: CircularProgressIndicator(),),) : Scaffold(
       // appBar: AppBar(backgroundColor: Theme.of(context).primaryColor,),
       // backgroundColor: Theme.of(context).primaryColor,
       backgroundColor: Color(0xFF312F54),
@@ -98,13 +130,47 @@ class _LoginState extends State<Login> {
                         //     ),
                         //   ),
                         // ),
-                        MyTextField(
-                          hintText: 'E-mail',
-                          isPassword: false,
+                        // MyTextField(
+                        //   hintText: 'E-mail',
+                        //   isPassword: false,
+                        // ),
+                        // MyTextField(
+                        //   hintText: 'Password',
+                        //   isPassword: true,
+                        // ),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: emailController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
                         ),
-                        MyTextField(
-                          hintText: 'Password',
-                          isPassword: true,
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -137,12 +203,14 @@ class _LoginState extends State<Login> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NavScreen(),
-                        ),
-                      );
+                      // Navigator.pushReplacement(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => NavScreen(),
+                      //   ),
+                      // );
+                      getData(emailController.text, passwordController.text);
+                      // Get.to(()=>NavScreen());
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -181,10 +249,10 @@ class _LoginState extends State<Login> {
                   ),
                   onTap: () {
                     // Navigator.pop(context);
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => Register()),
-                    // );
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => Register()),
+                    );
                   },
                 ),
               ],

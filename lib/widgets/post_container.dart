@@ -5,7 +5,7 @@ import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostContainer extends StatelessWidget {
-  final Post post;
+  final TestPost post;
 
   const PostContainer({Key key, @required this.post}) : super(key: key);
 
@@ -167,7 +167,7 @@ class PostContainer extends StatelessWidget {
 }
 
 class _PostHeader extends StatelessWidget {
-  final Post post;
+  final TestPost post;
 
   const _PostHeader({
     Key key,
@@ -232,7 +232,7 @@ class _PostHeader extends StatelessWidget {
 }
 
 class _PostStats extends StatelessWidget {
-  final Post post;
+  final TestPost post;
 
   const _PostStats({Key key, @required this.post}) : super(key: key);
 

@@ -1,13 +1,22 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/data/data.dart';
+import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/models/post_model.dart';
 import 'package:intro_app/screens/create_post.dart';
+
 // import 'package:intro_app/widgets/favorite_contacts.dart';
 import 'package:intro_app/widgets/widgets.dart';
 import 'package:intro_app/widgets/storiesv2.dart';
+
 // import 'package:stacked_themes/stacked_themes.dart';
+import 'package:http/http.dart' as http;
 
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +25,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Controller ctrl = Get.find();
+
+  void getPosts() async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+
+    var dataHolder = data['data'];
+    // print(dataHolder[0]['text']);
+    for (var i = 0; i < dataHolder.length; i++) {
+      Post post = Post(
+          userID: dataHolder[i]['id'],
+          caption: dataHolder[i]['text'],
+          timeAgo: dataHolder[i]['created_at'],
+          imageUrl: dataHolder[i]['image'],
+          likes: dataHolder[i]['like_number']);
+      ctrl.addPost(post);
+      // print(data['data'][i]['text']);
+    }
+    print(ctrl.posts.length);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: Container(
-        width: MediaQuery.of(context).size.width * 0.45,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.45,
         child: Drawer(
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
@@ -33,21 +68,31 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       // backgroundColor: Color(0xFF242526),
       // backgroundColor: Colors.black,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme
+          .of(context)
+          .backgroundColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            iconTheme: IconThemeData(color: Theme.of(context).accentColor),
+            iconTheme: IconThemeData(color: Theme
+                .of(context)
+                .accentColor),
             // brightness: Brightness.dark,
-            brightness: Theme.of(context).brightness,
+            brightness: Theme
+                .of(context)
+                .brightness,
             // backgroundColor: Colors.black,
-            backgroundColor: Theme.of(context).backgroundColor,
+            backgroundColor: Theme
+                .of(context)
+                .backgroundColor,
             title: Text(
               AppLocalizations.of(context).translate('logo'),
               // 'fadfada',
               style: TextStyle(
                 // color: Palette.facebookBlue,
-                color: Theme.of(context).accentColor,
+                color: Theme
+                    .of(context)
+                    .accentColor,
                 fontSize: 28.0,
                 fontWeight: FontWeight.bold,
               ),
@@ -102,25 +147,32 @@ class _HomeScreenState extends State<HomeScreen> {
           // ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              final Post post = posts[index];
+              final TestPost post = posts[index];
               return PostContainer(post: post);
             }, childCount: posts.length),
           )
         ],
       ),
+
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Theme.of(context).accentColor,
+        backgroundColor: Theme
+            .of(context)
+            .accentColor,
         // elevation: 0,
         onPressed: () {
           // setState(() {
           //   getThemeManager(context).selectThemeAtIndex(0
           //   );
           // });
+          getPosts();
+          // print(ctrl.count);
+          // print(ctrl.token);
+          // Get.to(()=>CreatePost());
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreatePost()),
-            );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => CreatePost()),
+          // );
         },
         // child: Text('Post',style: TextStyle(color: Colors.white),),
         child: Icon(

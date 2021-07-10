@@ -1,9 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intro_app/config/controller.dart';
 // import 'login.dart';
 // import 'package:intro_app/screens/login.dart';
 // import '../textField.dart';
 import 'screens.dart';
+// import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
 
 class Register extends StatefulWidget {
   @override
@@ -11,13 +18,36 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  Controller ctrl = Get.find();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController cPasswordController = TextEditingController();
+  bool inProgress=false;
+
+  var url = Uri.parse('http://10.0.2.2:8000/api/register');
+
+  Future getData(name,email,password,cPassword) async{
+    setState(() {
+      inProgress=true;
+    });
+    print('hello');
+    http.Response response = await http.post(url,body:{'name':'$name','email':'$email', 'password':'$password','c_password':'$cPassword'} );
+    // print(response.body);
+    var token = jsonDecode(response.body)['data']['token'];
+    ctrl.setTokenValue(token);
+    print(token);
+    if(jsonDecode(response.body)['success']==true){
+      setState(() {
+        inProgress=false;
+      });
+      Get.to(()=>NavScreen());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return inProgress? Scaffold(backgroundColor: Theme.of(context).backgroundColor,body: Center(child: CircularProgressIndicator(),),) : Scaffold(
       // backgroundColor: Theme.of(context).primaryColor,
       backgroundColor: Color(0xFF312F54),
       body: SingleChildScrollView(
@@ -185,12 +215,13 @@ class _RegisterState extends State<Register> {
                         print(emailController.text);
                         print(passwordController.text);
                         print(cPasswordController.text);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => NavScreen(),
-                          ),
-                        );
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => NavScreen(),
+                        //   ),
+                        // );
+                        getData(nameController.text, emailController.text, passwordController.text, cPasswordController.text);
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -208,8 +239,7 @@ class _RegisterState extends State<Register> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => Login()),
                       );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/themes/theme_setup.dart';
 // import 'screens/';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ThemeBuilder(
       themes: getThemes(),
-      builder: (context,regularTheme,darkTheme,themeMode)=> MaterialApp(
+      builder: (context,regularTheme,darkTheme,themeMode)=> GetMaterialApp(
         debugShowCheckedModeBanner: false,
         // theme: ThemeData(
         //   // primaryColor: Color(0xFF312F54),
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
           }
           return supportedLocales.first;
         },
-        home: Register(),
+        home: Login(),
       ),
     );
 

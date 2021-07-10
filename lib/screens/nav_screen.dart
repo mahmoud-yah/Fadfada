@@ -7,6 +7,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'screens.dart';
 // import 'profilev2.dart';
 import 'profilev4.dart';
+import 'package:get/get.dart';
+import 'package:intro_app/config/controller.dart';
 
 class NavScreen extends StatefulWidget {
   @override
@@ -14,6 +16,8 @@ class NavScreen extends StatefulWidget {
 }
 
 class _NavScreenState extends State<NavScreen> {
+
+
   List<Widget> _screens = [
     HomeScreen(),
     // MessengerScreen(),
@@ -104,6 +108,8 @@ class _NavScreenState extends State<NavScreen> {
           onTap: (index) {
             setState(() {
               _selectedIndex = index;
+              // controller.increment();
+              // print(controller.count);
             });
           },
         ),

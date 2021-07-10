@@ -1,10 +1,13 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/screens/Privacy.dart';
 import 'package:intro_app/screens/about.dart';
 import 'package:intro_app/screens/help.dart';
+import 'package:intro_app/screens/login.dart';
 import 'package:intro_app/screens/saved.dart';
 import 'package:intro_app/screens/settings.dart';
 
@@ -18,6 +21,7 @@ import 'edit_profile.dart';
 class ProfileV4 extends StatelessWidget {
   final panelController = PanelController();
 
+  final Controller ctrl = Get.find();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +81,10 @@ class ProfileV4 extends StatelessWidget {
                   // tileColor: Colors.grey,
                 ),
                 GestureDetector(
-                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Saved()));},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Saved()));
+                  },
                   child: ListTile(
                     leading: Icon(Icons.bookmarks,
                         // color: Colors.white,
@@ -94,7 +101,10 @@ class ProfileV4 extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Settings()));},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Settings()));
+                  },
                   child: ListTile(
                     leading: Icon(
                       Icons.settings,
@@ -113,7 +123,10 @@ class ProfileV4 extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>Privacy()));},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Privacy()));
+                  },
                   child: ListTile(
                     leading: Icon(
                       Icons.privacy_tip_outlined,
@@ -132,8 +145,9 @@ class ProfileV4 extends StatelessWidget {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Help()));
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Help()));
                   },
                   child: ListTile(
                     leading: Icon(
@@ -154,8 +168,9 @@ class ProfileV4 extends StatelessWidget {
                 ),
                 Expanded(
                   child: GestureDetector(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>About()));
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => About()));
                     },
                     child: ListTile(
                       leading: Icon(
@@ -175,19 +190,25 @@ class ProfileV4 extends StatelessWidget {
                     ),
                   ),
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  title: Text(
-                    // 'Logout',
-                    AppLocalizations.of(context).translate("logout"),
-                    style: TextStyle(
+                GestureDetector(
+                  onTap: () {
+                    ctrl.logout();
+                    Get.to(() => Login());
+                  },
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.logout,
                       // color: Colors.white,
                       color: Theme.of(context).primaryColor,
-                      fontSize: 18.0,
+                    ),
+                    title: Text(
+                      // 'Logout',
+                      AppLocalizations.of(context).translate("logout"),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
                 ),

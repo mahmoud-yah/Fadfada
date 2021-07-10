@@ -1,10 +1,31 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'package:intro_app/config/controller.dart';
 
-class CreatePost extends StatelessWidget {
+class CreatePost extends StatefulWidget {
+  @override
+  _CreatePostState createState() => _CreatePostState();
+}
+
+class _CreatePostState extends State<CreatePost> {
+   TextEditingController postController = TextEditingController();
+
+   TextEditingController imageController = TextEditingController();
+
+  final Controller ctrl = Get.find();
+
+  void addPost(postText) async{
+    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    http.Response response = await http.post(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
+    print(response.body);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +58,9 @@ class CreatePost extends StatelessWidget {
             padding:
                 const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
             child: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                addPost(postController.text);
+              },
               child: Text(
                 AppLocalizations.of(context).translate("post"),
                 // 'POST',
@@ -109,6 +132,7 @@ class CreatePost extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     TextField(
+                      controller: postController,
                       decoration: InputDecoration(
                         hintText: AppLocalizations.of(context)
                             .translate("whatsHappening"),

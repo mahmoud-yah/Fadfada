@@ -21,7 +21,7 @@ class ProfilePosts extends StatelessWidget {
         slivers: [
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              final Post post = profilePosts[index];
+              final TestPost post = profilePosts[index];
               return PostContainer(post: post);
             }, childCount: posts.length),
           ),
