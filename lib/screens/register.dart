@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/config/controller.dart';
+import 'package:intro_app/models/normal_post.dart';
 // import 'login.dart';
 // import 'package:intro_app/screens/login.dart';
 // import '../textField.dart';
@@ -38,12 +40,36 @@ class _RegisterState extends State<Register> {
     ctrl.setTokenValue(token);
     print(token);
     if(jsonDecode(response.body)['success']==true){
+      await getPosts();
       setState(() {
         inProgress=false;
       });
       Get.to(()=>NavScreen());
     }
   }
+
+
+  Future getPosts() async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+
+    var dataHolder = data['data'];
+    // print(dataHolder[0]['text']);
+    for (var i = 0; i < dataHolder.length; i++) {
+      Post post = Post(
+          userID: dataHolder[i]['id'],
+          caption: dataHolder[i]['text'],
+          timeAgo: dataHolder[i]['created_at'],
+          imageUrl: dataHolder[i]['image'],
+          likes: dataHolder[i]['like_number']);
+      ctrl.addPost(post);
+      // print(data['data'][i]['text']);
+    }
+    print(ctrl.posts.length);
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +86,7 @@ class _RegisterState extends State<Register> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   fit: BoxFit.fill,
-                  image: AssetImage('images/3.jpg'),
+                  image: AssetImage('images/3.png'),
                 ),
               ),
               // child: Container(

@@ -15,10 +15,10 @@ class TestPost {
     @required this.user,
     @required this.caption,
     @required this.timeAgo,
-    @required this.imageUrl,
+    this.imageUrl='https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png',
     @required this.likes,
     @required this.comments,
     @required this.shares,
-    this.isLiked,
+    this.isLiked=false,
   });
 }

@@ -17,6 +17,7 @@
   "changeImage": "Change Profile Image",
   "firstName": "First Name",
   "lastName": "Last Name",
+  "address": "Address",
   "username": "Username",
   "bio": "Bio",
   "email": "E-mail",

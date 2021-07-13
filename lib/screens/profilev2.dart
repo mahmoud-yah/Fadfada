@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_app/data/data.dart';
+import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/models/post_model.dart';
 import 'package:intro_app/screens/edit_profile.dart';
 
@@ -205,7 +206,7 @@ class ProfileV2 extends StatelessWidget {
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              final TestPost post = profilePosts[index];
+              final Post post = profilePosts[index];
               return PostContainer(post: post);
             }, childCount: posts.length),
           )

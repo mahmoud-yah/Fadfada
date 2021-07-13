@@ -9,7 +9,7 @@ class Post {
   final int likes;
   // final int comments;
   // final int shares;
-  // final bool isLiked;
+  final bool isLiked;
 
   const Post({
     @required this.userID,
@@ -19,6 +19,6 @@ class Post {
     @required this.likes,
     // @required this.comments,
     // @required this.shares,
-    // this.isLiked,
+    this.isLiked,
   });
 }

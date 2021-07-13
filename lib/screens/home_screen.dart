@@ -25,9 +25,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  @override
+  // void initState() async{
+  //   // TODO: implement initState
+  //   super.initState();
+  // await getPosts();
+  // }
+
   final Controller ctrl = Get.find();
 
-  void getPosts() async {
+  Future getPosts() async {
     var url = Uri.parse('http://10.0.2.2:8000/api/posts');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
@@ -147,9 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
           // ),
           SliverList(
             delegate: SliverChildBuilderDelegate((context, index) {
-              final TestPost post = posts[index];
+              final Post post = ctrl.posts[index];
               return PostContainer(post: post);
-            }, childCount: posts.length),
+            }, childCount: ctrl.posts.length),
           )
         ],
       ),
@@ -164,10 +172,10 @@ class _HomeScreenState extends State<HomeScreen> {
           //   getThemeManager(context).selectThemeAtIndex(0
           //   );
           // });
-          getPosts();
+          // getPosts();
           // print(ctrl.count);
           // print(ctrl.token);
-          // Get.to(()=>CreatePost());
+          Get.to(()=>CreatePost());
 
           // Navigator.push(
           //   context,

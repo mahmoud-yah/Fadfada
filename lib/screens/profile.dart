@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/data/data.dart';
+import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/models/post_model.dart';
 import 'package:intro_app/widgets/widgets.dart';
 
@@ -11,6 +14,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+
+  Controller ctrl = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,7 +269,7 @@ class _ProfileState extends State<Profile> {
               child: ListView.builder(
                   itemCount: posts.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final TestPost post = posts[index];
+                    final Post post = ctrl.posts[index];
                     return PostContainer(post: post);
                   }),
               // height: ,

@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_app/models/models.dart';
+import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class PostContainer extends StatelessWidget {
-  final TestPost post;
+  final Post post;
 
   const PostContainer({Key key, @required this.post}) : super(key: key);
 
@@ -55,6 +56,7 @@ class PostContainer extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     child: CachedNetworkImage(imageUrl: post.imageUrl),
+                    // child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
                   ),
                 )
               // Container(
@@ -65,7 +67,20 @@ class PostContainer extends StatelessWidget {
               //     //   imageUrl: post.imageUrl,
               //     // ),
               //   )
-              : const SizedBox.shrink(),
+
+
+
+              // : const SizedBox.shrink(),
+          :Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+              // child: CachedNetworkImage(imageUrl: post.imageUrl),
+              child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
+            ),
+          )
+
+
           // Padding(
           //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
           //   child: _PostButton(
@@ -85,81 +100,95 @@ class PostContainer extends StatelessWidget {
           //     Icon(Icons.favorite_border,color: Colors.white,)
           //   ],
           // ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  // crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      post.isLiked ? Icons.favorite : Icons.favorite_border,
-                      color: post.isLiked
-                          ? Colors.red.shade800
-                          : Theme.of(context).primaryColor,
-                    ),
-                    SizedBox(
-                      height: 3.0,
-                    ),
-                    Text(
-                      post.likes.toString(),
-                      style: TextStyle(
-                        // color: Colors.white,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    // Text(
-                    //   'Likes',
-                    //   style: TextStyle(color: Colors.white),
-                    // ),
-                  ],
-                ),
-                // OutlinedButton(
-                //     onPressed: () {},
-                //     child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Icon(
-                //           Icons.add_comment,
-                //           color: Colors.white,
-                //         ),
-                //         SizedBox(
-                //           width: 5.0,
-                //         ),
-                //         Text(
-                //           'Add a comment',
-                //           style: TextStyle(color: Colors.white),
-                //         ),
-                //       ],
-                //     )),
-                Column(
-                  children: [
-                    Icon(
-                      Icons.mode_comment,
-                      // color: Colors.white,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    SizedBox(
-                      height: 3.0,
-                    ),
-                    Text(
-                      post.comments.toString(),
-                      style: TextStyle(
-                        // color: Colors.white,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    // Text(
-                    //   'Comments',
-                    //   style: TextStyle(color: Colors.white),
-                    // ),
-                  ],
-                ),
-              ],
-            ),
-          )
+
+
+
+
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          //
+          //
+          //
+          //
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Column(
+          //         mainAxisAlignment: MainAxisAlignment.start,
+          //         // crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Icon(
+          //             post.isLiked ? Icons.favorite : Icons.favorite_border,
+          //             color: post.isLiked
+          //                 ? Colors.red.shade800
+          //                 : Theme.of(context).primaryColor,
+          //           ),
+          //           SizedBox(
+          //             height: 3.0,
+          //           ),
+          //           Text(
+          //             post.likes.toString(),
+          //             style: TextStyle(
+          //               // color: Colors.white,
+          //               color: Theme.of(context).primaryColor,
+          //             ),
+          //           ),
+          //           // Text(
+          //           //   'Likes',
+          //           //   style: TextStyle(color: Colors.white),
+          //           // ),
+          //         ],
+          //       ),
+          //       // OutlinedButton(
+          //       //     onPressed: () {},
+          //       //     child: Row(
+          //       //       mainAxisAlignment: MainAxisAlignment.center,
+          //       //       children: [
+          //       //         Icon(
+          //       //           Icons.add_comment,
+          //       //           color: Colors.white,
+          //       //         ),
+          //       //         SizedBox(
+          //       //           width: 5.0,
+          //       //         ),
+          //       //         Text(
+          //       //           'Add a comment',
+          //       //           style: TextStyle(color: Colors.white),
+          //       //         ),
+          //       //       ],
+          //       //     )),
+          //       Column(
+          //         children: [
+          //           Icon(
+          //             Icons.mode_comment,
+          //             // color: Colors.white,
+          //             color: Theme.of(context).primaryColor,
+          //           ),
+          //           SizedBox(
+          //             height: 3.0,
+          //           ),
+          //           Text(
+          //             // post.comments.toString(),
+          //             '0',
+          //             style: TextStyle(
+          //               // color: Colors.white,
+          //               color: Theme.of(context).primaryColor,
+          //             ),
+          //           ),
+          //           // Text(
+          //           //   'Comments',
+          //           //   style: TextStyle(color: Colors.white),
+          //           // ),
+          //         ],
+          //       ),
+          //     ],
+          //   ),
+          //
+          //
+          // )
+
+
+
         ],
       ),
     );
@@ -167,7 +196,7 @@ class PostContainer extends StatelessWidget {
 }
 
 class _PostHeader extends StatelessWidget {
-  final TestPost post;
+  final Post post;
 
   const _PostHeader({
     Key key,
@@ -179,7 +208,8 @@ class _PostHeader extends StatelessWidget {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        ProfileAvatar(imageUrl: post.user.imageUrl),
+        // ProfileAvatar(imageUrl: post.imageUrl),
+        ProfileAvatar(imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
         const SizedBox(
           width: 8.0,
         ),
@@ -189,7 +219,7 @@ class _PostHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.user.name,
+                post.userID.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   // color: Colors.white,
