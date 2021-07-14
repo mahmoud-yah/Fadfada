@@ -235,7 +235,7 @@ class _PostHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.name,
+                '${post.firstName} ' + '${post.lastName}',
                 // post.userID.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
@@ -265,13 +265,41 @@ class _PostHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.more_vert,
-            // color: Colors.white,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => print('more'),
+        // IconButton(
+        //   icon: Icon(
+        //     Icons.more_vert,
+        //     // color: Colors.white,
+        //     color: Theme.of(context).primaryColor,
+        //   ),
+        //   onPressed: () => print('more'),
+        // ),
+        PopupMenuButton(
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              child: Text(
+                'Edit',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            PopupMenuItem(
+              child: Text(
+                'Save',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -9,7 +9,9 @@ class Controller extends GetxController {
   var count = 0;
   var token;
   var posts = [];
+  var toVisitPosts = [];
   UserProfile currentUserProfile = UserProfile();
+  UserProfile toVisitProfile = UserProfile();
 
   void increment() {
     count++;
@@ -25,11 +27,11 @@ class Controller extends GetxController {
     posts.clear();
   }
 
-  void printPostsIds() {
-    for (var i = 0; i < posts.length; i++) {
-      print(posts[i].userID);
-    }
-  }
+  // void printPostsIds() {
+  //   for (var i = 0; i < posts.length; i++) {
+  //     print(posts[i].userID);
+  //   }
+  // }
 
   void addPost(Post post) {
     posts.add(post);
@@ -55,4 +57,23 @@ class Controller extends GetxController {
     currentUserProfile.bio = bio;
     currentUserProfile.birthDate = birthDate;
   }
+
+  addToVisitProfileInfo(
+    String firstName,
+    String lastName,
+    String imageUrl,
+    String address,
+    String bio,
+  ) {
+    toVisitProfile.firstName = firstName;
+    toVisitProfile.lastName = lastName;
+    toVisitProfile.imageUrl = imageUrl;
+    toVisitProfile.address = address;
+    toVisitProfile.bio = bio;
+  }
+
+  void addToVisitPost(Post post) {
+    toVisitPosts.add(post);
+  }
+
 }

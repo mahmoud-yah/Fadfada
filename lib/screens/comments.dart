@@ -7,11 +7,66 @@ import 'package:intro_app/widgets/profile_avatar.dart';
 class Comments extends StatelessWidget {
   // const Comments({Key? key}) : super(key: key);
 
+  final testComments=[
+    Comment(
+      userID: 1,
+      name: 'Alan Hussein',
+      imageUrl: '',
+      caption:
+      'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
+      isLiked: true,
+      likes: 5,
+      timeAgo: '54m',
+    ),
+    Comment(
+      userID: 2,
+      name: 'Alan Hussein',
+      imageUrl: '',
+      caption:
+      'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
+      isLiked: true,
+      likes: 5,
+      timeAgo: '32m',
+    ),
+    Comment(
+      userID: 3,
+      name: 'Alan Hussein',
+      imageUrl: '',
+      caption:
+      'Hi my name is alan i am 23 years old i study at the AIU Hi my name is alan i am 23',
+      isLiked: true,
+      likes: 5,
+      timeAgo: '24m',
+    ),
+    Comment(
+      userID: 4,
+      name: 'Alan Hussein',
+      imageUrl: '',
+      caption:
+      'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
+      isLiked: true,
+      likes: 5,
+      timeAgo: '15m',
+    ),
+    Comment(
+      userID: 5,
+      name: 'Alan Hussein',
+      imageUrl: '',
+      caption:
+      'Hi my name is alan ',
+      isLiked: true,
+      likes: 5,
+      timeAgo: '4m',
+    ),
+  ];
+
+
   final Comment comment = Comment(
     userID: 23,
     name: 'Alan Hussein',
     imageUrl: '',
-    caption: 'Hi my name is alan i am 23 years old i study at the AIU',
+    caption:
+        'Hi my name is alan i am 23 years old i study at the AIU Hi my name is alan i am 23 years old i study at the AIU',
     isLiked: true,
     likes: 5,
     timeAgo: '8m',
@@ -30,11 +85,21 @@ class Comments extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        child: Column(
-          children: [
-            _CommentHeader(comment: comment),
-          ],
-        ),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.1),
+        child: ListView.builder(itemBuilder: (BuildContext context, int index){
+          Comment comment = testComments[index];
+          print(comment.name);
+          return Container(
+            padding: EdgeInsets.only(top: 18,bottom: 2,),
+            child: _CommentHeader(comment: comment,),
+            // child: Text('hello',style: TextStyle(color: Colors.white),),
+          );
+        },itemCount: testComments.length,),
+        // child: Column(
+        //   children: [
+        //     _CommentHeader(comment: comment),
+        //   ],
+        // ),
       ),
       bottomSheet: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
@@ -135,10 +200,9 @@ class _CommentHeader extends StatelessWidget {
                       child: RichText(
                         text: TextSpan(
                           style: TextStyle(
-                            fontSize: 14.0,
-                            color: Theme.of(context).primaryColor,
-                            height: 1.35
-                          ),
+                              fontSize: 14.0,
+                              color: Theme.of(context).primaryColor,
+                              height: 1.35),
                           children: <TextSpan>[
                             TextSpan(
                               text: '${comment.name}  ',
@@ -166,7 +230,8 @@ class _CommentHeader extends StatelessWidget {
                 ],
               ),
               SizedBox(
-                height: 2.0,
+                // height: 4.0,
+                height: MediaQuery.of(context).size.height*0.012,
               ),
               Row(
                 children: [

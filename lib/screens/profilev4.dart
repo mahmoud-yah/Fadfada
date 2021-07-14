@@ -10,6 +10,7 @@ import 'package:intro_app/screens/help.dart';
 import 'package:intro_app/screens/login.dart';
 import 'package:intro_app/screens/saved.dart';
 import 'package:intro_app/screens/settings.dart';
+import 'package:intro_app/screens/tovisit_posts_data.dart';
 
 // import 'package:intro_app/data/data.dart';
 // import 'package:intro_app/models/models.dart';
@@ -428,12 +429,13 @@ class ProfileV4 extends StatelessWidget {
                             Expanded(
                               child: ElevatedButton(
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => ProfilePosts(),
-                                    ),
-                                  );
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => ProfilePosts(),
+                                  //   ),
+                                  // );
+                                  Get.to(PostsData());
                                 },
                                 child: Text(
                                   // 'User posts',

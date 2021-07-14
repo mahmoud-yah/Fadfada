@@ -12,9 +12,11 @@ class ProfilePosts extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         brightness: Theme.of(context).brightness,
+        iconTheme: Theme.of(context).iconTheme,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
           AppLocalizations.of(context).translate("posts"),
+          style: TextStyle(color: Theme.of(context).primaryColor),
         ),
       ),
       body: CustomScrollView(

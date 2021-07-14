@@ -68,6 +68,8 @@ class _LoginState extends State<Login> {
         imageUrl: dataHolder[i]['image'],
         likes: dataHolder[i]['like_number'],
         name: dataHolder[i]['name'],
+        firstName: dataHolder[i]['first_name'],
+        lastName: dataHolder[i]['second_name'],
         isLiked:false,
       );
       ctrl.addPost(post);

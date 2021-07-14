@@ -82,9 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           SliverAppBar(
             iconTheme: IconThemeData(color: Theme.of(context).accentColor),
-            // brightness: Brightness.dark,
             brightness: Theme.of(context).brightness,
-            // backgroundColor: Colors.black,
             backgroundColor: Theme.of(context).backgroundColor,
             title: Text(
               AppLocalizations.of(context).translate('logo'),
