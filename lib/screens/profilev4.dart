@@ -25,6 +25,7 @@ class ProfileV4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawerEnableOpenDragGesture: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         brightness: Brightness.dark,
@@ -341,9 +342,12 @@ class ProfileV4 extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
+                              // mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'David Brooks',
+                                  // 'David Brooks',
+                                  '${ctrl.currentUserProfile.firstName} '+'${ctrl.currentUserProfile.lastName}',
                                   style: TextStyle(
                                     // color: Colors.white,
                                     color: Theme.of(context).primaryColor,
@@ -355,7 +359,8 @@ class ProfileV4 extends StatelessWidget {
                                   height: 6.0,
                                 ),
                                 Text(
-                                  'Damascus, SY',
+                                  ctrl.currentUserProfile.address,
+                                  // 'Damascus, SY',
                                   style: TextStyle(
                                     // color: Colors.white,
                                     color: Theme.of(context).primaryColor,
@@ -397,9 +402,11 @@ class ProfileV4 extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
+                              ctrl.currentUserProfile.bio,
                               // 'Syrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim Morrison   Syrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim Morrison',
                               // 'Syrian..\n19 Years old\nAIU Arab International University\Love Music, Art, Swimming, and rkoob al5el',
-                              'Syrian..\n18 Years old\nAIU Arab International University\nLove Music, Art, Swimming, and rkoob al5el\nOld enough to know better 😶\nEvery day brings an opportunity to do something legendary.\n"Where\'s your will to be weird?" - Jim Morrison',
+                              // 'Syrian..\n18 Years old\nAIU Arab International University\nLove Music, Art, Swimming, and rkoob al5el\nOld enough to know better 😶\nEvery day brings an opportunity to do something legendary.\n"Where\'s your will to be weird?" - Jim Morrison',
+
                               style: TextStyle(
                                 // color: Colors.white,
                                 color: Theme.of(context).primaryColor,

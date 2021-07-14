@@ -4,9 +4,13 @@ import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/models/notification_model.dart';
 
 class Notifications extends StatelessWidget {
+  // var scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // endDrawerEnableOpenDragGesture: true,
+      // key: scaffoldKey,
+      // endDrawer: Drawer(child: Container(),),
       appBar: AppBar(
         // brightness: Brightness.dark,
         brightness: Theme.of(context).brightness,
@@ -20,15 +24,18 @@ class Notifications extends StatelessWidget {
         ),
         // backgroundColor: Colors.black,
         backgroundColor: Theme.of(context).backgroundColor,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-            // color: Colors.white,
-            color: Theme.of(context).primaryColor,
-            iconSize: 30.0,
-          )
-        ],
+        leading: Container(),
+        leadingWidth: 0,
+        // centerTitle: true,
+        // actions: [
+        //   IconButton(
+        //     icon: Icon(Icons.search),
+        //     onPressed: () {scaffoldKey.currentState.openEndDrawer();},
+        //     // color: Colors.white,
+        //     color: Theme.of(context).primaryColor,
+        //     iconSize: 30.0,
+        //   )
+        // ],
       ),
       backgroundColor: Colors.black,
       body: ListView.builder(

@@ -56,9 +56,16 @@ class _EditProfileState extends State<EditProfile> {
     // print(response.body);
     var data = jsonDecode(response.body);
     print(data['success']);
-    if(data['success']==true){
+    if (data['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('profile info updated successfully!',style: TextStyle(color: Theme.of(context).primaryColor),),backgroundColor: Theme.of(context).backgroundColor,padding: EdgeInsets.only(bottom: 10),),
+        SnackBar(
+          content: Text(
+            'profile info updated successfully!',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
       );
     }
     // print(response.body);
@@ -68,11 +75,10 @@ class _EditProfileState extends State<EditProfile> {
     // if (jsonDecode(response.body)['success'] == true) {
     //   await getPosts();
     //   await getProfile();
-      setState(() {
-        inProgress = false;
-      });
-      // Get.to(() => NavScreen());
-
+    setState(() {
+      inProgress = false;
+    });
+    // Get.to(() => NavScreen());
   }
 
   @override
@@ -128,7 +134,7 @@ class _EditProfileState extends State<EditProfile> {
               ),
               // color: Colors.blueAccent,
               color: Theme.of(context).accentColor,
-              onPressed: () async{
+              onPressed: () async {
                 await updateProfileInfo();
                 // Navigator.pop(context);
               },

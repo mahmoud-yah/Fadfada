@@ -9,12 +9,11 @@ class ProfilePosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
-        brightness: Brightness.dark,
-        backgroundColor: Colors.black,
+        brightness: Theme.of(context).brightness,
+        backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
-          // 'Posts',
           AppLocalizations.of(context).translate("posts"),
         ),
       ),

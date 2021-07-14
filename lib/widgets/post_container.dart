@@ -1,15 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/models/models.dart';
 import 'package:intro_app/models/normal_post.dart';
+import 'package:intro_app/screens/comments.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class PostContainer extends StatelessWidget {
+class PostContainer extends StatefulWidget {
   final Post post;
 
   const PostContainer({Key key, @required this.post}) : super(key: key);
 
+  @override
+  _PostContainerState createState() => _PostContainerState();
+}
+
+class _PostContainerState extends State<PostContainer> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,10 +33,10 @@ class PostContainer extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PostHeader(post: post),
+                _PostHeader(post: widget.post),
                 const SizedBox(height: 6.0),
                 Text(
-                  post.caption,
+                  widget.post.caption,
                   style: TextStyle(
                     // color: Colors.white,
                     color: Theme.of(context).primaryColor,
@@ -37,7 +44,7 @@ class PostContainer extends StatelessWidget {
                     letterSpacing: 0.5,
                   ),
                 ),
-                post.imageUrl != null
+                widget.post.imageUrl != null
                     ? const SizedBox.shrink()
                     : const SizedBox(
                         height: 6.0,
@@ -45,7 +52,7 @@ class PostContainer extends StatelessWidget {
               ],
             ),
           ),
-          post.imageUrl != null
+          widget.post.imageUrl != null
               ?
               // Padding(
               //         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -55,7 +62,7 @@ class PostContainer extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    child: CachedNetworkImage(imageUrl: post.imageUrl),
+                    child: CachedNetworkImage(imageUrl: widget.post.imageUrl),
                     // child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
                   ),
                 )
@@ -68,18 +75,17 @@ class PostContainer extends StatelessWidget {
               //     // ),
               //   )
 
-
-
               // : const SizedBox.shrink(),
-          :Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10.0),
-            child: ClipRRect(
-              borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              // child: CachedNetworkImage(imageUrl: post.imageUrl),
-              child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
-            ),
-          )
-
+              : Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    // child: CachedNetworkImage(imageUrl: post.imageUrl),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
+                  ),
+                ),
 
           // Padding(
           //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -101,94 +107,102 @@ class PostContainer extends StatelessWidget {
           //   ],
           // ),
 
-
-
-
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          //
-          //
-          //
-          //
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: [
-          //       Column(
-          //         mainAxisAlignment: MainAxisAlignment.start,
-          //         // crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Icon(
-          //             post.isLiked ? Icons.favorite : Icons.favorite_border,
-          //             color: post.isLiked
-          //                 ? Colors.red.shade800
-          //                 : Theme.of(context).primaryColor,
-          //           ),
-          //           SizedBox(
-          //             height: 3.0,
-          //           ),
-          //           Text(
-          //             post.likes.toString(),
-          //             style: TextStyle(
-          //               // color: Colors.white,
-          //               color: Theme.of(context).primaryColor,
-          //             ),
-          //           ),
-          //           // Text(
-          //           //   'Likes',
-          //           //   style: TextStyle(color: Colors.white),
-          //           // ),
-          //         ],
-          //       ),
-          //       // OutlinedButton(
-          //       //     onPressed: () {},
-          //       //     child: Row(
-          //       //       mainAxisAlignment: MainAxisAlignment.center,
-          //       //       children: [
-          //       //         Icon(
-          //       //           Icons.add_comment,
-          //       //           color: Colors.white,
-          //       //         ),
-          //       //         SizedBox(
-          //       //           width: 5.0,
-          //       //         ),
-          //       //         Text(
-          //       //           'Add a comment',
-          //       //           style: TextStyle(color: Colors.white),
-          //       //         ),
-          //       //       ],
-          //       //     )),
-          //       Column(
-          //         children: [
-          //           Icon(
-          //             Icons.mode_comment,
-          //             // color: Colors.white,
-          //             color: Theme.of(context).primaryColor,
-          //           ),
-          //           SizedBox(
-          //             height: 3.0,
-          //           ),
-          //           Text(
-          //             // post.comments.toString(),
-          //             '0',
-          //             style: TextStyle(
-          //               // color: Colors.white,
-          //               color: Theme.of(context).primaryColor,
-          //             ),
-          //           ),
-          //           // Text(
-          //           //   'Comments',
-          //           //   style: TextStyle(color: Colors.white),
-          //           // ),
-          //         ],
-          //       ),
-          //     ],
-          //   ),
-          //
-          //
-          // )
-
-
-
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  // crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          if (widget.post.isLiked == false) {
+                            widget.post.likes = widget.post.likes + 1;
+                          } else
+                            widget.post.likes = widget.post.likes - 1;
+                          widget.post.isLiked = !widget.post.isLiked;
+                        });
+                      },
+                      child: Icon(
+                        //   Icons.favorite_border,
+                        // color: Theme.of(context).primaryColor,
+                        widget.post.isLiked
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: widget.post.isLiked
+                            ? Colors.red.shade800
+                            : Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.0,
+                    ),
+                    Text(
+                      widget.post.likes.toString(),
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    // Text(
+                    //   'Likes',
+                    //   style: TextStyle(color: Colors.white),
+                    // ),
+                  ],
+                ),
+                // OutlinedButton(
+                //     onPressed: () {},
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.center,
+                //       children: [
+                //         Icon(
+                //           Icons.add_comment,
+                //           color: Colors.white,
+                //         ),
+                //         SizedBox(
+                //           width: 5.0,
+                //         ),
+                //         Text(
+                //           'Add a comment',
+                //           style: TextStyle(color: Colors.white),
+                //         ),
+                //       ],
+                //     )),
+                Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(Comments());
+                      },
+                      child: Icon(
+                        Icons.mode_comment,
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 3.0,
+                    ),
+                    Text(
+                      // post.comments.toString(),
+                      '0',
+                      style: TextStyle(
+                        // color: Colors.white,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    // Text(
+                    //   'Comments',
+                    //   style: TextStyle(color: Colors.white),
+                    // ),
+                  ],
+                ),
+              ],
+            ),
+          )
         ],
       ),
     );
@@ -209,7 +223,9 @@ class _PostHeader extends StatelessWidget {
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // ProfileAvatar(imageUrl: post.imageUrl),
-        ProfileAvatar(imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+        ProfileAvatar(
+            imageUrl:
+                'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
         const SizedBox(
           width: 8.0,
         ),
@@ -219,7 +235,8 @@ class _PostHeader extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                post.userID.toString(),
+                post.name,
+                // post.userID.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   // color: Colors.white,

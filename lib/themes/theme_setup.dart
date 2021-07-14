@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 List<ThemeData> getThemes() {
   return [
-    ThemeData(backgroundColor: Colors.black,primaryColor: Colors.white ,accentColor: Colors.lightGreenAccent,brightness: Brightness.dark,),
+    ThemeData(backgroundColor: Colors.black,primaryColor: Colors.white ,accentColor: Color(0xFF833AC7),brightness: Brightness.dark,),
     ThemeData(backgroundColor: Colors.white,primaryColor: Colors.red, accentColor: Colors.green),
     ThemeData(backgroundColor: Colors.purple,primaryColor: Colors.red, accentColor: Colors.green),
     ThemeData(backgroundColor: Colors.black,primaryColor: Colors.red, accentColor: Colors.red),

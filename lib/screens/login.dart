@@ -62,11 +62,14 @@ class _LoginState extends State<Login> {
     // print(dataHolder[0]['text']);
     for (var i = 0; i < dataHolder.length; i++) {
       Post post = Post(
-          userID: dataHolder[i]['id'],
-          caption: dataHolder[i]['text'],
-          timeAgo: dataHolder[i]['created_at'],
-          imageUrl: dataHolder[i]['image'],
-          likes: dataHolder[i]['like_number']);
+        userID: dataHolder[i]['id'],
+        caption: dataHolder[i]['text'],
+        timeAgo: dataHolder[i]['created_at'],
+        imageUrl: dataHolder[i]['image'],
+        likes: dataHolder[i]['like_number'],
+        name: dataHolder[i]['name'],
+        isLiked:false,
+      );
       ctrl.addPost(post);
       // print(data['data'][i]['text']);
     }
@@ -106,12 +109,14 @@ class _LoginState extends State<Login> {
             // backgroundColor: Theme.of(context).primaryColor,
             // backgroundColor: Color(0xFF312F54),
             backgroundColor: Theme.of(context).backgroundColor,
+            // appBar: AppBar(),
             body: SingleChildScrollView(
               child: Column(
                 // crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    height: 200.0,
+                    padding: EdgeInsets.only(top: 60.0),
+                    height: MediaQuery.of(context).size.height * 0.33,
                     child: Stack(
                       children: [
                         Positioned(

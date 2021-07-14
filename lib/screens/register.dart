@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/normal_post.dart';
+
 // import 'login.dart';
 // import 'package:intro_app/screens/login.dart';
 // import '../textField.dart';
 import 'screens.dart';
+
 // import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-
 
 class Register extends StatefulWidget {
   @override
@@ -25,29 +26,33 @@ class _RegisterState extends State<Register> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController cPasswordController = TextEditingController();
-  bool inProgress=false;
+  bool inProgress = false;
 
   var url = Uri.parse('http://10.0.2.2:8000/api/register');
 
-  Future getData(name,email,password,cPassword) async{
+  Future getData(name, email, password, cPassword) async {
     setState(() {
-      inProgress=true;
+      inProgress = true;
     });
     print('hello');
-    http.Response response = await http.post(url,body:{'name':'$name','email':'$email', 'password':'$password','c_password':'$cPassword'} );
+    http.Response response = await http.post(url, body: {
+      'name': '$name',
+      'email': '$email',
+      'password': '$password',
+      'c_password': '$cPassword'
+    });
     // print(response.body);
     var token = jsonDecode(response.body)['data']['token'];
     ctrl.setTokenValue(token);
     print(token);
-    if(jsonDecode(response.body)['success']==true){
+    if (jsonDecode(response.body)['success'] == true) {
       await getPosts();
       setState(() {
-        inProgress=false;
+        inProgress = false;
       });
-      Get.to(()=>NavScreen());
+      Get.to(() => NavScreen());
     }
   }
-
 
   Future getPosts() async {
     var url = Uri.parse('http://10.0.2.2:8000/api/posts');
@@ -59,232 +64,255 @@ class _RegisterState extends State<Register> {
     // print(dataHolder[0]['text']);
     for (var i = 0; i < dataHolder.length; i++) {
       Post post = Post(
-          userID: dataHolder[i]['id'],
-          caption: dataHolder[i]['text'],
-          timeAgo: dataHolder[i]['created_at'],
-          imageUrl: dataHolder[i]['image'],
-          likes: dataHolder[i]['like_number']);
+        userID: dataHolder[i]['id'],
+        caption: dataHolder[i]['text'],
+        timeAgo: dataHolder[i]['created_at'],
+        imageUrl: dataHolder[i]['image'],
+        likes: dataHolder[i]['like_number'],
+        name: dataHolder[i]['name'],
+        isLiked: false,
+      );
+
       ctrl.addPost(post);
       // print(data['data'][i]['text']);
     }
     print(ctrl.posts.length);
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return inProgress? Scaffold(backgroundColor: Theme.of(context).backgroundColor,body: Center(child: CircularProgressIndicator(),),) : Scaffold(
-      // backgroundColor: Theme.of(context).primaryColor,
-      backgroundColor: Color(0xFF312F54),
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              height: 200.0,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage('images/3.png'),
-                ),
-              ),
-              // child: Container(
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.fill,
-              //       image: AssetImage('images/3.jpg'),
-              //     ),
-              //   ),
-              // ),
+    return inProgress
+        ? Scaffold(
+            backgroundColor: Theme.of(context).backgroundColor,
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 30.0, left: 20.0),
-              child: Text(
-                'Get on board!',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 35.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 20.0, left: 20.0, right: 20.0),
+          )
+        : Scaffold(
+            // backgroundColor: Theme.of(context).primaryColor,
+            // backgroundColor: Color(0xFF312F54),
+            backgroundColor: Theme.of(context).backgroundColor,
+            // backgroundColor: Colors.yellowAccent,
+            body: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Container(
-                  //   padding: EdgeInsets.all(10.0),
-                  //   decoration: BoxDecoration(
-                  //     border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                  //   ),
-                  //   child: TextField(
-                  //     decoration: InputDecoration(
-                  //       hintText: 'Name',
-                  //       hintStyle: TextStyle(color: Colors.blueGrey),
-                  //       border: InputBorder.none,
-                  //       // icon: Icon(Icons.email_outlined,color: Colors.blueGrey,),
-                  //     ),
-                  //   ),
-                  // ),
-                  // Container(
-                  //   padding: EdgeInsets.all(10.0),
-                  //   decoration: BoxDecoration(
-                  //     border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                  //   ),
-                  //   child: TextField(
-                  //     decoration: InputDecoration(
-                  //       hintText: 'E-mail',
-                  //       hintStyle: TextStyle(
-                  //         color: Colors.blueGrey,
-                  //       ),
-                  //       border: InputBorder.none,
-                  //     ),
-                  //   ),
-                  // ),
-                  // MyTextField(
-                  //   hintText: 'Name',
-                  //   isPassword: false,
-                  // ),
-                  // MyTextField(
-                  //   hintText: 'E-mail',
-                  //   isPassword: false,
-                  // ),
-                  // MyTextField(
-                  //   hintText: 'Password',
-                  //   isPassword: true,
-                  // ),
-                  // MyTextField(
-                  //   hintText: 'Confirm Password',
-                  //   isPassword: true,
-                  // ),
                   Container(
-                    padding: EdgeInsets.all(8.0),
+                    height: MediaQuery.of(context).size.height * 0.33,
                     decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                    ),
-                    child: TextField(
-                      controller: nameController,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Name',
-                        hintStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        border: InputBorder.none,
+                      image: DecorationImage(
+                        fit: BoxFit.fitWidth,
+                        image: AssetImage('images/3.png'),
                       ),
                     ),
+                    // child: Container(
+                    //   decoration: BoxDecoration(
+                    //     image: DecorationImage(
+                    //       fit: BoxFit.fill,
+                    //       image: AssetImage('images/3.jpg'),
+                    //     ),
+                    //   ),
+                    // ),
                   ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                    ),
-                    child: TextField(
-                      controller: emailController,
-                      obscureText: false,
-                      decoration: InputDecoration(
-                        hintText: 'Email',
-                        hintStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                    ),
-                    child: TextField(
-                      controller: passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        hintStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      border: Border(bottom: BorderSide(color: Colors.blueGrey)),
-                    ),
-                    child: TextField(
-                      controller: cPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Confirm Password',
-                        hintStyle: TextStyle(
-                          color: Colors.blueGrey,
-                        ),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(8.0),
-                  //   child: Text(
-                  //     'By creating an account, you agree \n  to our terms, and privacy policy',
-                  //     style: TextStyle(color: Colors.white60),
-                  //   ),
-                  // ),
                   Padding(
-                    padding: const EdgeInsets.all(25.0),
-                    child: TextButton(
-                      onPressed: () {
-                        print(nameController.text);
-                        print(emailController.text);
-                        print(passwordController.text);
-                        print(cPasswordController.text);
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => NavScreen(),
-                        //   ),
-                        // );
-                        getData(nameController.text, emailController.text, passwordController.text, cPasswordController.text);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10.0, vertical: 5.0),
-                        child: Text(
-                          'Sign Up',
-                          style: TextStyle(color: Colors.white, fontSize: 20.0),
-                        ),
-                      ),
-                      style: TextButton.styleFrom(
-                        backgroundColor: Color(0xFF833AC7),
-                        elevation: 4.0,
+                    padding: const EdgeInsets.only(top: 30.0, left: 20.0),
+                    child: Text(
+                      'Get on board!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 35.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => Login()),
-                      );
-                    },
-                    child: Text(
-                      'I am already a member',
-                      style: TextStyle(
-                        color: Colors.white30,
-                        decoration: TextDecoration.underline,
-                        fontSize: 15.0,
-                      ),
+                  Container(
+                    padding:
+                        EdgeInsets.only(bottom: 20.0, left: 20.0, right: 20.0),
+                    child: Column(
+                      children: [
+                        // Container(
+                        //   padding: EdgeInsets.all(10.0),
+                        //   decoration: BoxDecoration(
+                        //     border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                        //   ),
+                        //   child: TextField(
+                        //     decoration: InputDecoration(
+                        //       hintText: 'Name',
+                        //       hintStyle: TextStyle(color: Colors.blueGrey),
+                        //       border: InputBorder.none,
+                        //       // icon: Icon(Icons.email_outlined,color: Colors.blueGrey,),
+                        //     ),
+                        //   ),
+                        // ),
+                        // Container(
+                        //   padding: EdgeInsets.all(10.0),
+                        //   decoration: BoxDecoration(
+                        //     border: Border(bottom: BorderSide(color: Colors.blueGrey)),
+                        //   ),
+                        //   child: TextField(
+                        //     decoration: InputDecoration(
+                        //       hintText: 'E-mail',
+                        //       hintStyle: TextStyle(
+                        //         color: Colors.blueGrey,
+                        //       ),
+                        //       border: InputBorder.none,
+                        //     ),
+                        //   ),
+                        // ),
+                        // MyTextField(
+                        //   hintText: 'Name',
+                        //   isPassword: false,
+                        // ),
+                        // MyTextField(
+                        //   hintText: 'E-mail',
+                        //   isPassword: false,
+                        // ),
+                        // MyTextField(
+                        //   hintText: 'Password',
+                        //   isPassword: true,
+                        // ),
+                        // MyTextField(
+                        //   hintText: 'Confirm Password',
+                        //   isPassword: true,
+                        // ),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: nameController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Name',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: emailController,
+                            obscureText: false,
+                            decoration: InputDecoration(
+                              hintText: 'Email',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: passwordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Password',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            border: Border(
+                                bottom: BorderSide(color: Colors.blueGrey)),
+                          ),
+                          child: TextField(
+                            controller: cPasswordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              hintText: 'Confirm Password',
+                              hintStyle: TextStyle(
+                                color: Colors.blueGrey,
+                              ),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(8.0),
+                        //   child: Text(
+                        //     'By creating an account, you agree \n  to our terms, and privacy policy',
+                        //     style: TextStyle(color: Colors.white60),
+                        //   ),
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.all(25.0),
+                          child: TextButton(
+                            onPressed: () {
+                              print(nameController.text);
+                              print(emailController.text);
+                              print(passwordController.text);
+                              print(cPasswordController.text);
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => NavScreen(),
+                              //   ),
+                              // );
+                              getData(
+                                  nameController.text,
+                                  emailController.text,
+                                  passwordController.text,
+                                  cPasswordController.text);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 5.0),
+                              child: Text(
+                                'Sign Up',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 20.0),
+                              ),
+                            ),
+                            style: TextButton.styleFrom(
+                              // backgroundColor: Color(0xFF833AC7),
+                              backgroundColor: Theme.of(context).accentColor,
+                              elevation: 4.0,
+                            ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => Login()),
+                            );
+                          },
+                          child: Text(
+                            'I am already a member',
+                            style: TextStyle(
+                              color: Colors.white30,
+                              decoration: TextDecoration.underline,
+                              fontSize: 15.0,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

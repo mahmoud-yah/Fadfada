@@ -29,6 +29,9 @@ class _MessengerScreenState extends State<MessengerScreen> {
         //   color: Colors.white,
         //   onPressed: () {},
         // ),
+        leadingWidth: 0,
+        leading: Container(),
+        centerTitle: true,
         title: Text(
           // 'Chats',
           AppLocalizations.of(context).translate("chats"),
@@ -40,14 +43,14 @@ class _MessengerScreenState extends State<MessengerScreen> {
           ),
         ),
         elevation: 0.0,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.search),
-            iconSize: 30.0,
-            color: Colors.white,
-            onPressed: () {},
-          ),
-        ],
+        // actions: <Widget>[
+        //   IconButton(
+        //     icon: Icon(Icons.search),
+        //     iconSize: 30.0,
+        //     color: Colors.white,
+        //     onPressed: () {},
+        //   ),
+        // ],
       ),
       // drawer: Drawer(
       //   // elevation: 10.0,

@@ -6,17 +6,21 @@ class Post {
   final String caption;
   final String timeAgo;
   final String imageUrl;
-  final int likes;
+   int likes;
+  final String name;
+  // final String firstName;
+  // final String lastName;
   // final int comments;
   // final int shares;
-  final bool isLiked;
+   bool isLiked;
 
-  const Post({
+   Post({
     @required this.userID,
     @required this.caption,
     @required this.timeAgo,
     @required this.imageUrl,
     @required this.likes,
+     this.name,
     // @required this.comments,
     // @required this.shares,
     this.isLiked,
