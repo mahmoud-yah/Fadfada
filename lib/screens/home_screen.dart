@@ -43,7 +43,8 @@ class _HomeScreenState extends State<HomeScreen> {
     // print(dataHolder[0]['text']);
     for (var i = 0; i < dataHolder.length; i++) {
       Post post = Post(
-        userID: dataHolder[i]['id'],
+        postID: dataHolder[i]['id'],
+        userID: dataHolder[i]['user_id'],
         caption: dataHolder[i]['text'],
         timeAgo: dataHolder[i]['created_at'],
         imageUrl: dataHolder[i]['image'],

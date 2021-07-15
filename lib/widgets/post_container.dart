@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/models.dart';
 import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/screens/comments.dart';
+import 'package:intro_app/screens/edit_post.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -17,6 +19,8 @@ class PostContainer extends StatefulWidget {
 }
 
 class _PostContainerState extends State<PostContainer> {
+  Controller ctrl = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -210,9 +214,11 @@ class _PostContainerState extends State<PostContainer> {
 }
 
 class _PostHeader extends StatelessWidget {
+  final Controller ctrl = Get.find();
+
   final Post post;
 
-  const _PostHeader({
+  _PostHeader({
     Key key,
     @required this.post,
   }) : super(key: key);
@@ -274,6 +280,21 @@ class _PostHeader extends StatelessWidget {
         //   onPressed: () => print('more'),
         // ),
         PopupMenuButton(
+          onSelected: (result) {
+            if (result == 0) {
+              print('Call SaveAPI');
+            } else if (result == 1) {
+              print('post.userid: '+post.userID.toString());
+              print('ctrl.userid: '+ctrl.currentUserProfile.userID);
+              if (post.userID.toString() == ctrl.currentUserProfile.userID.toString()) {
+                Get.to(()=>EditPost(
+                  post: post,
+                ));
+              } else
+                print('You can only edit your own posts!');
+            } else
+              print('call reportAPI');
+          },
           itemBuilder: (context) => [
             PopupMenuItem(
               child: Text(
@@ -282,6 +303,7 @@ class _PostHeader extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+              value: 0,
             ),
             PopupMenuItem(
               child: Text(
@@ -290,14 +312,16 @@ class _PostHeader extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+              value: 1,
             ),
             PopupMenuItem(
               child: Text(
-                'Save',
+                'Report',
                 style: TextStyle(
                   color: Colors.white,
                 ),
               ),
+              value: 2,
             ),
           ],
         ),

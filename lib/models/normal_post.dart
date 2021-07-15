@@ -3,6 +3,7 @@ import 'package:intro_app/models/user_model.dart';
 
 class Post {
   final int userID;
+   int postID;
   final String caption;
   final String timeAgo;
   final String imageUrl;
@@ -16,7 +17,9 @@ class Post {
   bool isLiked;
 
   Post({
+
     @required this.userID,
+    this.postID,
     @required this.caption,
     @required this.timeAgo,
     @required this.imageUrl,

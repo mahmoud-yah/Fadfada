@@ -1,29 +1,40 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
-import 'package:http/http.dart' as http;
 import 'package:intro_app/config/controller.dart';
+import 'package:intro_app/models/normal_post.dart';
+import 'package:http/http.dart'as http;
 
-class CreatePost extends StatefulWidget {
+class EditPost extends StatefulWidget {
+
+
+  final Post post;
+
+   EditPost({Key key, this.post}) : super(key: key);
+
   @override
-  _CreatePostState createState() => _CreatePostState();
+  _EditPostState createState() => _EditPostState();
 }
 
-class _CreatePostState extends State<CreatePost> {
-   TextEditingController postController = TextEditingController();
+class _EditPostState extends State<EditPost> {
+  @override
+  void initState() {
+    postController.text=widget.post.caption;
+    super.initState();
+  }
+  final TextEditingController postController = TextEditingController();
 
-   TextEditingController imageController = TextEditingController();
+  final TextEditingController imageController = TextEditingController();
 
   final Controller ctrl = Get.find();
 
-  void addPost(postText) async{
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
-    http.Response response = await http.post(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
+  void editPost(postText) async{
+    var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+widget.post.postID.toString());
+    http.Response response = await http.put(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
     print(response.body);
     if(jsonDecode(response.body)['success']==true){
       Get.back();
@@ -41,7 +52,7 @@ class _CreatePostState extends State<CreatePost> {
         // backgroundColor: Colors.black,
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
-          AppLocalizations.of(context).translate("createPost"),
+          AppLocalizations.of(context).translate("editPost"),
           // 'Create Post',
           style: TextStyle(
             // color: Colors.white,
@@ -60,13 +71,13 @@ class _CreatePostState extends State<CreatePost> {
         actions: [
           Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+            const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
             child: ElevatedButton(
               onPressed: () {
-                addPost(postController.text);
+                editPost(postController.text);
               },
               child: Text(
-                AppLocalizations.of(context).translate("post"),
+                AppLocalizations.of(context).translate("update"),
                 // 'POST',
                 style: TextStyle(color: Colors.white),
               ),
@@ -106,10 +117,10 @@ class _CreatePostState extends State<CreatePost> {
                       children: [
                         Text(
                           // 'David Brooks',
-                          '${ctrl.currentUserProfile.firstName} '+'${ctrl.currentUserProfile.lastName}',
+                          '${widget.post.firstName} '+'${widget.post.lastName}',
                           style: TextStyle(
-                              // color: Colors.white,
-                            color: Theme.of(context).primaryColor,
+                            // color: Colors.white,
+                              color: Theme.of(context).primaryColor,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold),
                         ),
