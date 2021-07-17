@@ -26,6 +26,7 @@ class _PostsDataState extends State<PostsData> {
   }
 
   final Controller ctrl = Get.find();
+  List<Post> posts = [];
 
   Future getPosts() async {
     var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+ctrl.currentUserProfile.userID);
@@ -48,11 +49,12 @@ class _PostsDataState extends State<PostsData> {
         lastName: dataHolder[i]['second_name'],
         isLiked:false,
       );
-      ctrl.addToVisitPost(post);
+      // ctrl.addToVisitPost(post);
+      posts.add(post);
       // print(data['data'][i]['text']);
     }
     print(ctrl.posts.length);
-    Get.off(ProfilePosts());
+    // Get.off(ProfilePosts());
   }
 
   @override

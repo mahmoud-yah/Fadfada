@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,9 +8,12 @@ import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/models.dart';
 import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/screens/comments.dart';
+import 'package:intro_app/screens/comments_data.dart';
 import 'package:intro_app/screens/edit_post.dart';
+import 'package:intro_app/screens/visit_profile.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:http/http.dart' as http;
 
 class PostContainer extends StatefulWidget {
   final Post post;
@@ -179,7 +185,7 @@ class _PostContainerState extends State<PostContainer> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Get.to(Comments());
+                        Get.to(GetComments(post: widget.post));
                       },
                       child: Icon(
                         Icons.mode_comment,
@@ -223,15 +229,42 @@ class _PostHeader extends StatelessWidget {
     @required this.post,
   }) : super(key: key);
 
+  void savePost(BuildContext context) async{
+    var url = Uri.parse('http://10.0.2.2:8000/api/savedPost');
+    http.Response response = await http
+        .post(url, body: {'post_id': post.postID.toString()},headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+    if(data['success']==true){
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Post saved successfully',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return Row(
       // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         // ProfileAvatar(imageUrl: post.imageUrl),
-        ProfileAvatar(
-            imageUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+        GestureDetector(
+          onTap: (){
+            Get.to(()=>VisitProfile(userID: post.userID.toString()));
+          },
+          child: ProfileAvatar(
+              imageUrl:
+                  'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+        ),
         const SizedBox(
           width: 8.0,
         ),
@@ -282,7 +315,8 @@ class _PostHeader extends StatelessWidget {
         PopupMenuButton(
           onSelected: (result) {
             if (result == 0) {
-              print('Call SaveAPI');
+              // print('Call SaveAPI');
+              savePost(context);
             } else if (result == 1) {
               print('post.userid: '+post.userID.toString());
               print('ctrl.userid: '+ctrl.currentUserProfile.userID);

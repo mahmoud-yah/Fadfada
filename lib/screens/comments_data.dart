@@ -1,86 +1,122 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/config/controller.dart';
+import 'package:http/http.dart' as http;
 import 'package:intro_app/models/comment_model.dart';
+import 'package:intro_app/models/normal_post.dart';
+import 'package:intro_app/screens/comments.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 
-class Comments extends StatelessWidget {
-  // const Comments({Key? key}) : super(key: key);
-  final List<Comment> comments;
+class GetComments extends StatefulWidget {
+  // const GetComments({Key? key}) : super(key: key);
 
-  Comments({this.comments});
+  final Post post;
 
+  GetComments({@required this.post});
 
+  @override
+  _GetCommentsState createState() => _GetCommentsState();
+}
 
-  // final testComments=[
-  //   Comment(
-  //     userID: 1,
-  //     name: 'Alan Hussein',
-  //     imageUrl: '',
-  //     caption:
-  //     'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
-  //     isLiked: true,
-  //     likes: 5,
-  //     timeAgo: '54m',
-  //   ),
-  //   Comment(
-  //     userID: 2,
-  //     name: 'Alan Hussein',
-  //     imageUrl: '',
-  //     caption:
-  //     'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
-  //     isLiked: true,
-  //     likes: 5,
-  //     timeAgo: '32m',
-  //   ),
-  //   Comment(
-  //     userID: 3,
-  //     name: 'Alan Hussein',
-  //     imageUrl: '',
-  //     caption:
-  //     'Hi my name is alan i am 23 years old i study at the AIU Hi my name is alan i am 23',
-  //     isLiked: true,
-  //     likes: 5,
-  //     timeAgo: '24m',
-  //   ),
-  //   Comment(
-  //     userID: 4,
-  //     name: 'Alan Hussein',
-  //     imageUrl: '',
-  //     caption:
-  //     'Hi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIUHi my name is alan i am 23 years old i study at the AIU',
-  //     isLiked: true,
-  //     likes: 5,
-  //     timeAgo: '15m',
-  //   ),
-  //   Comment(
-  //     userID: 5,
-  //     name: 'Alan Hussein',
-  //     imageUrl: '',
-  //     caption:
-  //     'Hi my name is alan ',
-  //     isLiked: true,
-  //     likes: 5,
-  //     timeAgo: '4m',
-  //   ),
-  // ];
-  //
-  //
-  // final Comment comment = Comment(
-  //   userID: 23,
-  //   name: 'Alan Hussein',
-  //   imageUrl: '',
-  //   caption:
-  //       'Hi my name is alan i am 23 years old i study at the AIU Hi my name is alan i am 23 years old i study at the AIU',
-  //   isLiked: true,
-  //   likes: 5,
-  //   timeAgo: '8m',
-  // );
+class _GetCommentsState extends State<GetComments> {
+  @override
+  void initState() {
+    super.initState();
+    getData = getComments();
+  }
+
+  Future<String> getData;
+
+  refreshData() {
+    getData = getComments();
+  }
+
+  final Controller ctrl = Get.find();
+
+  List<Comment> comments = [];
+
+  Future<String> getComments() async {
+    comments.clear();
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/comment/' + widget.post.postID.toString());
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+
+    var data = jsonDecode(response.body);
+    if (data['success'] == true) {
+      var dataHolder = data['data'];
+      print(dataHolder[0]['description']);
+      for (var i = 0; i < dataHolder.length; i++) {
+        // print(i);
+        Comment comment = Comment(
+          ID: dataHolder[i]['id'],
+          postID: dataHolder[i]['post_id'],
+          userID: dataHolder[i]['user_id'],
+          caption: dataHolder[i]['description'],
+          timeAgo: dataHolder[i]['created_at'],
+          imageUrl: dataHolder[i]['image'],
+          firstName: dataHolder[i]['first_name'],
+          lastName: dataHolder[i]['second_name'],
+          // ID: 1,
+          // postID: 1,
+          // userID: 6,
+          // caption:'hello from comments',
+        );
+        // print(comment.caption);
+        comments.add(comment);
+        // ctrl.addToVisitPost(post);
+        // print(data['data'][i]['text']);
+      }
+      return 'success';
+      // print(ctrl.posts.length);
+      // Get.off(() => Comments(comments: comments));
+    } else {
+      // print(response.statusCode);
+      return 'no comments';
+      // Get.off(() => Comments(comments: []));
+    }
+    // return comments;
+  }
+
+  Future postComment() async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/comment');
+    http.Response response = await http.post(url, headers: {
+      HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
+    }, body: {
+      'description': '${commentController.text}',
+      'post_id': '${widget.post.postID}',
+      'parent_id': '3',
+    });
+
+    var data = jsonDecode(response.body);
+    if(data['success']==true){
+      setState(() {
+        refreshData();
+        commentController.clear();
+        FocusScope.of(context).unfocus();
+      });
+    }
+  }
+
+  final TextEditingController commentController = TextEditingController();
+
+  // static int counter = 0;
+
+  // Future<String> apiCallLogic() async {
+  //   print("Api Called ${++counter} time(s)");
+  //   await Future.delayed(Duration(seconds: 2));
+  //   return Future.value("Hello World");
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
         title: Text(
@@ -89,23 +125,9 @@ class Comments extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).size.height*0.1),
-        child: ListView.builder(itemBuilder: (BuildContext context, int index){
-          Comment comment = comments[index];
-          print(comment.firstName);
-          return Container(
-            padding: EdgeInsets.only(top: 18,bottom: 2,),
-            child: _CommentHeader(comment: comment,),
-            // child: Text('hello',style: TextStyle(color: Colors.white),),
-          );
-        },itemCount: comments.length,),
-        // child: Column(
-        //   children: [
-        //     _CommentHeader(comment: comment),
-        //   ],
-        // ),
-      ),
+
+      backgroundColor: Theme.of(context).backgroundColor,
+
       bottomSheet: Container(
         padding: EdgeInsets.symmetric(horizontal: 20.0),
         width: double.infinity,
@@ -122,6 +144,7 @@ class Comments extends StatelessWidget {
             ),
             Expanded(
                 child: TextField(
+              controller: commentController,
               style: TextStyle(
                 // color: Colors.white,
                 color: Theme.of(context).primaryColor,
@@ -136,7 +159,9 @@ class Comments extends StatelessWidget {
               ),
             )),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                postComment();
+              },
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
                 height: MediaQuery.of(context).size.height * 0.07,
@@ -157,6 +182,62 @@ class Comments extends StatelessWidget {
           ],
         ),
       ),
+      body: FutureBuilder(
+        future: getData,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: const CircularProgressIndicator());
+
+          if (snapshot.hasData)
+            // return Text('${snapshot.data}');
+            // if(snapshot.data=='success'){
+            return Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
+              child: RefreshIndicator(
+                onRefresh: () {
+                  // print('refreshed');
+                  setState(() {
+                    refreshData();
+                  });
+                  return null;
+                },
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    Comment comment = comments[index];
+                    print(comment.firstName);
+                    return Container(
+                      padding: EdgeInsets.only(
+                        top: 18,
+                        bottom: 2,
+                      ),
+                      child: _CommentHeader(
+                        comment: comment,
+                      ),
+                      // child: Text('hello',style: TextStyle(color: Colors.white),),
+                    );
+                  },
+                  itemCount: comments.length,
+                ),
+              ),
+              // child: Column(
+              //   children: [
+              //     _CommentHeader(comment: comment),
+              //   ],
+              // ),
+            );
+          // }
+          // else return Center();
+          else
+            return const Text('Some error happened');
+        },
+      ),
+      // Center(
+      //   child: CircularProgressIndicator(),
+      // ),
+      // floatingActionButton: FloatingActionButton(child: Text('Refresh'),onPressed: (){setState(() {
+      //
+      // });},),
     );
   }
 }
@@ -210,7 +291,8 @@ class _CommentHeader extends StatelessWidget {
                               height: 1.35),
                           children: <TextSpan>[
                             TextSpan(
-                              text: '${comment.firstName} '+'${comment.lastName}  ',
+                              text: '${comment.firstName} ' +
+                                  '${comment.lastName}  ',
                               style: TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold,
@@ -236,7 +318,7 @@ class _CommentHeader extends StatelessWidget {
               ),
               SizedBox(
                 // height: 4.0,
-                height: MediaQuery.of(context).size.height*0.012,
+                height: MediaQuery.of(context).size.height * 0.012,
               ),
               Row(
                 children: [

@@ -8,8 +8,11 @@ import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
 import 'package:http/http.dart' as http;
+import 'package:intro_app/models/profile_model.dart';
 
 class EditProfile extends StatefulWidget {
+  final UserProfile profile;
+  EditProfile({this.profile});
   // final TextEditingController idTextController = TextEditingController();
   @override
   _EditProfileState createState() => _EditProfileState();

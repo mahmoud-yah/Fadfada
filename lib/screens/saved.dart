@@ -1,6 +1,66 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'dart:io';
 
-class Saved extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intro_app/config/controller.dart';
+import 'package:intro_app/models/normal_post.dart';
+import 'package:http/http.dart' as http;
+import 'package:intro_app/widgets/post_container.dart';
+
+class Saved extends StatefulWidget {
+
+  @override
+  _SavedState createState() => _SavedState();
+}
+
+class _SavedState extends State<Saved> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  List<Post> posts = [];
+
+  Future<String> getData;
+  final Controller ctrl = Get.find();
+
+  refreshData() {
+    getData = getPosts();
+  }
+
+  Future<String> getPosts() async {
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/posts/savedPost/'+ctrl.currentUserProfile.userID);
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+
+    var dataHolder = data['data'];
+    // print(dataHolder[0]['text']);
+    for (var i = 0; i < dataHolder.length; i++) {
+      Post post = Post(
+        postID: dataHolder[i]['id'],
+        userID: dataHolder[i]['user_id'],
+        caption: dataHolder[i]['text'],
+        timeAgo: dataHolder[i]['created_at'],
+        imageUrl: dataHolder[i]['image'],
+        likes: dataHolder[i]['like_number'],
+        name: dataHolder[i]['name'],
+        firstName: dataHolder[i]['first_name'],
+        lastName: dataHolder[i]['second_name'],
+        isLiked: false,
+      );
+      // ctrl.addToVisitPost(post);
+      posts.add(post);
+      // print(data['data'][i]['text']);
+    }
+    return 'ok';
+  }
+
+
 
 
   @override
@@ -19,6 +79,46 @@ class Saved extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+      ),
+      body: FutureBuilder(
+        future: getData,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting)
+            return Center(child: const CircularProgressIndicator());
+
+          if (snapshot.hasData)
+            // return Text('${snapshot.data}');
+            // if(snapshot.data=='success'){
+            return Container(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
+              child: RefreshIndicator(
+                onRefresh: () {
+                  // print('refreshed');
+                  setState(() {
+                    refreshData();
+                  });
+                  return null;
+                },
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    Post post = posts[index];
+                    return PostContainer(post: post);
+                  },
+                  itemCount: posts.length,
+                ),
+              ),
+              // child: Column(
+              //   children: [
+              //     _CommentHeader(comment: comment),
+              //   ],
+              // ),
+            );
+          // }
+          // else return Center();
+          else
+            return const Text('Some error happened');
+        },
       ),
     );
   }

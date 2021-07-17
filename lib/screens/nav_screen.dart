@@ -11,11 +11,20 @@ import 'package:get/get.dart';
 import 'package:intro_app/config/controller.dart';
 
 class NavScreen extends StatefulWidget {
+  final Controller ctrl = Get.find();
+
   @override
   _NavScreenState createState() => _NavScreenState();
 }
 
 class _NavScreenState extends State<NavScreen> {
+  void initState() {
+    // TODO: implement initState
+    userID = widget.ctrl.currentUserProfile.userID;
+    super.initState();
+  }
+
+  String userID;
 
 
   List<Widget> _screens = [

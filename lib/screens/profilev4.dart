@@ -72,7 +72,7 @@ class ProfileV4 extends StatelessWidget {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => EditProfile()),
+                      MaterialPageRoute(builder: (context) => EditProfile(profile: ctrl.currentUserProfile,)),
                     );
                   },
                   hoverColor: Colors.grey,
@@ -375,7 +375,7 @@ class ProfileV4 extends StatelessWidget {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => EditProfile()),
+                                      builder: (context) => EditProfile(profile: ctrl.currentUserProfile,)),
                                 );
                               },
                               child: Text(
@@ -435,7 +435,7 @@ class ProfileV4 extends StatelessWidget {
                                   //     builder: (context) => ProfilePosts(),
                                   //   ),
                                   // );
-                                  Get.to(PostsData());
+                                  Get.to(()=>ProfilePosts(userID: ctrl.currentUserProfile.userID));
                                 },
                                 child: Text(
                                   // 'User posts',

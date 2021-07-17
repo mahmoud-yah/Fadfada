@@ -1,20 +1,29 @@
 class Comment {
+  int ID;
   int userID;
-  String name;
+  int postID;
+  // String ID;
+  // String userID;
+  // String postID;
+  String firstName;
+  String lastName;
   String caption;
   String timeAgo;
   String imageUrl;
-  int likes;
-  bool isLiked;
+  // int likes;
+  // bool isLiked;
 
   Comment({
+    this.ID,
     this.userID,
-    this.name,
+    this.postID,
+    this.firstName,
+    this.lastName,
     this.caption,
     this.timeAgo,
     this.imageUrl,
-    this.likes,
-    this.isLiked,
+    // this.likes,
+    // this.isLiked,
   });
 
 
