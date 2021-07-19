@@ -4,7 +4,9 @@
   "createPost": "إنشاء منشور",
   "editPost": "تعديل منشور",
   "update": "تحديث",
+  "edit": "تعديل",
   "post": "نشر",
+  "report": "تبليغ",
   "postMotive": "عبر عن مشاعرك, أنت لست وحدك\nنحن جميعا هنا معك",
   "whatsHappening": "ماذا يحدث؟",
   "stories": "القصص",
@@ -34,5 +36,6 @@
   "privacy": "الخصوصية",
   "help": "مساعدة",
   "about": "حول",
-  "logout": "تسجيل الخروج"
+  "logout": "تسجيل الخروج",
+  "somethingWrong": "حدث خطأ ما"
 }

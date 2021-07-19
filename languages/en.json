@@ -5,6 +5,8 @@
   "editPost": "Edit Post",
   "update": "update",
   "post": "Post",
+  "edit": "Edit",
+  "report": "Report",
   "postMotive": "Express your feelings, you are not alone\nWe are all here with you",
   "whatsHappening": "What's happening?",
   "stories": "Stories",
@@ -34,5 +36,6 @@
   "privacy": "Privacy",
   "help": "Help",
   "about": "About",
-  "logout": "Logout"
+  "logout": "Logout",
+  "somethingWrong": "Something went wrong"
 }

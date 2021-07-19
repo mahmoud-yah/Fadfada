@@ -9,16 +9,15 @@ import 'package:http/http.dart' as http;
 import 'package:intro_app/widgets/post_container.dart';
 
 class Saved extends StatefulWidget {
-
   @override
   _SavedState createState() => _SavedState();
 }
 
 class _SavedState extends State<Saved> {
-
   @override
   void initState() {
     // TODO: implement initState
+    getData = getPosts();
     super.initState();
   }
 
@@ -32,36 +31,44 @@ class _SavedState extends State<Saved> {
   }
 
   Future<String> getPosts() async {
+    posts.clear();
     var url = Uri.parse(
-        'http://10.0.2.2:8000/api/posts/savedPost/'+ctrl.currentUserProfile.userID);
-    http.Response response = await http.get(url,
-        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
-    var data = jsonDecode(response.body);
+      'http://10.0.2.2:8000/api/savedPost/${ctrl.currentUserProfile.userID}',
+    );
+    // print(ctrl.currentUserProfile.userID);
+    try {
+      http.Response response = await http.get(url,
+          headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+      // print(response.body);
+      // print(response.statusCode);
+      var data = jsonDecode(response.body);
 
-    var dataHolder = data['data'];
-    // print(dataHolder[0]['text']);
-    for (var i = 0; i < dataHolder.length; i++) {
-      Post post = Post(
-        postID: dataHolder[i]['id'],
-        userID: dataHolder[i]['user_id'],
-        caption: dataHolder[i]['text'],
-        timeAgo: dataHolder[i]['created_at'],
-        imageUrl: dataHolder[i]['image'],
-        likes: dataHolder[i]['like_number'],
-        name: dataHolder[i]['name'],
-        firstName: dataHolder[i]['first_name'],
-        lastName: dataHolder[i]['second_name'],
-        isLiked: false,
-      );
-      // ctrl.addToVisitPost(post);
-      posts.add(post);
-      // print(data['data'][i]['text']);
+      print(response.body);
+
+      var dataHolder = data['data'];
+      // print(dataHolder[0]['text']);
+      for (var i = 0; i < dataHolder.length; i++) {
+        Post post = Post(
+          postID: dataHolder[i]['id'],
+          userID: dataHolder[i]['user_id'],
+          caption: dataHolder[i]['text'],
+          timeAgo: dataHolder[i]['created_at'],
+          imageUrl: dataHolder[i]['image'],
+          likes: dataHolder[i]['like_number'],
+          name: dataHolder[i]['name'],
+          firstName: dataHolder[i]['first_name'],
+          lastName: dataHolder[i]['second_name'],
+          isLiked: false,
+        );
+        posts.add(post);
+        print(post);
+      }
+    } catch (e) {
+      print(e);
     }
+
     return 'ok';
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -87,14 +94,11 @@ class _SavedState extends State<Saved> {
             return Center(child: const CircularProgressIndicator());
 
           if (snapshot.hasData)
-            // return Text('${snapshot.data}');
-            // if(snapshot.data=='success'){
             return Container(
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.1),
               child: RefreshIndicator(
-                onRefresh: () {
-                  // print('refreshed');
+                onRefresh: () async {
                   setState(() {
                     refreshData();
                   });

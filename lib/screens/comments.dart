@@ -1,12 +1,19 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/comment_model.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
+import 'package:http/http.dart' as http;
 
 class Comments extends StatelessWidget {
   // const Comments({Key? key}) : super(key: key);
   final List<Comment> comments;
+
 
   Comments({this.comments});
 
@@ -164,7 +171,9 @@ class Comments extends StatelessWidget {
 class _CommentHeader extends StatelessWidget {
   final Comment comment;
 
-  const _CommentHeader({
+  final Controller ctrl = Get.find();
+
+   _CommentHeader({
     Key key,
     @required this.comment,
   }) : super(key: key);
@@ -257,15 +266,92 @@ class _CommentHeader extends StatelessWidget {
             ],
           ),
         ),
-        IconButton(
-          icon: Icon(
-            Icons.more_vert,
-            // color: Colors.white,
-            color: Theme.of(context).primaryColor,
-          ),
-          onPressed: () => print('more'),
+        PopupMenuButton(
+          onSelected: (result) {
+            if (result == 0) {
+              if (comment.userID.toString() ==
+                  ctrl.currentUserProfile.userID.toString()) {
+                deleteComment(context);
+              } else
+                print('You can only edit your own posts!');
+            } else if (result == 1) {
+              // print('post.userid: ' + post.userID.toString());
+              // print('ctrl.userid: ' + ctrl.currentUserProfile.userID);
+              if (comment.userID.toString() ==
+                  ctrl.currentUserProfile.userID.toString()) {
+                // editComment();
+              } else
+                print('You can only edit your own posts!');
+            } else
+              print('call Report comment');
+              // reportPost(context);
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              value: 0,
+            ),
+            PopupMenuItem(
+              child: Text(
+                'Edit',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              value: 1,
+            ),
+            PopupMenuItem(
+              child: Text(
+                'Report',
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              value: 2,
+            ),
+          ],
         ),
       ],
     );
   }
+
+  void deleteComment(BuildContext context) async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/like/${comment.ID}');
+    // print('reporting');
+    http.Response response = await http.delete(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+
+    var data = jsonDecode(response.body);
+    // if(data['success']==true){
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Comment deleted successfully',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).translate('somethingWrong'),
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    }
+  }
+
 }

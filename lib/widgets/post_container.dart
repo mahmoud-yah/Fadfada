@@ -10,6 +10,7 @@ import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/screens/comments.dart';
 import 'package:intro_app/screens/comments_data.dart';
 import 'package:intro_app/screens/edit_post.dart';
+import 'package:intro_app/screens/report_post.dart';
 import 'package:intro_app/screens/visit_profile.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -128,6 +129,7 @@ class _PostContainerState extends State<PostContainer> {
                   children: [
                     GestureDetector(
                       onTap: () {
+                        likePost();
                         setState(() {
                           if (widget.post.isLiked == false) {
                             widget.post.likes = widget.post.likes + 1;
@@ -217,6 +219,47 @@ class _PostContainerState extends State<PostContainer> {
       ),
     );
   }
+
+  void likePost() async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/like');
+    // print('reporting');
+    http.Response response = await http.post(
+      url,
+      body: {'post_id': widget.post.postID.toString(), 'like':true.toString()},
+      headers: {
+        HttpHeaders.contentTypeHeader: "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+        HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
+      },
+    );
+    print(response.body);
+    var data = jsonDecode(response.body);
+    // if(data['success']==true){
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Post liked successfully',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Something went wrong.',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    }
+  }
 }
 
 class _PostHeader extends StatelessWidget {
@@ -229,13 +272,13 @@ class _PostHeader extends StatelessWidget {
     @required this.post,
   }) : super(key: key);
 
-  void savePost(BuildContext context) async{
+  void savePost(BuildContext context) async {
     var url = Uri.parse('http://10.0.2.2:8000/api/savedPost');
-    http.Response response = await http
-        .post(url, body: {'post_id': post.postID.toString()},headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    http.Response response = await http.post(url,
+        body: {'post_id': post.postID.toString()},
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);
-    if(data['success']==true){
-
+    if (data['success'] == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -249,7 +292,40 @@ class _PostHeader extends StatelessWidget {
     }
   }
 
+  void reportPost(BuildContext context) async {
+    var url = Uri.parse('http://10.0.2.2:8000/api/report');
+    print('reporting');
+    http.Response response = await http.post(url,
+        body: {'post_id': post.postID.toString(), 'description': ' '},
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
 
+    var data = jsonDecode(response.body);
+    // if(data['success']==true){
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Post reported successfully',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Something went wrong.',
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -258,8 +334,8 @@ class _PostHeader extends StatelessWidget {
       children: [
         // ProfileAvatar(imageUrl: post.imageUrl),
         GestureDetector(
-          onTap: (){
-            Get.to(()=>VisitProfile(userID: post.userID.toString()));
+          onTap: () {
+            Get.to(() => VisitProfile(userID: post.userID.toString()));
           },
           child: ProfileAvatar(
               imageUrl:
@@ -318,16 +394,17 @@ class _PostHeader extends StatelessWidget {
               // print('Call SaveAPI');
               savePost(context);
             } else if (result == 1) {
-              print('post.userid: '+post.userID.toString());
-              print('ctrl.userid: '+ctrl.currentUserProfile.userID);
-              if (post.userID.toString() == ctrl.currentUserProfile.userID.toString()) {
-                Get.to(()=>EditPost(
-                  post: post,
-                ));
+              print('post.userid: ' + post.userID.toString());
+              print('ctrl.userid: ' + ctrl.currentUserProfile.userID);
+              if (post.userID.toString() ==
+                  ctrl.currentUserProfile.userID.toString()) {
+                Get.to(() => EditPost(
+                      post: post,
+                    ));
               } else
                 print('You can only edit your own posts!');
             } else
-              print('call reportAPI');
+              Get.to(()=>(ReportPost(post: post)));
           },
           itemBuilder: (context) => [
             PopupMenuItem(
