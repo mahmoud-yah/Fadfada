@@ -37,5 +37,10 @@
   "help": "مساعدة",
   "about": "حول",
   "logout": "تسجيل الخروج",
-  "somethingWrong": "حدث خطأ ما"
+  "somethingWrong": "حدث خطأ ما",
+  "you": "أنت",
+  "liked": "أعجبه منشورك",
+  "commented": "علق على منشورك",
+  "youLiked": "أُعجبت بمنشورك",
+  "youCommented": "علقت على منشورك"
 }

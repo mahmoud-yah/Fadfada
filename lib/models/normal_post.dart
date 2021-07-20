@@ -18,12 +18,12 @@ class Post {
 
   Post({
 
-    @required this.userID,
+    this.userID,
     this.postID,
-    @required this.caption,
-    @required this.timeAgo,
-    @required this.imageUrl,
-    @required this.likes,
+    this.caption,
+    this.timeAgo,
+    this.imageUrl,
+    this.likes,
     this.name,
     this.firstName,
     this.lastName,

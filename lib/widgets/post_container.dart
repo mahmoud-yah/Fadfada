@@ -15,6 +15,7 @@ import 'package:intro_app/screens/visit_profile.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as dio;
 
 class PostContainer extends StatefulWidget {
   final Post post;
@@ -221,19 +222,25 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   void likePost() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/like');
+    var url = 'http://10.0.2.2:8000/api/like';
     // print('reporting');
-    http.Response response = await http.post(
-      url,
-      body: {'post_id': widget.post.postID.toString(), 'like':true.toString()},
-      headers: {
-        HttpHeaders.contentTypeHeader: "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
-        HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
-      },
-    );
+
+    var response = await GetConnect().post(
+        url, {'post_id': widget.post.postID.toString(), 'like': true},
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    // dio.Response response = await dio.Dio().post(
+    //   url,
+    //   data: {'post_id': widget.post.postID.toString(), 'like':true},
+    //   options: dio.Options(
+    //     headers: {
+    //       // HttpHeaders.contentTypeHeader: "application/json",
+    //       // "Content-Type": "application/x-www-form-urlencoded",
+    //       HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
+    //     },
+    //   ),
+    // );
     print(response.body);
-    var data = jsonDecode(response.body);
+    // var data = jsonDecode(response.body);
     // if(data['success']==true){
     print(response.statusCode);
     if (response.statusCode == 200) {
@@ -404,7 +411,7 @@ class _PostHeader extends StatelessWidget {
               } else
                 print('You can only edit your own posts!');
             } else
-              Get.to(()=>(ReportPost(post: post)));
+              Get.to(() => (ReportPost(post: post)));
           },
           itemBuilder: (context) => [
             PopupMenuItem(

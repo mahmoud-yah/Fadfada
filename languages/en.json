@@ -37,5 +37,10 @@
   "help": "Help",
   "about": "About",
   "logout": "Logout",
-  "somethingWrong": "Something went wrong"
+  "somethingWrong": "Something went wrong",
+  "you": "You",
+  "liked": "Likes your post",
+  "commented": "Commented on your post",
+  "youLiked": "liked your own post",
+  "youCommented": "commented on your own post"
 }
