@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ctrl.posts.clear();
     // ctrl.posts
     var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    // var url = Uri.parse('http://192.168.1.2:8000/api/posts');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);
@@ -65,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         timeAgo: dataHolder[i]['created_at'],
         imageUrl: dataHolder[i]['image'],
         likes: dataHolder[i]['like_number'],
+        commentsNumber: dataHolder[i]['comment_number'].toString(),
         name: dataHolder[i]['name'],
         firstName: dataHolder[i]['first_name'],
         lastName: dataHolder[i]['second_name'],

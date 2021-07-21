@@ -49,6 +49,7 @@ class _PostContainerState extends State<PostContainer> {
                 const SizedBox(height: 6.0),
                 Text(
                   widget.post.caption,
+                  // '0',
                   style: TextStyle(
                     // color: Colors.white,
                     color: Theme.of(context).primaryColor,
@@ -154,6 +155,7 @@ class _PostContainerState extends State<PostContainer> {
                       height: 3.0,
                     ),
                     Text(
+                      // '0',
                       widget.post.likes.toString(),
                       style: TextStyle(
                         // color: Colors.white,
@@ -200,10 +202,9 @@ class _PostContainerState extends State<PostContainer> {
                       height: 3.0,
                     ),
                     Text(
-                      // post.comments.toString(),
-                      '0',
+                      widget.post.commentsNumber.toString(),
+                      // '0',
                       style: TextStyle(
-                        // color: Colors.white,
                         color: Theme.of(context).primaryColor,
                       ),
                     ),

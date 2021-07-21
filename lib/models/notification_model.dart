@@ -3,6 +3,7 @@
 import 'user_model.dart';
 
 class PostNotification {
+  final String notificationID;
   final String userID;
   final String postID;
   final String likeID;
@@ -18,6 +19,7 @@ class PostNotification {
   // final String text;
 
   PostNotification({
+    this.notificationID,
     this.userID,
     this.postID,
     this.likeID,

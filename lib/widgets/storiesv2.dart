@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/models/message_model.dart';
+import 'package:intro_app/screens/story.dart';
+
 // import 'package:intro_app/screens/chat_screen.dart';
 // import 'package:intro_app/screens/profilev3.dart';
 
@@ -65,14 +68,19 @@ class StoriesTest extends StatelessWidget {
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        CircleAvatar(
-                          radius: 35.0,
-                          backgroundColor: Colors.blue,
-                          // backgroundColor: Color(ColorTween(begin: Colors.blue,end: Colors.red)),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => ShowStory());
+                          },
                           child: CircleAvatar(
-                            radius: 32.5,
-                            backgroundImage:
-                                AssetImage(favorites[index].imageUrl),
+                            radius: 35.0,
+                            backgroundColor: Colors.blue,
+                            // backgroundColor: Color(ColorTween(begin: Colors.blue,end: Colors.red)),
+                            child: CircleAvatar(
+                              radius: 32.5,
+                              backgroundImage:
+                                  AssetImage(favorites[index].imageUrl),
+                            ),
                           ),
                         ),
                         SizedBox(

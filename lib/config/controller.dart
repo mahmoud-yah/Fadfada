@@ -1,12 +1,11 @@
 import 'package:get/get.dart';
 import 'package:intro_app/models/normal_post.dart';
-
-// import 'package:intro_app/screens/profile.dart';
 import 'package:intro_app/models/profile_model.dart';
 
 class Controller extends GetxController {
   var count = 0;
   var token;
+  bool isEmulator;
   var posts = [];
   var toVisitPosts = [];
   UserProfile currentUserProfile = UserProfile();
@@ -31,6 +30,8 @@ class Controller extends GetxController {
   //     print(posts[i].userID);
   //   }
   // }
+
+
 
   void addPost(Post post) {
     posts.add(post);
@@ -74,5 +75,4 @@ class Controller extends GetxController {
   void addToVisitPost(Post post) {
     toVisitPosts.add(post);
   }
-
 }

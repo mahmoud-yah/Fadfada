@@ -7,7 +7,7 @@ import 'package:intro_app/widgets/profile_avatar.dart';
 
 class Stories extends StatelessWidget {
   final User currentUser;
-  final List<Story> stories;
+  final List<DummyStory> stories;
 
   const Stories({Key key, @required this.currentUser, @required this.stories})
       : super(key: key);
@@ -31,7 +31,7 @@ class Stories extends StatelessWidget {
               ),
             );
           }
-          final Story story = stories[index - 1];
+          final DummyStory story = stories[index - 1];
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 4.0),
             child: _StoryCard(story: story),
@@ -45,7 +45,7 @@ class Stories extends StatelessWidget {
 class _StoryCard extends StatelessWidget {
   final bool isAddStory;
   final User currentUser;
-  final Story story;
+  final DummyStory story;
 
   const _StoryCard(
       {Key key, this.isAddStory = false, this.currentUser, this.story})

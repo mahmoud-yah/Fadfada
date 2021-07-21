@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
   @override
   void initState() {
     // TODO: implement initState
+    print('hello posts');
     getData = getPosts();
     super.initState();
   }
@@ -37,6 +39,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
   }
 
   Future<String> getPosts() async {
+    posts.clear();
     var url = Uri.parse(
         'http://10.0.2.2:8000/api/posts/' + widget.userID);
     http.Response response = await http.get(url,
@@ -53,6 +56,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
         timeAgo: dataHolder[i]['created_at'],
         imageUrl: dataHolder[i]['image'],
         likes: dataHolder[i]['like_number'],
+        commentsNumber: dataHolder[i]['like_number'].toString(),
         name: dataHolder[i]['name'],
         firstName: dataHolder[i]['first_name'],
         lastName: dataHolder[i]['second_name'],
@@ -62,6 +66,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
       posts.add(post);
       // print(data['data'][i]['text']);
     }
+    posts = List.from(posts.reversed);
     return 'ok';
   }
 
@@ -91,7 +96,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.1),
               child: RefreshIndicator(
-                onRefresh: () {
+                onRefresh: () async{
                   // print('refreshed');
                   setState(() {
                     refreshData();

@@ -1,14 +1,19 @@
-import 'package:meta/meta.dart';
-import 'package:intro_app/models/models.dart';
-
 class Story {
-  final User user;
+  final String firstName;
+  final String lastName;
+  final String storyID;
+  final String userID;
   final String imageUrl;
-  final bool isViewed;
+  final String videoUrl;
+  final String time;
 
-  const Story({
-    @required this.user,
-    @required this.imageUrl,
-    this.isViewed = false,
+  Story({
+    this.firstName,
+    this.lastName,
+    this.storyID,
+    this.userID,
+    this.imageUrl,
+    this.videoUrl,
+    this.time,
   });
 }

@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/screens/Notifications.dart';
@@ -19,7 +22,6 @@ class NavScreen extends StatefulWidget {
 
 class _NavScreenState extends State<NavScreen> {
   void initState() {
-    // TODO: implement initState
     userID = widget.ctrl.currentUserProfile.userID;
     super.initState();
   }

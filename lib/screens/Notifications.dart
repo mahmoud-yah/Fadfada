@@ -12,7 +12,6 @@ import 'package:intro_app/screens/show_post.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
 import 'package:http/http.dart' as http;
 
-
 final Controller ctrl = Get.find();
 
 class Notifications extends StatefulWidget {
@@ -50,6 +49,7 @@ class _NotificationsState extends State<Notifications> {
     // print(dataHolder[0]['text']);
     for (var i = 0; i < dataHolder.length; i++) {
       PostNotification notification = PostNotification(
+        notificationID: dataHolder[i]['id'].toString(),
         postID: dataHolder[i]['post_id'].toString(),
         userID: dataHolder[i]['user_id'].toString(),
         likeID: dataHolder[i]['like_id'].toString(),
@@ -59,7 +59,7 @@ class _NotificationsState extends State<Notifications> {
         type: dataHolder[i]['description'],
         fromUserID: dataHolder[i]['from_user_id'].toString(),
         time: dataHolder[i]['created_at'],
-        seen: dataHolder[i]['seen']=='false'?false:true,
+        seen: dataHolder[i]['seen'] == 'false' ? false : true,
         // imageUrl: dataHolder[i]['image'],
       );
       // ctrl.addPost(post);
@@ -130,8 +130,10 @@ class _NotificationsState extends State<Notifications> {
                   itemBuilder: (BuildContext context, int index) {
                     final PostNotification notification = notifications[index];
                     return GestureDetector(
-                      onTap: () async{
-                        await Get.to(() => ShowPost(notification: notification,));
+                      onTap: () async {
+                        await Get.to(() => ShowPost(
+                              notification: notification,
+                            ));
                         refreshData();
                       },
                       child: NotificationContainer(notification: notification),
@@ -198,48 +200,61 @@ class NotificationContainer extends StatelessWidget {
       ),
       height: 100.0,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10.0),
-                child: ProfileAvatar(
-                  // imageUrl: notification.imageUrl,
-                  imageUrl:
-                      'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-                ),
-              ),
-              Container(
-                // width: MediaQuery.of(context).size.width*0.3,
-                constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width*0.3,),
-                child: Text(
-                  getNotificationName(context),
-                  style: TextStyle(
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ),
-              SizedBox(width: 5.0),
-              Container(
-                child: Text(
-                  getNotificationText(context),
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    color: Colors.white,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
-            ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: CircleAvatar(
+              radius: 28,
+              backgroundImage: CachedNetworkImageProvider('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+            )
+            // ProfileAvatar(
+            //   // imageUrl: notification.imageUrl,
+            //   imageUrl:
+            //       'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+            //   // radius: 35,
+            // ),
           ),
-          Text(
-            notification.time,
-            style: TextStyle(fontSize: 13.0, color: Colors.white),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    // width: MediaQuery.of(context).size.width*0.3,
+                    constraints: BoxConstraints(
+                      maxWidth: MediaQuery.of(context).size.width * 0.3,
+                    ),
+                    child: Text(
+                      getNotificationName(context),
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  SizedBox(width: 5.0),
+                  Container(
+                    child: Text(
+                      getNotificationText(context),
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        color: Colors.white,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Text(
+                notification.time,
+                style: TextStyle(fontSize: 13.0, color: Colors.white),
+              ),
+            ],
           ),
         ],
       ),
@@ -247,23 +262,23 @@ class NotificationContainer extends StatelessWidget {
   }
 
   String getNotificationText(BuildContext context) {
-    if(notification.type=='like'){
-      if(notification.fromUserID== ctrl.currentUserProfile.userID){
+    if (notification.type == 'like') {
+      if (notification.fromUserID == ctrl.currentUserProfile.userID) {
         return AppLocalizations.of(context).translate('youLiked');
-      }
-      else return AppLocalizations.of(context).translate('liked');
-    }
-    else{
-      if(notification.fromUserID==ctrl.currentUserProfile.userID){
+      } else
+        return AppLocalizations.of(context).translate('liked');
+    } else {
+      if (notification.fromUserID == ctrl.currentUserProfile.userID) {
         return AppLocalizations.of(context).translate('youCommented');
-      }
-      else return AppLocalizations.of(context).translate('commented');
+      } else
+        return AppLocalizations.of(context).translate('commented');
     }
   }
 
   String getNotificationName(BuildContext context) {
-    if(notification.fromUserID==ctrl.currentUserProfile.userID)
+    if (notification.fromUserID == ctrl.currentUserProfile.userID)
       return AppLocalizations.of(context).translate('you');
-    else return '${notification.firstName} '+'${notification.lastName} '+'fasf fsafasfsa fas fas fas fas fa sf a fas fasafs';
+    else
+      return '${notification.firstName} ' + '${notification.lastName}';
   }
 }

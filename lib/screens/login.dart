@@ -22,6 +22,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  @override
+  void initState() {
+    super.initState();
+  }
   final ctrl = Get.put(Controller());
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -30,7 +34,7 @@ class _LoginState extends State<Login> {
   // Controller ctrl = Get.find();
 
   var url = Uri.parse('http://10.0.2.2:8000/api/login');
-
+  // var url = Uri.parse('http://192.168.1.2:8000/api/login');
   Future getData(email, password) async {
     setState(() {
       inProgress = true;
@@ -43,7 +47,7 @@ class _LoginState extends State<Login> {
     ctrl.setTokenValue(token);
     // print('ok');
     if (jsonDecode(response.body)['success'] == true) {
-      await getPosts();
+      // await getPosts();
       await getProfile();
       setState(() {
         inProgress = false;
@@ -52,35 +56,37 @@ class _LoginState extends State<Login> {
     }
   }
 
-  Future getPosts() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
-    http.Response response = await http.get(url,
-        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
-    var data = jsonDecode(response.body);
-
-    var dataHolder = data['data'];
-    // print(dataHolder[0]['text']);
-    for (var i = 0; i < dataHolder.length; i++) {
-      Post post = Post(
-        postID: dataHolder[i]['id'],
-        userID: dataHolder[i]['user_id'],
-        caption: dataHolder[i]['text'],
-        timeAgo: dataHolder[i]['created_at'],
-        imageUrl: dataHolder[i]['image'],
-        likes: dataHolder[i]['like_number'],
-        name: dataHolder[i]['name'],
-        firstName: dataHolder[i]['first_name'],
-        lastName: dataHolder[i]['second_name'],
-        isLiked:false,
-      );
-      ctrl.addPost(post);
-      // print(data['data'][i]['text']);
-    }
-    print(ctrl.posts.length);
-  }
+  // Future getPosts() async {
+  //   var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+  //   http.Response response = await http.get(url,
+  //       headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+  //   var data = jsonDecode(response.body);
+  //
+  //   var dataHolder = data['data'];
+  //   // print(dataHolder[0]['text']);
+  //   for (var i = 0; i < dataHolder.length; i++) {
+  //     Post post = Post(
+  //       postID: dataHolder[i]['id'],
+  //       userID: dataHolder[i]['user_id'],
+  //       caption: dataHolder[i]['text'],
+  //       timeAgo: dataHolder[i]['created_at'],
+  //       imageUrl: dataHolder[i]['image'],
+  //       likes: dataHolder[i]['like_number'],
+  //       commentsNumber: dataHolder[i]['comment_number'].toString(),
+  //       name: dataHolder[i]['name'],
+  //       firstName: dataHolder[i]['first_name'],
+  //       lastName: dataHolder[i]['second_name'],
+  //       isLiked:false,
+  //     );
+  //     ctrl.addPost(post);
+  //     // print(data['data'][i]['text']);
+  //   }
+  //   print(ctrl.posts.length);
+  // }
 
   Future getProfile() async {
     var url = Uri.parse('http://10.0.2.2:8000/api/profile');
+    // var url = Uri.parse('http://192.168.1.2:8000/api/profile');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

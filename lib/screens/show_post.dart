@@ -8,11 +8,12 @@ import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/models/notification_model.dart';
 import 'package:intro_app/widgets/post_container.dart';
+import 'package:http/http.dart' as http;
 
 class ShowPost extends StatefulWidget {
   final PostNotification notification;
 
-  const ShowPost({Key key,this.notification}) : super(key: key);
+  const ShowPost({Key key, this.notification}) : super(key: key);
 
   @override
   _ShowPostState createState() => _ShowPostState();
@@ -21,35 +22,55 @@ class ShowPost extends StatefulWidget {
 class _ShowPostState extends State<ShowPost> {
   @override
   void initState() {
+    print('i am in show post');
+    // print(widget.notification.lastName);
     getData = getPost();
+    setSeen();
     super.initState();
   }
 
   final Controller ctrl = Get.find();
   Future<String> getData;
-  Post post = Post();
+  Post post;
 
   void setSeen() async{
     // We need notification id
-    var url = 'http://10.0.2.2:8000/api/notification/${widget.notification.postID}';
+    // var url = 'http://10.0.2.2:8000/api/notification/${widget.notification.notificationID}';
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/notification/${widget.notification.notificationID}');
+    http.Response response = await http.put(url,body: {'seen':'true'},headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+        // var response =  await GetConnect().put(url, {'seen':'true'});
+    if(response.statusCode!=200){
+      print(response.body);
+    }
+
   }
 
   Future<String> getPost() async {
-    var url = 'http://10.0.2.2:8000/api/posts/detail/${widget.notification.postID}';
-    var response = await GetConnect().get(url,
+    // var url = 'http://10.0.2.2:8000/api/posts/detail/${widget.notification.postID}';
+    // http response = await GetConnect().get(url,
+    //     headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    // print(response.body);
+    // var data = response.body;
+    //
+    // var dataHolder = data['data'];
+    print('hello');
+    var url = Uri.parse(
+        'http://10.0.2.2:8000/api/posts/detail/${widget.notification.postID}');
+    http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
-    print(response.body);
-    var data = response.body;
-
+    var data = jsonDecode(response.body);
     var dataHolder = data['data'];
+
     print(dataHolder['text']);
-      post = Post(
+    post = Post(
       postID: dataHolder['id'],
       userID: dataHolder['user_id'],
       caption: dataHolder['text'],
       timeAgo: dataHolder['created_at'],
       imageUrl: dataHolder['image'],
       likes: dataHolder['like_number'],
+      commentsNumber: dataHolder['comment_number'].toString(),
       name: dataHolder['name'],
       firstName: dataHolder['first_name'],
       lastName: dataHolder['second_name'],
@@ -59,7 +80,10 @@ class _ShowPostState extends State<ShowPost> {
   }
 
   refreshData() {
-    getData = getPost();
+    print('refreshing');
+    setState(() {
+      getData = getPost();
+    });
   }
 
   @override
@@ -68,7 +92,10 @@ class _ShowPostState extends State<ShowPost> {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: AppBar(
         backgroundColor: Theme.of(context).backgroundColor,
-        title: Text(AppLocalizations.of(context).translate('post'),style: TextStyle(color: Theme.of(context).primaryColor),),
+        title: Text(
+          AppLocalizations.of(context).translate('post'),
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
         centerTitle: true,
       ),
       body: FutureBuilder(
@@ -97,12 +124,19 @@ class _ShowPostState extends State<ShowPost> {
               ),
             );
           else {
-            print(snapshot.error);
+            print('ok');
+            print(snapshot);
             return Center(
                 child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text('Some error happened',style: TextStyle(color: Theme.of(context).primaryColor,fontSize: 20),),
+                Text(
+                  'Some error happened',
+                  // snapshot.error.toString(),
+                  // post.firstName,
+                  style: TextStyle(
+                      color: Theme.of(context).primaryColor, fontSize: 20),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     refreshData();

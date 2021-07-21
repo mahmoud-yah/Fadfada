@@ -8,6 +8,7 @@ class Post {
   final String timeAgo;
   final String imageUrl;
   int likes;
+  String commentsNumber;
   final String name;
   final String firstName;
   final String lastName;
@@ -27,6 +28,7 @@ class Post {
     this.name,
     this.firstName,
     this.lastName,
+    this.commentsNumber,
     // @required this.comments,
     // @required this.shares,
     this.isLiked,
