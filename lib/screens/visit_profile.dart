@@ -54,7 +54,8 @@ class _VisitProfileState extends State<VisitProfile> {
   }
 
   Future<String> getProfile() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/profile/' + widget.userID);
+    // var url = Uri.parse('http://10.0.2.2:8000/api/profile/' + widget.userID);
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile/' + widget.userID);
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

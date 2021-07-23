@@ -36,7 +36,8 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       inProgress = true;
     });
-    var url = Uri.parse('http://10.0.2.2:8000/api/profile/1');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/profile/1');
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile/1');
     // print('hello');
     http.Response response = await http.put(url, body: {
       'first_name': firstNameTextController.text,

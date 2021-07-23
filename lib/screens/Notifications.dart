@@ -39,8 +39,8 @@ class _NotificationsState extends State<Notifications> {
   Future<String> getNotifications() async {
     notifications.clear();
     // ctrl.posts
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/notification/${ctrl.currentUserProfile.userID.toString()}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/notification/${ctrl.currentUserProfile.userID.toString()}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/notification/${ctrl.currentUserProfile.userID.toString()}');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);
@@ -66,6 +66,7 @@ class _NotificationsState extends State<Notifications> {
       notifications.add(notification);
       // print(data['data'][i]['text']);
     }
+    notifications = List.from(notifications.reversed);
     // ctrl.posts = List.from(ctrl.posts.reversed);
     // print(ctrl.posts.length);
     return 'ok';

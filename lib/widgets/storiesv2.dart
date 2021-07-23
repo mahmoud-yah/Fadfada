@@ -1,13 +1,126 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intro_app/app_localizations.dart';
+import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/message_model.dart';
+import 'package:intro_app/models/story_model.dart';
 import 'package:intro_app/screens/story.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart' as myDio;
+import 'package:intro_app/screens/test_video.dart';
+import 'package:http_parser/http_parser.dart';
 
 // import 'package:intro_app/screens/chat_screen.dart';
 // import 'package:intro_app/screens/profilev3.dart';
 
 class StoriesTest extends StatelessWidget {
+  final List<Story> stories;
+  final Controller ctrl = Get.find();
+
+  StoriesTest({this.stories});
+
+  postVideo(String path) async {
+    Map body = {'video': path};
+    // var url = 'http://10.0.2.2:8000/api/story';
+    var url = 'http://192.168.1.2:8000/api/story';
+    var response = await myDio.Dio().post(
+      url,
+      data: body,
+      options: myDio.Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 500;
+        },
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',
+          'Accept': 'application/json'
+        },
+      ),
+    );
+    // print(body.toString());
+    print(response.statusCode);
+    print(response.headers);
+    print(response.data);
+
+    // var multipartFile = http.MultipartFile.fromBytes(
+    //   'file',
+    //   (await rootBundle.load('images/lilkid.mp4')).buffer.asUint8List(),
+    //   filename: 'lilkid.mp4', // use the real name if available, or omit
+    //   // contentType: MediaType('video', 'mp4'),
+    // );
+    //
+    // // request.files.add(multipartFile);
+    // var url = Uri.parse('http://10.0.2.2:8000/api/story');
+    // var request = http.MultipartRequest("POST",url);
+    // // request.files.add(await http.MultipartFile.fromPath('story', 'C:\\Users\\m-y-6\\Desktop\\lilkid.mp4'));
+    // request.files.add(multipartFile);
+    // request.headers[HttpHeaders.authorizationHeader]='Bearer ${ctrl.token}';
+    // // request.headers['Accept']='application/json';
+    // var response = await request.send();
+    // if (response.statusCode == 200) print('Uploaded!');else print(response.statusCode);
+    // print(response.statusCode);
+
+    // http.Response response = await http.post(url,body: {
+    //   'video':path,
+    // },headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'},);
+    // print(response.body);
+    // print(response.statusCode);
+    // if (response.statusCode == 302) {
+    //   var responseUrl = response.headers['location'];
+    //   http.get(responseUrl);
+    // }
+
+    // String url = 'http://10.0.2.2:8000/api/story';
+    //
+
+    // http.Client client = new http.Client();
+    //
+    // var response = await GetConnect().post(url, body,headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',"Accept" : "application/json"});
+    // // http.Response response = await client.post(Uri.parse(url), body: body,headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',"Accept" : "application/json"});
+    // print(response.body);
+    //
+    // print(response.statusCode);
+    // // print(response.isRedirect);
+    // print(response.statusCode);
+    // if (response.statusCode == 302) {
+    // //   // url = response.headers['location'];
+    // //   // client.get(Uri.parse(url));
+    // //   // response = await client.post(Uri.parse(url), body: body,headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    // //   // print(response.body);
+    //   print(response.headers);
+    //   if(response.headers.containsKey("location")){
+    //     print('hello');
+    //     var url = 'http://10.0.2.2:8000/api/story';
+    //     // final getResponse = await GetConnect().post(url,body,headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',"Accept" : "application/json"});
+    //     // print(getResponse.statusCode);
+    //     final getResponse = await GetConnect().get(response.headers["location"]);
+    //     // print(getResponse.statusCode);
+    //     print(getResponse.body);
+    //     print('getResponse.statusCode:' + getResponse.statusCode.toString());
+    //   }
+    // }
+    // print(response);
+  }
+
+  pickVideo() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile file = await _picker.pickVideo(
+      source: ImageSource.camera,
+      maxDuration: const Duration(seconds: 5),
+    );
+    print(file.path);
+    if (file.isBlank) {
+      print('file is empty');
+    } else {
+      postVideo(file.path);
+      // Get.to(()=>TestVideo());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -62,37 +175,55 @@ class StoriesTest extends StatelessWidget {
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 // padding: EdgeInsets.only(left: 10.0),
-                itemCount: favorites.length,
+                itemCount: stories.length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: EdgeInsets.all(10.0),
                     child: Column(
                       children: [
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => ShowStory());
-                          },
-                          child: CircleAvatar(
-                            radius: 35.0,
-                            backgroundColor: Colors.blue,
-                            // backgroundColor: Color(ColorTween(begin: Colors.blue,end: Colors.red)),
-                            child: CircleAvatar(
-                              radius: 32.5,
-                              backgroundImage:
-                                  AssetImage(favorites[index].imageUrl),
-                            ),
-                          ),
-                        ),
+                        index == 0
+                            ? GestureDetector(
+                                onTap: () {
+                                  pickVideo();
+                                },
+                                child: CircleAvatar(
+                                  child: Icon(Icons.add),
+                                  radius: 35.0,
+                                ))
+                            : GestureDetector(
+                                onTap: () {
+                                  Get.to(() => ShowStory(
+                                        story: stories[index - 1],
+                                      ));
+                                },
+                                child: CircleAvatar(
+                                  radius: 35.0,
+                                  backgroundColor: Colors.blue,
+                                  // backgroundColor: Color(ColorTween(begin: Colors.blue,end: Colors.red)),
+                                  child: CircleAvatar(
+                                    radius: 32.5,
+                                    backgroundImage: CachedNetworkImageProvider(
+                                        'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                                  ),
+                                ),
+                              ),
                         SizedBox(
                           height: 6.0,
                         ),
-                        Text(
-                          favorites[index].name,
-                          style: TextStyle(
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.blueGrey),
-                        ),
+                        index == 0
+                            ? Text('Add a story')
+                            : Padding(
+                                padding: index == favorites.length
+                                    ? EdgeInsets.only(bottom: 8.0)
+                                    : EdgeInsets.zero,
+                                child: Text(
+                                  stories[index - 1].firstName,
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.blueGrey),
+                                ),
+                              ),
                       ],
                     ),
                   );

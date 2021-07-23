@@ -22,7 +22,8 @@ class _CreatePostState extends State<CreatePost> {
   final Controller ctrl = Get.find();
 
   void addPost(postText) async{
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts');
     http.Response response = await http.post(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
     print(response.body);
     if(jsonDecode(response.body)['success']==true){

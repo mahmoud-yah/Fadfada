@@ -33,8 +33,8 @@ class _LoginState extends State<Login> {
 
   // Controller ctrl = Get.find();
 
-  var url = Uri.parse('http://10.0.2.2:8000/api/login');
-  // var url = Uri.parse('http://192.168.1.2:8000/api/login');
+  // var url = Uri.parse('http://10.0.2.2:8000/api/login');
+  var url = Uri.parse('http://192.168.1.2:8000/api/login');
   Future getData(email, password) async {
     setState(() {
       inProgress = true;
@@ -85,8 +85,8 @@ class _LoginState extends State<Login> {
   // }
 
   Future getProfile() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/profile');
-    // var url = Uri.parse('http://192.168.1.2:8000/api/profile');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/profile');
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

@@ -49,8 +49,8 @@ class _GetCommentsState extends State<GetComments> {
 
   Future<String> getComments() async {
     comments.clear();
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/comment/' + widget.post.postID.toString());
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/' + widget.post.postID.toString());
+    var url = Uri.parse('http://192.168.1.2:8000/api/comment/' + widget.post.postID.toString());
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
 
@@ -91,7 +91,8 @@ class _GetCommentsState extends State<GetComments> {
   }
 
   Future postComment() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/comment');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment');
+    var url = Uri.parse('http://192.168.1.2:8000/api/comment');
     http.Response response = await http.post(url, headers: {
       HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
     }, body: {
@@ -406,7 +407,8 @@ class _CommentHeader extends StatelessWidget {
   }
 
   void deleteComment(BuildContext context) async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/comment/${comment.ID}');
     // print('reporting');
     http.Response response = await http.delete(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
@@ -440,7 +442,8 @@ class _CommentHeader extends StatelessWidget {
   }
 
   void editComment(BuildContext context) async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/comment/${comment.ID}');
     // print('reporting');
     http.Response response = await http.put(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'},body: {'description':'','post_id':''});

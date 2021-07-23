@@ -33,7 +33,8 @@ class _EditPostState extends State<EditPost> {
   final Controller ctrl = Get.find();
 
   void editPost(postText) async{
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+widget.post.postID.toString());
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+widget.post.postID.toString());
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts/'+widget.post.postID.toString());
     http.Response response = await http.put(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
     print(response.body);
     if(jsonDecode(response.body)['success']==true){

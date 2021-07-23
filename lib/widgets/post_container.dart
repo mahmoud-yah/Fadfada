@@ -223,7 +223,8 @@ class _PostContainerState extends State<PostContainer> {
   }
 
   void likePost() async {
-    var url = 'http://10.0.2.2:8000/api/like';
+    // var url = 'http://10.0.2.2:8000/api/like';
+    var url = 'http://192.168.1.2:8000/api/like';
     // print('reporting');
 
     var response = await GetConnect().post(
@@ -281,7 +282,8 @@ class _PostHeader extends StatelessWidget {
   }) : super(key: key);
 
   void savePost(BuildContext context) async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/savedPost');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/savedPost');
+    var url = Uri.parse('http://192.168.1.2:8000/api/savedPost');
     http.Response response = await http.post(url,
         body: {'post_id': post.postID.toString()},
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
@@ -301,7 +303,8 @@ class _PostHeader extends StatelessWidget {
   }
 
   void reportPost(BuildContext context) async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/report');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/report');
+    var url = Uri.parse('http://192.168.1.2:8000/api/report');
     print('reporting');
     http.Response response = await http.post(url,
         body: {'post_id': post.postID.toString(), 'description': ' '},

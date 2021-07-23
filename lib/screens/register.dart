@@ -28,7 +28,8 @@ class _RegisterState extends State<Register> {
   TextEditingController cPasswordController = TextEditingController();
   bool inProgress = false;
 
-  var url = Uri.parse('http://10.0.2.2:8000/api/register');
+  // var url = Uri.parse('http://10.0.2.2:8000/api/register');
+  var url = Uri.parse('http://192.168.1.2:8000/api/register');
 
   Future getData(name, email, password, cPassword) async {
     setState(() {
@@ -55,7 +56,8 @@ class _RegisterState extends State<Register> {
   }
 
   Future getPosts() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

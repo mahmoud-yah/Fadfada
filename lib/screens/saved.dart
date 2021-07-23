@@ -32,9 +32,8 @@ class _SavedState extends State<Saved> {
 
   Future<String> getPosts() async {
     posts.clear();
-    var url = Uri.parse(
-      'http://10.0.2.2:8000/api/savedPost/${ctrl.currentUserProfile.userID}',
-    );
+    // var url = Uri.parse('http://10.0.2.2:8000/api/savedPost/${ctrl.currentUserProfile.userID}',);
+    var url = Uri.parse('http://192.168.1.2:8000/api/savedPost/${ctrl.currentUserProfile.userID}',);
     // print(ctrl.currentUserProfile.userID);
     try {
       http.Response response = await http.get(url,

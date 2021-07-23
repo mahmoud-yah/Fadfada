@@ -29,7 +29,8 @@ class _PostsDataState extends State<PostsData> {
   List<Post> posts = [];
 
   Future getPosts() async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+ctrl.currentUserProfile.userID);
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts/'+ctrl.currentUserProfile.userID);
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts/'+ctrl.currentUserProfile.userID);
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

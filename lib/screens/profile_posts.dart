@@ -40,8 +40,8 @@ class _ProfilePostsState extends State<ProfilePosts> {
 
   Future<String> getPosts() async {
     posts.clear();
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/posts/' + widget.userID);
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts/' + widget.userID);
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts/' + widget.userID);
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

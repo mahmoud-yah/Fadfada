@@ -17,7 +17,8 @@ class ReportPost extends StatelessWidget {
 
 
   void reportPost(BuildContext context) async {
-    var url = Uri.parse('http://10.0.2.2:8000/api/report');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/report');
+    var url = Uri.parse('http://192.168.1.2:8000/api/report');
     print('reporting');
     http.Response response = await http.post(url,
         body: {'post_id': post.postID.toString(), 'description': reportController.text},

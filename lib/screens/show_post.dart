@@ -36,8 +36,8 @@ class _ShowPostState extends State<ShowPost> {
   void setSeen() async{
     // We need notification id
     // var url = 'http://10.0.2.2:8000/api/notification/${widget.notification.notificationID}';
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/notification/${widget.notification.notificationID}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/notification/${widget.notification.notificationID}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/notification/${widget.notification.notificationID}');
     http.Response response = await http.put(url,body: {'seen':'true'},headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
         // var response =  await GetConnect().put(url, {'seen':'true'});
     if(response.statusCode!=200){
@@ -55,8 +55,8 @@ class _ShowPostState extends State<ShowPost> {
     //
     // var dataHolder = data['data'];
     print('hello');
-    var url = Uri.parse(
-        'http://10.0.2.2:8000/api/posts/detail/${widget.notification.postID}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts/detail/${widget.notification.postID}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts/detail/${widget.notification.postID}');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);

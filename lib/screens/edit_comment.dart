@@ -35,8 +35,8 @@ class _EditCommentState extends State<EditComment> {
   final Controller ctrl = Get.find();
 
   void editComment(BuildContext context) async {
-    var url =
-        Uri.parse('http://10.0.2.2:8000/api/comment/${widget.comment.ID}');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/${widget.comment.ID}');
+    var url = Uri.parse('http://192.168.1.2:8000/api/comment/${widget.comment.ID}');
     // print('reporting');
     http.Response response = await http.put(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'},

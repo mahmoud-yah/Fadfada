@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
+
 // import 'package:intro_app/data/data.dart';
 import 'package:intro_app/models/normal_post.dart';
+import 'package:intro_app/models/story_model.dart';
+
 // import 'package:intro_app/models/post_model.dart';
 import 'package:intro_app/screens/create_post.dart';
 
@@ -20,7 +23,6 @@ import 'package:intro_app/widgets/storiesv2.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:draggable_fab/draggable_fab.dart';
-
 
 class HomeScreen extends StatefulWidget {
   final List<Post> posts;
@@ -35,24 +37,34 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getData = getPosts();
+    getStoriesData = getStories();
     super.initState();
   }
 
+  List<Story> stories = [];
   final Controller ctrl = Get.find();
 
   Future<String> getData;
+  Future<String> getStoriesData;
 
   refreshData() {
     setState(() {
       getData = getPosts();
+      getStoriesData = getStories();
+    });
+  }
+
+  refreshStoriesData() {
+    setState(() {
+      getStoriesData = getStories();
     });
   }
 
   Future<String> getPosts() async {
     ctrl.posts.clear();
     // ctrl.posts
-    var url = Uri.parse('http://10.0.2.2:8000/api/posts');
-    // var url = Uri.parse('http://192.168.1.2:8000/api/posts');
+    // var url = Uri.parse('http://10.0.2.2:8000/api/posts');
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);
@@ -81,6 +93,32 @@ class _HomeScreenState extends State<HomeScreen> {
     return 'ok';
   }
 
+  Future<String> getStories() async {
+    stories.clear();
+
+    // var url = Uri.parse('http://10.0.2.2:8000/api/story');
+    var url = Uri.parse('http://192.168.1.2:8000/api/story');
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+    var dataHolder = data['data'];
+    for (var i = 0; i < dataHolder.length; i++) {
+      Story story = Story(
+        storyID: dataHolder[i]['id'].toString(),
+        userID: dataHolder[i]['user_id'].toString(),
+        videoUrl: dataHolder[i]['video'],
+        time: dataHolder[i]['created_at'],
+        imageUrl: dataHolder[i]['image'],
+        firstName: dataHolder[i]['first_name'],
+        lastName: dataHolder[i]['second_name'],
+      );
+      stories.add(story);
+      // print(data['data'][i]['text']);
+    }
+    stories = List.from(stories.reversed);
+    return 'ok';
+  }
+
   GlobalKey<ScaffoldState> homeScaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -90,22 +128,51 @@ class _HomeScreenState extends State<HomeScreen> {
       key: homeScaffoldKey,
       endDrawer: Container(
         width: MediaQuery.of(context).size.width * 0.45,
-        child: Drawer(
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: Container(
-              color: Colors.white,
-              child: StoriesTest(),
-            ),
-          ),
+        child: FutureBuilder(
+          future: getStoriesData,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting)
+              return Center(child: const CircularProgressIndicator());
+
+            if (snapshot.hasData)
+              // return Text('${snapshot.data}');
+              // if(snapshot.data=='success'){
+              return Container(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height * 0.01),
+                child: Drawer(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Container(
+                      color: Colors.white,
+                      child: StoriesTest(
+                        stories: stories,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            else {
+              print(snapshot.error);
+              return const Text('Some error happened');
+            }
+          },
         ),
+
+        // Drawer(
+        //   child: SingleChildScrollView(
+        //     scrollDirection: Axis.vertical,
+        //     child: Container(
+        //       color: Colors.white,
+        //       child: StoriesTest(),
+        //     ),
+        //   ),
+        // ),
       ),
       // backgroundColor: Color(0xFF242526),
       // backgroundColor: Colors.black,
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar:
-      AppBar(
-
+      appBar: AppBar(
         iconTheme: IconThemeData(color: Theme.of(context).accentColor),
         brightness: Theme.of(context).brightness,
         backgroundColor: Theme.of(context).backgroundColor,
@@ -259,7 +326,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: FloatingActionButton(
           backgroundColor: Theme.of(context).accentColor,
           // elevation: 0,
-          onPressed: () async{
+          onPressed: () async {
             // setState(() {
             //   getThemeManager(context).selectThemeAtIndex(0
             //   );
