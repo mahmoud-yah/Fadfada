@@ -12,6 +12,7 @@ import 'package:intro_app/models/normal_post.dart';
 import 'package:intro_app/screens/comments.dart';
 import 'package:intro_app/screens/edit_comment.dart';
 import 'package:intro_app/widgets/profile_avatar.dart';
+import 'package:dio/dio.dart' as myDio;
 
 
 
@@ -205,7 +206,7 @@ class _GetCommentsState extends State<GetComments> {
               padding: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height * 0.1),
               child: RefreshIndicator(
-                onRefresh: () {
+                onRefresh: () async{
                   // print('refreshed');
                   setState(() {
                     refreshData();
@@ -359,7 +360,7 @@ class _CommentHeader extends StatelessWidget {
                   ctrl.currentUserProfile.userID.toString()) {
                 deleteComment(context);
               } else
-                print('You can only edit your own posts!');
+                print('You can only delete your own comments!');
             } else if (result == 1) {
               // print('post.userid: ' + post.userID.toString());
               // print('ctrl.userid: ' + ctrl.currentUserProfile.userID);
@@ -367,7 +368,7 @@ class _CommentHeader extends StatelessWidget {
                   ctrl.currentUserProfile.userID.toString()) {
                 Get.to(()=>EditComment(comment: comment,));
               } else
-                print('You can only edit your own posts!');
+                print('You can only edit your own comments!');
             } else
               print('call Report comment');
             // reportPost(context);
@@ -407,15 +408,35 @@ class _CommentHeader extends StatelessWidget {
   }
 
   void deleteComment(BuildContext context) async {
-    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
-    var url = Uri.parse('http://192.168.1.2:8000/api/comment/${comment.ID}');
-    // print('reporting');
-    http.Response response = await http.delete(url,
-        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var url = 'http://192.168.1.2:8000/api/comment/${comment.ID.toString()}';
+    var response = await myDio.Dio().delete(
+      url,
+      data: {"post_id":"${comment.postID}"},
+      options: myDio.Options(
+        followRedirects: false,
+        validateStatus: (status) {
+          return status < 500;
+        },
+        headers: {
+          HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',
+          'Accept': 'application/json'
+        },
+      ),
+    );
+    print(response.statusCode);
+    print(response.data);
 
-    var data = jsonDecode(response.body);
+
+    // var url = Uri.parse('http://10.0.2.2:8000/api/comment/${comment.ID}');
+    // var url = Uri.parse('http://192.168.1.2:8000/api/comment/${comment.ID.toString()}');
+    // print('reporting');
+    // http.Response response = await http.delete(url,
+    //     headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    //
+    // print(response.statusCode);
+    // print(response.body);
+    // var data = jsonDecode(response.body);
     // if(data['success']==true){
-    print(response.body);
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

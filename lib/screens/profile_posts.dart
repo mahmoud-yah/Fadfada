@@ -57,7 +57,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
         imageUrl: dataHolder[i]['image'],
         likes: dataHolder[i]['like_number'],
         commentsNumber: dataHolder[i]['like_number'].toString(),
-        name: dataHolder[i]['name'],
+        imageProfile: dataHolder[i]['image_profile'],
         firstName: dataHolder[i]['first_name'],
         lastName: dataHolder[i]['second_name'],
         isLiked: false,

@@ -72,7 +72,10 @@ class _RegisterState extends State<Register> {
         timeAgo: dataHolder[i]['created_at'],
         imageUrl: dataHolder[i]['image'],
         likes: dataHolder[i]['like_number'],
-        name: dataHolder[i]['name'],
+        firstName: dataHolder[i]['first_name'],
+        lastName: dataHolder[i]['second_name'],
+        commentsNumber: dataHolder[i]['comment_number'].toString(),
+        imageProfile: dataHolder[i]['image_profile'],
         isLiked: false,
       );
 

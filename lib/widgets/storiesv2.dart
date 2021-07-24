@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
+// import 'package:image_picker/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
@@ -23,46 +25,34 @@ class StoriesTest extends StatelessWidget {
 
   StoriesTest({this.stories});
 
-  postVideo(String path) async {
-    Map body = {'video': path};
+  postVideo(BuildContext context,String path) async {
+    Map body = {"video": path};
     // var url = 'http://10.0.2.2:8000/api/story';
-    var url = 'http://192.168.1.2:8000/api/story';
-    var response = await myDio.Dio().post(
-      url,
-      data: body,
-      options: myDio.Options(
-        followRedirects: false,
-        validateStatus: (status) {
-          return status < 500;
-        },
-        headers: {
-          HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',
-          'Accept': 'application/json'
-        },
-      ),
-    );
-    // print(body.toString());
-    print(response.statusCode);
-    print(response.headers);
-    print(response.data);
-
-    // var multipartFile = http.MultipartFile.fromBytes(
-    //   'file',
-    //   (await rootBundle.load('images/lilkid.mp4')).buffer.asUint8List(),
-    //   filename: 'lilkid.mp4', // use the real name if available, or omit
-    //   // contentType: MediaType('video', 'mp4'),
-    // );
-    //
-    // // request.files.add(multipartFile);
-    // var url = Uri.parse('http://10.0.2.2:8000/api/story');
-    // var request = http.MultipartRequest("POST",url);
-    // // request.files.add(await http.MultipartFile.fromPath('story', 'C:\\Users\\m-y-6\\Desktop\\lilkid.mp4'));
+    var url = Uri.parse('http://192.168.1.2:8000/api/story');
+    var request = http.MultipartRequest("POST", url);
+    request.files.add(await http.MultipartFile.fromPath('video', path));
     // request.files.add(multipartFile);
-    // request.headers[HttpHeaders.authorizationHeader]='Bearer ${ctrl.token}';
-    // // request.headers['Accept']='application/json';
-    // var response = await request.send();
-    // if (response.statusCode == 200) print('Uploaded!');else print(response.statusCode);
-    // print(response.statusCode);
+    request.headers[HttpHeaders.authorizationHeader] = 'Bearer ${ctrl.token}';
+    request.headers[HttpHeaders.acceptHeader] = 'application/json';
+    request.headers[HttpHeaders.contentTypeHeader]='multipart/form-data; boundary=<calculated when request is sent>';
+    request.headers[HttpHeaders.acceptEncodingHeader]='gzip, deflate, br';
+
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Uploaded!');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            AppLocalizations.of(context).translate('somethingWrong'),
+            style: TextStyle(color: Theme.of(context).primaryColor),
+          ),
+          backgroundColor: Theme.of(context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    } else
+      print(response.statusCode);
+    print(response.statusCode);
 
     // http.Response response = await http.post(url,body: {
     //   'video':path,
@@ -71,7 +61,7 @@ class StoriesTest extends StatelessWidget {
     // print(response.statusCode);
     // if (response.statusCode == 302) {
     //   var responseUrl = response.headers['location'];
-    //   http.get(responseUrl);
+    //   http.get(Uri.parse(responseUrl));
     // }
 
     // String url = 'http://10.0.2.2:8000/api/story';
@@ -94,8 +84,17 @@ class StoriesTest extends StatelessWidget {
     //   print(response.headers);
     //   if(response.headers.containsKey("location")){
     //     print('hello');
-    //     var url = 'http://10.0.2.2:8000/api/story';
-    //     // final getResponse = await GetConnect().post(url,body,headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}',"Accept" : "application/json"});
+    //     var url = 'http://192.168.1.2:8000/api/story';
+    // final getResponse = await GetConnect().post(url, body, headers: {
+    //   HttpHeaders.authorizationHeader: "Bearer ${ctrl.token}",
+    //   "Accept": "application/json",
+    //   HttpHeaders.contentTypeHeader: "multipart/form-data",
+    //   HttpHeaders.acceptEncodingHeader: "gzip, deflate, br",
+    //   HttpHeaders.connectionHeader: "keep-alive",
+    // });
+    // print(getResponse.body);
+    // print(path);
+    // print(getResponse.statusCode);
     //     // print(getResponse.statusCode);
     //     final getResponse = await GetConnect().get(response.headers["location"]);
     //     // print(getResponse.statusCode);
@@ -111,13 +110,13 @@ class StoriesTest extends StatelessWidget {
     final XFile file = await _picker.pickVideo(
       source: ImageSource.camera,
       maxDuration: const Duration(seconds: 5),
+      preferredCameraDevice: CameraDevice.front,
     );
     print(file.path);
     if (file.isBlank) {
       print('file is empty');
     } else {
-      postVideo(file.path);
-      // Get.to(()=>TestVideo());
+      postVideo(Get.context ,file.path);
     }
   }
 

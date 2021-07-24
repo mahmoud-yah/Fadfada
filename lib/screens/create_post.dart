@@ -98,7 +98,7 @@ class _CreatePostState extends State<CreatePost> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(
-                            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'),
+                            'http://192.168.1.2:8000/${ctrl.currentUserProfile.imageUrl}'),
                         radius: 30.0,
                       ),
                     ),

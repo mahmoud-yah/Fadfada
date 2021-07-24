@@ -71,7 +71,7 @@ class _ShowPostState extends State<ShowPost> {
       imageUrl: dataHolder['image'],
       likes: dataHolder['like_number'],
       commentsNumber: dataHolder['comment_number'].toString(),
-      name: dataHolder['name'],
+      imageProfile: dataHolder['image_profile'],
       firstName: dataHolder['first_name'],
       lastName: dataHolder['second_name'],
       isLiked: false,
@@ -98,57 +98,64 @@ class _ShowPostState extends State<ShowPost> {
         ),
         centerTitle: true,
       ),
-      body: FutureBuilder(
-        future: getData,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
-            return Center(child: const CircularProgressIndicator());
+      body: SingleChildScrollView(
+        child: RefreshIndicator(
+          onRefresh: () async{
+            refreshData();
+          },
+          child: FutureBuilder(
+            future: getData,
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting)
+                return Center(child: const CircularProgressIndicator());
 
-          if (snapshot.hasData)
-            // return Text('${snapshot.data}');
-            // if(snapshot.data=='success'){
-            return Container(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.01),
-              child: RefreshIndicator(
-                onRefresh: () async {
-                  // print('refreshed');
-                  setState(() {
-                    refreshData();
-                  });
-                  return null;
-                },
-                child: PostContainer(
-                  post: post,
-                ),
-              ),
-            );
-          else {
-            print('ok');
-            print(snapshot);
-            return Center(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Some error happened',
-                  // snapshot.error.toString(),
-                  // post.firstName,
-                  style: TextStyle(
-                      color: Theme.of(context).primaryColor, fontSize: 20),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    refreshData();
-                  },
-                  child: Text('Reload'),
-                  style: ElevatedButton.styleFrom(
-                      primary: Theme.of(context).accentColor),
-                ),
-              ],
-            ));
-          }
-        },
+              if (snapshot.hasData)
+                // return Text('${snapshot.data}');
+                // if(snapshot.data=='success'){
+                return Container(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height * 0.01),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      // print('refreshed');
+                      setState(() {
+                        refreshData();
+                      });
+                      return null;
+                    },
+                    child: PostContainer(
+                      post: post,
+                    ),
+                  ),
+                );
+              else {
+                print('ok');
+                print(snapshot);
+                return Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Some error happened',
+                      // snapshot.error.toString(),
+                      // post.firstName,
+                      style: TextStyle(
+                          color: Theme.of(context).primaryColor, fontSize: 20),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        refreshData();
+                      },
+                      child: Text('Reload'),
+                      style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).accentColor),
+                    ),
+                  ],
+                ));
+              }
+            },
+          ),
+        ),
       ),
     );
   }

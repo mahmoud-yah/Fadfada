@@ -9,7 +9,7 @@ class Post {
   final String imageUrl;
   int likes;
   String commentsNumber;
-  final String name;
+  final String imageProfile;
   final String firstName;
   final String lastName;
 
@@ -25,7 +25,7 @@ class Post {
     this.timeAgo,
     this.imageUrl,
     this.likes,
-    this.name,
+    this.imageProfile,
     this.firstName,
     this.lastName,
     this.commentsNumber,

@@ -1,4 +1,5 @@
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -231,11 +232,11 @@ class ProfileV4 extends StatelessWidget {
             print('img');
           },
           child:
-              // CachedNetworkImage(imageUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80',fit: BoxFit.cover,)
-              Image(
-            image: AssetImage('images/David.jpg'),
-            fit: BoxFit.cover,
-          ),
+              CachedNetworkImage(imageUrl: 'http://192.168.1.2:8000/${ctrl.currentUserProfile.imageUrl}',fit: BoxFit.cover,)
+          //     Image(
+          //   image: AssetImage('images/David.jpg'),
+          //   fit: BoxFit.cover,
+          // ),
         ),
         panelBuilder: (ScrollController scroll) {
           return Column(

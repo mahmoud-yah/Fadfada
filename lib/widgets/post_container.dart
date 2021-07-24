@@ -75,7 +75,7 @@ class _PostContainerState extends State<PostContainer> {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    child: CachedNetworkImage(imageUrl: widget.post.imageUrl),
+                    child: CachedNetworkImage(imageUrl: 'http://192.168.1.2:8000/${widget.post.imageUrl}'),
                     // child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
                   ),
                 )

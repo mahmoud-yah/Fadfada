@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -103,10 +104,7 @@ class _VisitProfileState extends State<VisitProfile> {
               parallaxEnabled: true,
               // parallaxOffset: 0.5,
               controller: panelController,
-              body: Image(
-                image: AssetImage('images/David.jpg'),
-                fit: BoxFit.cover,
-              ),
+              body: CachedNetworkImage(imageUrl: 'http://192.168.1.2:8000/${profile.imageUrl}',fit: BoxFit.cover,),
               panelBuilder: (ScrollController scroll) {
                 return Column(
                   // crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,31 +242,32 @@ class _VisitProfileState extends State<VisitProfile> {
                                       ),
                                     ],
                                   ),
-                                  OutlinedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => EditProfile(
-                                                  profile: profile,
-                                                )),
-                                      );
-                                    },
-                                    child: Text(
-                                      // 'Edit Profile',
-                                      AppLocalizations.of(context)
-                                          .translate("editProfile"),
-                                      style: TextStyle(fontSize: 15.0),
-                                    ),
-                                    style: OutlinedButton.styleFrom(
-                                        // primary: Colors.blueAccent,
-                                        primary: Theme.of(context).accentColor,
-                                        side: BorderSide(
-                                          // color: Colors.blueAccent,
-                                          color: Theme.of(context).accentColor,
-                                          width: 0.4,
-                                        )),
-                                  ),
+                                  // OutlinedButton(
+                                  //
+                                  //   onPressed: () {
+                                  //     Navigator.push(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (context) => EditProfile(
+                                  //                 profile: profile,
+                                  //               )),
+                                  //     );
+                                  //   },
+                                  //   child: Text(
+                                  //     // 'Edit Profile',
+                                  //     AppLocalizations.of(context)
+                                  //         .translate("editProfile"),
+                                  //     style: TextStyle(fontSize: 15.0),
+                                  //   ),
+                                  //   style: OutlinedButton.styleFrom(
+                                  //       // primary: Colors.blueAccent,
+                                  //       primary: Theme.of(context).accentColor,
+                                  //       side: BorderSide(
+                                  //         // color: Colors.blueAccent,
+                                  //         color: Theme.of(context).accentColor,
+                                  //         width: 0.4,
+                                  //       )),
+                                  // ),
                                 ],
                               ),
                             ),
