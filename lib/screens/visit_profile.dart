@@ -98,7 +98,7 @@ class _VisitProfileState extends State<VisitProfile> {
             // return Text('${snapshot.data}');
             // if(snapshot.data=='success'){
             return SlidingUpPanel(
-              maxHeight: 400,
+              maxHeight: 350,
               minHeight: 150,
               color: Colors.transparent,
               parallaxEnabled: true,

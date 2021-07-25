@@ -31,7 +31,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
         // ),
         leadingWidth: 0,
         leading: Container(),
-        centerTitle: true,
+        // centerTitle: true,
         title: Text(
           // 'Chats',
           AppLocalizations.of(context).translate("chats"),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
 
 class About extends StatelessWidget {
@@ -13,7 +14,7 @@ class About extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         brightness: Theme.of(context).brightness,
         title: Text(
-          'About',
+          AppLocalizations.of(context).translate("about"),
           style: TextStyle(
             color: Theme.of(context).accentColor,
             fontSize: 25,

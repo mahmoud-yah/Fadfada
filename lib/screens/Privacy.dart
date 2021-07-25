@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_app/app_localizations.dart';
 
 class Privacy extends StatelessWidget {
 
@@ -12,7 +13,7 @@ class Privacy extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         brightness: Theme.of(context).brightness,
         title: Text(
-          'Privacy',
+          AppLocalizations.of(context).translate("privacy"),
           style: TextStyle(
             color: Theme.of(context).accentColor,
             fontSize: 25,

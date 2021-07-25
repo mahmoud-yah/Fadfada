@@ -37,7 +37,17 @@ class _EditPostState extends State<EditPost> {
     var url = Uri.parse('http://192.168.1.2:8000/api/posts/'+widget.post.postID.toString());
     http.Response response = await http.put(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
     print(response.body);
-    if(jsonDecode(response.body)['success']==true){
+    if(response.statusCode==200){
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          'Post edited successfully',
+          style: TextStyle(color: Theme.of(context).primaryColor),
+        ),
+        behavior: SnackBarBehavior.floating,
+        elevation: 6.0,
+        backgroundColor: Theme.of(context).backgroundColor,
+        padding: EdgeInsets.only(bottom: 10),
+      ));
       Get.back();
     }
   }
@@ -109,7 +119,7 @@ class _EditPostState extends State<EditPost> {
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       child: CircleAvatar(
                         backgroundImage: CachedNetworkImageProvider(
-                            'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80'),
+                            'http://192.168.1.2:8000/${widget.post.imageProfile}'),
                         radius: 30.0,
                       ),
                     ),

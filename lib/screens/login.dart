@@ -26,6 +26,7 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
   }
+
   final ctrl = Get.put(Controller());
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -35,6 +36,7 @@ class _LoginState extends State<Login> {
 
   // var url = Uri.parse('http://10.0.2.2:8000/api/login');
   var url = Uri.parse('http://192.168.1.2:8000/api/login');
+
   Future getData(email, password) async {
     setState(() {
       inProgress = true;
@@ -92,6 +94,7 @@ class _LoginState extends State<Login> {
     var data = jsonDecode(response.body);
     var dataHolder = data['data'];
     ctrl.addProfileInfo(
+        dataHolder['id'].toString(),
         dataHolder['user_id'].toString(),
         dataHolder['first_name'],
         dataHolder['second_name'],

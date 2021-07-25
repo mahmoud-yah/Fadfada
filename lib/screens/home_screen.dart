@@ -108,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
         userID: dataHolder[i]['user_id'].toString(),
         videoUrl: dataHolder[i]['video'],
         time: dataHolder[i]['created_at'],
-        imageUrl: dataHolder[i]['image'],
+        imageUrl: dataHolder[i]['image_profil'],
         firstName: dataHolder[i]['first_name'],
         lastName: dataHolder[i]['second_name'],
       );

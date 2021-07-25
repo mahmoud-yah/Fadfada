@@ -106,7 +106,7 @@ class _ProfilePostsState extends State<ProfilePosts> {
                 child: ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
                     Post post = posts[index];
-                    return PostContainer(post: post);
+                    return PostContainer(post: post,isMe: true,);
                   },
                   itemCount: posts.length,
                 ),

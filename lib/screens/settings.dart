@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_app/app_localizations.dart';
 
 class Settings extends StatelessWidget {
 
@@ -12,7 +13,7 @@ class Settings extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         brightness: Theme.of(context).brightness,
         title: Text(
-          'Settings',
+          AppLocalizations.of(context).translate("settings"),
           style: TextStyle(
             color: Theme.of(context).accentColor,
             fontSize: 25,

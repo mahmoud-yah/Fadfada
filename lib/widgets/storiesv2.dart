@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,11 +23,13 @@ import 'package:http_parser/http_parser.dart';
 
 class StoriesTest extends StatelessWidget {
   final List<Story> stories;
+
+  // final Function refreshCallback;
   final Controller ctrl = Get.find();
 
   StoriesTest({this.stories});
 
-  postVideo(BuildContext context,String path) async {
+  postVideo(BuildContext context, String path) async {
     Map body = {"video": path};
     // var url = 'http://10.0.2.2:8000/api/story';
     var url = Uri.parse('http://192.168.1.2:8000/api/story');
@@ -34,8 +38,9 @@ class StoriesTest extends StatelessWidget {
     // request.files.add(multipartFile);
     request.headers[HttpHeaders.authorizationHeader] = 'Bearer ${ctrl.token}';
     request.headers[HttpHeaders.acceptHeader] = 'application/json';
-    request.headers[HttpHeaders.contentTypeHeader]='multipart/form-data; boundary=<calculated when request is sent>';
-    request.headers[HttpHeaders.acceptEncodingHeader]='gzip, deflate, br';
+    request.headers[HttpHeaders.contentTypeHeader] =
+        'multipart/form-data; boundary=<calculated when request is sent>';
+    request.headers[HttpHeaders.acceptEncodingHeader] = 'gzip, deflate, br';
 
     var response = await request.send();
     if (response.statusCode == 200) {
@@ -43,7 +48,8 @@ class StoriesTest extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            AppLocalizations.of(context).translate('somethingWrong'),
+            'Story Uploaded!',
+            // AppLocalizations.of(context).translate('somethingWrong'),
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           backgroundColor: Theme.of(context).backgroundColor,
@@ -109,14 +115,14 @@ class StoriesTest extends StatelessWidget {
     final ImagePicker _picker = ImagePicker();
     final XFile file = await _picker.pickVideo(
       source: ImageSource.camera,
-      maxDuration: const Duration(seconds: 5),
+      maxDuration: const Duration(seconds: 40),
       preferredCameraDevice: CameraDevice.front,
     );
     print(file.path);
     if (file.isBlank) {
       print('file is empty');
     } else {
-      postVideo(Get.context ,file.path);
+      postVideo(Get.context, file.path);
     }
   }
 
@@ -170,7 +176,8 @@ class StoriesTest extends StatelessWidget {
             Container(
               height: MediaQuery.of(context).size.height,
               // height: double.infinity,
-              color: Colors.black,
+              // color: Colors.black,
+              color: Theme.of(context).backgroundColor,
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
                 // padding: EdgeInsets.only(left: 10.0),
@@ -186,7 +193,16 @@ class StoriesTest extends StatelessWidget {
                                   pickVideo();
                                 },
                                 child: CircleAvatar(
-                                  child: Icon(Icons.add),
+                                  backgroundImage: CachedNetworkImageProvider(
+                                      'http://192.168.1.2:8000/${ctrl.currentUserProfile.imageUrl}'),
+                                  child: Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: CircleAvatar(
+                                      // backgroundColor: Colors.transparent,
+                                      child: Icon(Icons.add,size: 18,),
+                                      radius: 12,
+                                    ),
+                                  ),
                                   radius: 35.0,
                                 ))
                             : GestureDetector(
@@ -197,12 +213,12 @@ class StoriesTest extends StatelessWidget {
                                 },
                                 child: CircleAvatar(
                                   radius: 35.0,
-                                  backgroundColor: Colors.blue,
+                                  backgroundColor: Theme.of(context).accentColor,
                                   // backgroundColor: Color(ColorTween(begin: Colors.blue,end: Colors.red)),
                                   child: CircleAvatar(
                                     radius: 32.5,
                                     backgroundImage: CachedNetworkImageProvider(
-                                        'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                                        'http://192.168.1.2:8000/${stories[index-1].imageUrl}'),
                                   ),
                                 ),
                               ),

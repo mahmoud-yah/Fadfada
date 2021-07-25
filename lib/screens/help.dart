@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intro_app/app_localizations.dart';
 
 class Help extends StatelessWidget {
 
@@ -12,7 +13,7 @@ class Help extends StatelessWidget {
         brightness: Theme.of(context).brightness,
         // brightness: Brightness.light,
         title: Text(
-          'Help',
+          AppLocalizations.of(context).translate("help"),
           style: TextStyle(
             color: Theme.of(context).accentColor,
             fontSize: 25,

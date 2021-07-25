@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 
 class UserProfile {
+  String profileID;
   String userID;
   String firstName;
   String lastName;
@@ -12,6 +13,7 @@ class UserProfile {
   String birthDate;
 
   UserProfile({
+    this.profileID,
     this.userID,
     this.firstName,
     this.lastName,
@@ -24,6 +26,7 @@ class UserProfile {
   });
 
   void setInfo({
+    String profileID,
     String userID,
     String firstName,
     String lastName,
@@ -34,6 +37,7 @@ class UserProfile {
     String bio,
     String birthDate,}
   ) {
+    this.profileID=profileID;
     this.userID = userID;
     this.firstName = firstName;
     this.lastName = lastName;

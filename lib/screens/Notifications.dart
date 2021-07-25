@@ -54,13 +54,13 @@ class _NotificationsState extends State<Notifications> {
         userID: dataHolder[i]['user_id'].toString(),
         likeID: dataHolder[i]['like_id'].toString(),
         commentID: dataHolder[i]['comment_id'].toString(),
+        imageUrl: dataHolder[i]['image'],
         firstName: dataHolder[i]['first_name'],
         lastName: dataHolder[i]['second_name'],
         type: dataHolder[i]['description'],
         fromUserID: dataHolder[i]['from_user_id'].toString(),
         time: dataHolder[i]['created_at'],
         seen: dataHolder[i]['seen'] == 'false' ? false : true,
-        // imageUrl: dataHolder[i]['image'],
       );
       // ctrl.addPost(post);
       notifications.add(notification);
@@ -207,7 +207,7 @@ class NotificationContainer extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: CircleAvatar(
               radius: 28,
-              backgroundImage: CachedNetworkImageProvider('https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+              backgroundImage: CachedNetworkImageProvider('http://192.168.1.2:8000/${notification.imageUrl}'),
             )
             // ProfileAvatar(
             //   // imageUrl: notification.imageUrl,

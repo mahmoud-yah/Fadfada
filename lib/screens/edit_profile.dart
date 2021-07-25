@@ -40,42 +40,74 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       inProgress = true;
     });
-    // var url = Uri.parse('http://10.0.2.2:8000/api/profile/1');
-    var url = Uri.parse('http://192.168.1.2:8000/api/profile/1');
-    // print('hello');
-    http.Response response = await http.put(url, body: {
-      'first_name': firstNameTextController.text,
-      'second_name': lastNameTextController.text,
-      'address': addressTextController.text,
-      'phone': phoneTextController.text,
-      'gender': genderTextController.text,
-      'bio': bioTextController.text,
-      'date_of_birth': birthDateTextController.text,
-      // 'first_name': 'hello',
-      // 'second_name': 'bye',
-      // 'address': 'ok',
-      // 'phone': '029',
-      // 'gender': 'female',
-      // 'bio': 'no comment',
-      // 'date_of_birth': '2021/7/24',
-    }, headers: {
-      HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
-    });
-    // print(response.body);
-    var data = jsonDecode(response.body);
-    print(data['success']);
-    if (data['success'] == true) {
+
+
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile/${widget.profile.profileID}');
+    var request = http.MultipartRequest("POST", url);
+    request.fields['first_name']=firstNameTextController.text;
+    request.fields['second_name']= lastNameTextController.text;
+    request.fields['address']= addressTextController.text;
+    request.fields['phone']= phoneTextController.text;
+    request.fields['gender']= genderTextController.text;
+    request.fields['bio']= bioTextController.text;
+    request.fields['date_of_birth']= birthDateTextController.text;
+    request.fields['_method']='PUT';
+    // request.fields['image']='null';
+    // request.fields['image'];
+    request.headers[HttpHeaders.authorizationHeader] = 'Bearer ${ctrl.token}';
+    request.headers[HttpHeaders.acceptHeader] = 'application/json';
+    request.headers[HttpHeaders.contentTypeHeader]='application/json';
+    request.headers[HttpHeaders.acceptEncodingHeader]='gzip, deflate, br';
+    var response = await request.send();
+    if (response.statusCode == 200) {
+      print('Uploaded!');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'profile info updated successfully!',
+            'Profile information edited Successfully!',
+            // AppLocalizations.of(context).translate('upload'),
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
           backgroundColor: Theme.of(context).backgroundColor,
           padding: EdgeInsets.only(bottom: 10),
         ),
       );
-    }
+      Get.back();
+    } else
+      print(response.statusCode);
+    print(response.statusCode);
+
+
+    // var url = Uri.parse('http://192.168.1.2:8000/api/profile/${widget.profile.profileID}');
+
+    // http.Response response = await http.post(url, body: {
+    //   'first_name': firstNameTextController.text,
+    //   'second_name': lastNameTextController.text,
+    //   'address': addressTextController.text,
+    //   'phone': phoneTextController.text,
+    //   'gender': genderTextController.text,
+    //   'bio': bioTextController.text,
+    //   'date_of_birth': birthDateTextController.text,
+    //   '_method':'PUT',
+    //   'image':null,
+
+    // }, headers: {
+    //   HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'
+    // });
+
+    // print(response.statusCode);
+    // if (response.statusCode==200) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     SnackBar(
+    //       content: Text(
+    //         'profile info updated successfully!',
+    //         style: TextStyle(color: Theme.of(context).primaryColor),
+    //       ),
+    //       backgroundColor: Theme.of(context).backgroundColor,
+    //       padding: EdgeInsets.only(bottom: 10),
+    //     ),
+    //   );
+    // }
     // print(response.body);
     // var token = jsonDecode(response.body)['data']['token'];
     // ctrl.setTokenValue(token);
@@ -115,7 +147,12 @@ class _EditProfileState extends State<EditProfile> {
     final XFile file = await _picker.pickImage(
       source: ImageSource.gallery,
     );
-    var url = Uri.parse('http://192.168.1.2:8000/api/profile/1');
+
+    if(file.isBlank){
+      return;
+    }
+
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile/${widget.profile.profileID}');
     print(file.path);
     Map body = {
       // 'image': file.path,
@@ -127,6 +164,7 @@ class _EditProfileState extends State<EditProfile> {
       'bio': bioTextController.text,
       'date_of_birth': birthDateTextController.text,
       '_method':'PUT',
+      'image':null,
     };
     // var url = Uri.parse('http://192.168.1.2:8000/api/story')
     var request = http.MultipartRequest("POST", url);
@@ -146,11 +184,10 @@ class _EditProfileState extends State<EditProfile> {
     request.headers[HttpHeaders.acceptEncodingHeader]='gzip, deflate, br';
     var response = await request.send();
     if (response.statusCode == 200) {
-      print('Uploaded!');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            'Uploaded!',
+            'Profile image updated successfully!',
             // AppLocalizations.of(context).translate('upload'),
             style: TextStyle(color: Theme.of(context).primaryColor),
           ),
@@ -158,6 +195,7 @@ class _EditProfileState extends State<EditProfile> {
           padding: EdgeInsets.only(bottom: 10),
         ),
       );
+      Get.back();
     } else
       print(response.statusCode);
     print(response.statusCode);
@@ -294,6 +332,8 @@ class _EditProfileState extends State<EditProfile> {
                 ProfileTextField(
                   labelText: AppLocalizations.of(context).translate("bio"),
                   controller: bioTextController,
+                  maxLines: null,
+                  keyboard: TextInputType.multiline,
                   // labelText: 'Bio',
                 ),
                 // SizedBox(height: 5.0,),
@@ -321,17 +361,20 @@ class _EditProfileState extends State<EditProfile> {
                 ProfileTextField(
                   labelText: AppLocalizations.of(context).translate("phone"),
                   controller: phoneTextController,
+                  keyboard: TextInputType.phone,
                   // labelText: 'Phone',
                 ),
                 ProfileTextField(
                   labelText: AppLocalizations.of(context).translate("gender"),
                   controller: genderTextController,
+                  // keyboard: ,
                   // labelText: 'Gender',
                 ),
                 ProfileTextField(
                   // labelText: 'Birthday',
                   labelText: AppLocalizations.of(context).translate("birthday"),
                   controller: birthDateTextController,
+                  keyboard: TextInputType.datetime,
                 ),
               ]),
             ),
@@ -345,8 +388,10 @@ class _EditProfileState extends State<EditProfile> {
 class ProfileTextField extends StatelessWidget {
   final String labelText;
   final TextEditingController controller;
+  final maxLines;
+  final TextInputType keyboard;
 
-  ProfileTextField({this.labelText, this.controller});
+  ProfileTextField({this.labelText, this.controller,this.maxLines=1,this.keyboard=TextInputType.text});
 
   @override
   Widget build(BuildContext context) {
@@ -367,6 +412,8 @@ class ProfileTextField extends StatelessWidget {
           ),
           border: InputBorder.none,
         ),
+        maxLines: maxLines,
+        keyboardType: keyboard,
       ),
     );
   }

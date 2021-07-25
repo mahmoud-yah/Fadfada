@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/normal_post.dart';
 import 'package:http/http.dart' as http;
@@ -79,7 +80,7 @@ class _SavedState extends State<Saved> {
         backgroundColor: Theme.of(context).backgroundColor,
         brightness: Theme.of(context).brightness,
         title: Text(
-          'Saved Posts',
+          AppLocalizations.of(context).translate("saved"),
           style: TextStyle(
             color: Theme.of(context).accentColor,
             fontSize: 25,

@@ -38,6 +38,7 @@ class Controller extends GetxController {
   }
 
   addProfileInfo(
+      String profileID,
       String userID,
       String firstName,
       String lastName,
@@ -47,6 +48,7 @@ class Controller extends GetxController {
       String phone,
       String bio,
       String birthDate) {
+    currentUserProfile.profileID=profileID;
     currentUserProfile.userID = userID;
     currentUserProfile.firstName = firstName;
     currentUserProfile.lastName = lastName;

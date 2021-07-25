@@ -1,10 +1,14 @@
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/config/controller.dart';
+import 'package:intro_app/models/profile_model.dart';
 import 'package:intro_app/screens/Privacy.dart';
 import 'package:intro_app/screens/about.dart';
 import 'package:intro_app/screens/help.dart';
@@ -12,6 +16,7 @@ import 'package:intro_app/screens/login.dart';
 import 'package:intro_app/screens/saved.dart';
 import 'package:intro_app/screens/settings.dart';
 import 'package:intro_app/screens/tovisit_posts_data.dart';
+import 'package:http/http.dart' as http;
 
 // import 'package:intro_app/data/data.dart';
 // import 'package:intro_app/models/models.dart';
@@ -20,35 +25,69 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:intro_app/screens/profile_posts.dart';
 import 'edit_profile.dart';
 
-class ProfileV4 extends StatelessWidget {
+class ProfileV4 extends StatefulWidget {
+  @override
+  _ProfileV4State createState() => _ProfileV4State();
+}
+
+class _ProfileV4State extends State<ProfileV4> {
   final panelController = PanelController();
 
+  // UserProfile profile = UserProfile();
+  Future<String> getData;
   final Controller ctrl = Get.find();
+
+  refreshData() async {
+    await getProfile();
+    setState(() {});
+  }
+
+  Future<String> getProfile() async {
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile');
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+    var dataHolder = data['data'];
+    // profile.setInfo(
+    //   profileID: dataHolder['id'].toString(),
+    //   userID: dataHolder['user_id'].toString(),
+    //   firstName: dataHolder['first_name'],
+    //   lastName: dataHolder['second_name'],
+    //   imageUrl: dataHolder['image'],
+    //   address: dataHolder['address'],
+    //   gender: dataHolder['gender'],
+    //   phone: dataHolder['phone'],
+    //   bio: dataHolder['bio'],
+    //   birthDate: dataHolder['date_of_birth'],
+    // );
+    ctrl.addProfileInfo(
+      dataHolder['id'].toString(),
+      dataHolder['user_id'].toString(),
+      dataHolder['first_name'],
+      dataHolder['second_name'],
+      dataHolder['image'],
+      dataHolder['address'],
+      dataHolder['gender'],
+      dataHolder['phone'],
+      dataHolder['bio'],
+      dataHolder['date_of_birth'],
+    );
+    return 'ok';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawerEnableOpenDragGesture: true,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        brightness: Brightness.dark,
+        brightness: Theme.of(context).brightness,
         elevation: 0,
         backgroundColor: Colors.transparent,
-        // actions: [
-        //   IconButton(
-        //     // Icons.menu,
-        //     icon: Icon(
-        //       Icons.menu,
-        //       size: 25,
-        //       color: Colors.white,
-        //     ),
-        //     onPressed: () {},
-        //   ),
-        // ],
       ),
       endDrawer: Drawer(
         // elevation: 10.0,
         child: Container(
-          // color: Colors.black,
           color: Theme.of(context).backgroundColor,
           // margin: EdgeInsets.only(top: 25.0),
           // padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.066),
@@ -70,11 +109,18 @@ class ProfileV4 extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                   ),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => EditProfile(profile: ctrl.currentUserProfile,)),
-                    );
+                  onTap: () async {
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //       builder: (context) => EditProfile(
+                    //             profile: ctrl.currentUserProfile,
+                    //           )),
+                    // );
+                    await Get.to(EditProfile(
+                      profile: ctrl.currentUserProfile,
+                    ));
+                    refreshData();
                   },
                   hoverColor: Colors.grey,
                   focusColor: Colors.grey,
@@ -196,7 +242,7 @@ class ProfileV4 extends StatelessWidget {
                 GestureDetector(
                   onTap: () {
                     ctrl.logout();
-                    Get.to(() => Login());
+                    Get.off(() => Login());
                   },
                   child: ListTile(
                     leading: Icon(
@@ -221,22 +267,16 @@ class ProfileV4 extends StatelessWidget {
         ),
       ),
       body: SlidingUpPanel(
-        maxHeight: 400,
+        maxHeight: 350,
         minHeight: 150,
         color: Colors.transparent,
         parallaxEnabled: true,
         // parallaxOffset: 0.5,
         controller: panelController,
-        body: GestureDetector(
-          onTap: () {
-            print('img');
-          },
-          child:
-              CachedNetworkImage(imageUrl: 'http://192.168.1.2:8000/${ctrl.currentUserProfile.imageUrl}',fit: BoxFit.cover,)
-          //     Image(
-          //   image: AssetImage('images/David.jpg'),
-          //   fit: BoxFit.cover,
-          // ),
+        body: CachedNetworkImage(
+          imageUrl:
+              'http://192.168.1.2:8000/${ctrl.currentUserProfile.imageUrl}',
+          fit: BoxFit.cover,
         ),
         panelBuilder: (ScrollController scroll) {
           return Column(
@@ -349,7 +389,8 @@ class ProfileV4 extends StatelessWidget {
                               children: [
                                 Text(
                                   // 'David Brooks',
-                                  '${ctrl.currentUserProfile.firstName} '+'${ctrl.currentUserProfile.lastName}',
+                                  '${ctrl.currentUserProfile.firstName} ' +
+                                      '${ctrl.currentUserProfile.lastName}',
                                   style: TextStyle(
                                     // color: Colors.white,
                                     color: Theme.of(context).primaryColor,
@@ -372,12 +413,16 @@ class ProfileV4 extends StatelessWidget {
                               ],
                             ),
                             OutlinedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => EditProfile(profile: ctrl.currentUserProfile,)),
-                                );
+                              onPressed: () async {
+                                // Navigator.push(
+                                //   context,
+                                //   MaterialPageRoute(
+                                //       builder: (context) => EditProfile(profile: ctrl.currentUserProfile,)),
+                                // );
+                                await Get.to(() => EditProfile(
+                                      profile: ctrl.currentUserProfile,
+                                    ));
+                                refreshData();
                               },
                               child: Text(
                                 // 'Edit Profile',
@@ -405,10 +450,6 @@ class ProfileV4 extends StatelessWidget {
                           children: [
                             Text(
                               ctrl.currentUserProfile.bio,
-                              // 'Syrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim Morrison   Syrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim MorrisonSyrian..\nIT ●Arab International University●\nOld enough to know better 😶\n"Where\'s your will to be weird?" - Jim Morrison',
-                              // 'Syrian..\n19 Years old\nAIU Arab International University\Love Music, Art, Swimming, and rkoob al5el',
-                              // 'Syrian..\n18 Years old\nAIU Arab International University\nLove Music, Art, Swimming, and rkoob al5el\nOld enough to know better 😶\nEvery day brings an opportunity to do something legendary.\n"Where\'s your will to be weird?" - Jim Morrison',
-
                               style: TextStyle(
                                 // color: Colors.white,
                                 color: Theme.of(context).primaryColor,
@@ -436,7 +477,11 @@ class ProfileV4 extends StatelessWidget {
                                   //     builder: (context) => ProfilePosts(),
                                   //   ),
                                   // );
-                                  Get.to(()=>ProfilePosts(userID: ctrl.currentUserProfile.userID));
+                                  Get.to(
+                                    () => ProfilePosts(
+                                      userID: ctrl.currentUserProfile.userID,
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   // 'User posts',

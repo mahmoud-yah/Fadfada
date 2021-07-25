@@ -19,8 +19,10 @@ import 'package:dio/dio.dart' as dio;
 
 class PostContainer extends StatefulWidget {
   final Post post;
+  final bool isMe;
 
-  const PostContainer({Key key, @required this.post}) : super(key: key);
+  const PostContainer({Key key, @required this.post, this.isMe = false})
+      : super(key: key);
 
   @override
   _PostContainerState createState() => _PostContainerState();
@@ -45,7 +47,10 @@ class _PostContainerState extends State<PostContainer> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _PostHeader(post: widget.post),
+                _PostHeader(
+                  post: widget.post,
+                  isMe: widget.isMe,
+                ),
                 const SizedBox(height: 6.0),
                 Text(
                   widget.post.caption,
@@ -75,7 +80,9 @@ class _PostContainerState extends State<PostContainer> {
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    child: CachedNetworkImage(imageUrl: 'http://192.168.1.2:8000/${widget.post.imageUrl}'),
+                    child: CachedNetworkImage(
+                        imageUrl:
+                            'http://192.168.1.2:8000/${widget.post.imageUrl}'),
                     // child: CachedNetworkImage(imageUrl: 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
                   ),
                 )
@@ -95,8 +102,10 @@ class _PostContainerState extends State<PostContainer> {
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     // child: CachedNetworkImage(imageUrl: post.imageUrl),
                     child: CachedNetworkImage(
-                        imageUrl:
-                            'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png'),
+                      imageUrl:
+                          // 'https://www.apkmod.co/wp-content/uploads/2020/03/Fadfada-Chat-Rooms.png',
+                          'https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/122464299_114797577087656_2560421644886291278_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=I3wh-R1OFE0AX-xeg9X&_nc_ht=scontent-frt3-1.xx&oh=8e51be0efb21c00f1ebec924a97e8185&oe=6122AD39',
+                    ),
                   ),
                 ),
 
@@ -132,13 +141,6 @@ class _PostContainerState extends State<PostContainer> {
                     GestureDetector(
                       onTap: () {
                         likePost();
-                        setState(() {
-                          if (widget.post.isLiked == false) {
-                            widget.post.likes = widget.post.likes + 1;
-                          } else
-                            widget.post.likes = widget.post.likes - 1;
-                          widget.post.isLiked = !widget.post.isLiked;
-                        });
                       },
                       child: Icon(
                         //   Icons.favorite_border,
@@ -246,16 +248,23 @@ class _PostContainerState extends State<PostContainer> {
     // if(data['success']==true){
     print(response.statusCode);
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Post liked successfully',
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          backgroundColor: Theme.of(context).backgroundColor,
-          padding: EdgeInsets.only(bottom: 10),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text(
+      //       'Post liked successfully',
+      //       style: TextStyle(color: Theme.of(context).primaryColor),
+      //     ),
+      //     backgroundColor: Theme.of(context).backgroundColor,
+      //     padding: EdgeInsets.only(bottom: 10),
+      //   ),
+      // );
+      setState(() {
+        if (widget.post.isLiked == false) {
+          widget.post.likes = widget.post.likes + 1;
+        } else
+          widget.post.likes = widget.post.likes - 1;
+        widget.post.isLiked = !widget.post.isLiked;
+      });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -274,14 +283,16 @@ class _PostContainerState extends State<PostContainer> {
 class _PostHeader extends StatelessWidget {
   final Controller ctrl = Get.find();
 
+  final bool isMe;
   final Post post;
 
   _PostHeader({
     Key key,
     @required this.post,
+    this.isMe = false,
   }) : super(key: key);
 
-  void savePost(BuildContext context) async {
+  void savePost() async {
     // var url = Uri.parse('http://10.0.2.2:8000/api/savedPost');
     var url = Uri.parse('http://192.168.1.2:8000/api/savedPost');
     http.Response response = await http.post(url,
@@ -289,13 +300,46 @@ class _PostHeader extends StatelessWidget {
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
     var data = jsonDecode(response.body);
     if (data['success'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(Get.context).showSnackBar(
         SnackBar(
           content: Text(
             'Post saved successfully',
-            style: TextStyle(color: Theme.of(context).primaryColor),
+            style: TextStyle(color: Theme.of(Get.context).primaryColor),
           ),
-          backgroundColor: Theme.of(context).backgroundColor,
+          backgroundColor: Theme.of(Get.context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    }
+  }
+
+  void deletePost() async {
+    var url = Uri.parse('http://192.168.1.2:8000/api/posts/${post.postID}');
+    http.Response response = await http.delete(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+
+    // var data = jsonDecode(response.body);
+    // if(data['success']==true){
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(Get.context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Post deleted successfully',
+            style: TextStyle(color: Theme.of(Get.context).primaryColor),
+          ),
+          backgroundColor: Theme.of(Get.context).backgroundColor,
+          padding: EdgeInsets.only(bottom: 10),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(Get.context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Something went wrong.',
+            style: TextStyle(color: Theme.of(Get.context).primaryColor),
+          ),
+          backgroundColor: Theme.of(Get.context).backgroundColor,
           padding: EdgeInsets.only(bottom: 10),
         ),
       );
@@ -303,9 +347,7 @@ class _PostHeader extends StatelessWidget {
   }
 
   void reportPost(BuildContext context) async {
-    // var url = Uri.parse('http://10.0.2.2:8000/api/report');
     var url = Uri.parse('http://192.168.1.2:8000/api/report');
-    print('reporting');
     http.Response response = await http.post(url,
         body: {'post_id': post.postID.toString(), 'description': ' '},
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
@@ -350,7 +392,8 @@ class _PostHeader extends StatelessWidget {
           },
           child: ProfileAvatar(
               imageUrl:
-                  'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                  // 'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+                  'http://192.168.1.2:8000/${post.imageProfile}'),
         ),
         const SizedBox(
           width: 8.0,
@@ -391,62 +434,63 @@ class _PostHeader extends StatelessWidget {
             ],
           ),
         ),
-        // IconButton(
-        //   icon: Icon(
-        //     Icons.more_vert,
-        //     // color: Colors.white,
-        //     color: Theme.of(context).primaryColor,
-        //   ),
-        //   onPressed: () => print('more'),
-        // ),
-        PopupMenuButton(
-          onSelected: (result) {
-            if (result == 0) {
-              // print('Call SaveAPI');
-              savePost(context);
-            } else if (result == 1) {
-              print('post.userid: ' + post.userID.toString());
-              print('ctrl.userid: ' + ctrl.currentUserProfile.userID);
-              if (post.userID.toString() ==
-                  ctrl.currentUserProfile.userID.toString()) {
-                Get.to(() => EditPost(
-                      post: post,
-                    ));
-              } else
-                print('You can only edit your own posts!');
-            } else
-              Get.to(() => (ReportPost(post: post)));
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              child: Text(
-                'Save',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+        isMe
+            ? PopupMenuButton(
+                onSelected: (result) {
+                  if (result == 0) {
+                    Get.to(() => EditPost(post: post));
+                  } else
+                    deletePost();
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Text(
+                      'Edit',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    value: 0,
+                  ),
+                  PopupMenuItem(
+                    child: Text(
+                      'Delete',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    value: 1,
+                  ),
+                ],
+              )
+            : PopupMenuButton(
+                onSelected: (result) {
+                  if (result == 0) {
+                    savePost();
+                  } else
+                    Get.to(() => (ReportPost(post: post)));
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Text(
+                      'Save',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    value: 0,
+                  ),
+                  PopupMenuItem(
+                    child: Text(
+                      'Report',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    value: 1,
+                  ),
+                ],
               ),
-              value: 0,
-            ),
-            PopupMenuItem(
-              child: Text(
-                'Edit',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              value: 1,
-            ),
-            PopupMenuItem(
-              child: Text(
-                'Report',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              value: 2,
-            ),
-          ],
-        ),
       ],
     );
   }

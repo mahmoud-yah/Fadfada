@@ -273,7 +273,7 @@ class _CommentHeader extends StatelessWidget {
         // ProfileAvatar(imageUrl: post.imageUrl),
         ProfileAvatar(
             imageUrl:
-                'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png'),
+            'http://192.168.1.2:8000/${comment.imageUrl}'),
         const SizedBox(
           width: 12.0,
         ),
