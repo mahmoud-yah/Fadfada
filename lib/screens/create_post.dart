@@ -15,18 +15,23 @@ class CreatePost extends StatefulWidget {
 }
 
 class _CreatePostState extends State<CreatePost> {
-   TextEditingController postController = TextEditingController();
+  TextEditingController postController = TextEditingController();
 
-   TextEditingController imageController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+
+  int _typeValue;
+  int _tagValue;
 
   final Controller ctrl = Get.find();
 
-  void addPost(postText) async{
+  void addPost(postText) async {
     // var url = Uri.parse('http://10.0.2.2:8000/api/posts');
     var url = Uri.parse('http://192.168.1.2:8000/api/posts');
-    http.Response response = await http.post(url,headers: {HttpHeaders.authorizationHeader:'Bearer ${ctrl.token}'},body: {'text':postText,'status':'happy'});
+    http.Response response = await http.post(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'},
+        body: {'text': postText, 'status': 'happy'});
     print(response.body);
-    if(jsonDecode(response.body)['success']==true){
+    if (jsonDecode(response.body)['success'] == true) {
       Get.back();
     }
   }
@@ -107,10 +112,11 @@ class _CreatePostState extends State<CreatePost> {
                       children: [
                         Text(
                           // 'David Brooks',
-                          '${ctrl.currentUserProfile.firstName} '+'${ctrl.currentUserProfile.lastName}',
+                          '${ctrl.currentUserProfile.firstName} ' +
+                              '${ctrl.currentUserProfile.lastName}',
                           style: TextStyle(
                               // color: Colors.white,
-                            color: Theme.of(context).primaryColor,
+                              color: Theme.of(context).primaryColor,
                               fontSize: 18.0,
                               fontWeight: FontWeight.bold),
                         ),
@@ -131,6 +137,58 @@ class _CreatePostState extends State<CreatePost> {
                     ),
                   ],
                 ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DropdownButton(
+                    value: _typeValue,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(
+                          'Trouble',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                        value: 1,
+                      ),
+                      DropdownMenuItem(
+                        child: Text(
+                          'Experiment',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                        value: 2,
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _typeValue = value;
+                      });
+                    },
+                    hint: Text('Select a type'),
+                  ),
+
+                  DropdownButton(
+                    value: _tagValue,
+                    items: [
+                      DropdownMenuItem(
+                        child: Text(
+                          'Abuse',
+                          style:
+                              TextStyle(color: Theme.of(context).primaryColor),
+                        ),
+                        value: 1,
+                      )
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        _tagValue = value;
+                      });
+                    },
+                    hint: Text('Select a tag'),
+                  ),
+                ],
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),

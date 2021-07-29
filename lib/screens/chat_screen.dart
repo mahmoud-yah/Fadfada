@@ -1,16 +1,20 @@
 // import 'dart:html';
 
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/models/message_model.dart';
-import 'package:intro_app/models/user_model.dart';
+import 'package:intro_app/models/user_model.dart' as userModel;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
-  final User user;
+  final userModel.User user;
 
   ChatScreen({this.user});
 
@@ -19,6 +23,45 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+  final _firestore = FirebaseFirestore.instance;
+  final _auth = FirebaseAuth.instance;
+  User loggedIn;
+
+  void getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if(user!=null) {
+        loggedIn = user;
+        print(loggedIn.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // void getMessages() async{
+  //
+  //
+  //   final messages = await _firestore.collection('messages').get();
+  //    for(var message in  messages.docs){
+  //      print(message.data());
+  //    }
+  // }
+
+  void messagesStream() async{
+    await for (var snapshot in _firestore.collection('messages').snapshots()){
+      for(var message in  snapshot.docs){
+        print(message.data());
+      }
+    }
+  }
+
   _buildMessage(Message message, bool isMe) {
     // Color selectedColor = Colors.black;
     return Row(
@@ -52,17 +95,17 @@ class _ChatScreenState extends State<ChatScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                message.time,
-                style: TextStyle(
-                    // color: Colors.white,
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 11.0,
-                    fontWeight: FontWeight.w600),
-              ),
-              SizedBox(
-                height: 8.0,
-              ),
+              // Text(
+              //   message.time,
+              //   style: TextStyle(
+              //       // color: Colors.white,
+              //       color: Theme.of(context).primaryColor,
+              //       fontSize: 11.0,
+              //       fontWeight: FontWeight.w600),
+              // ),
+              // SizedBox(
+              //   height: 8.0,
+              // ),
               Text(
                 message.text,
                 style: TextStyle(
@@ -74,34 +117,38 @@ class _ChatScreenState extends State<ChatScreen> {
             ],
           ),
         ),
-        isMe
-            ? Text('')
-            : IconButton(
-                icon: message.isLiked
-                    ? Icon(
-                        Icons.favorite,
-                        color: Colors.red,
-                      )
-                    : Icon(
-                        Icons.favorite_border,
-                        color: Colors.blueGrey,
-                      ),
-                onPressed: () {
-                  setState(() {
-                    // message.isLiked=!message.isLiked;
-                  });
-                }),
+        // isMe
+        //     ? Text('')
+        //     : IconButton(
+        //         icon: message.isLiked
+        //             ? Icon(
+        //                 Icons.favorite,
+        //                 color: Colors.red,
+        //               )
+        //             : Icon(
+        //                 Icons.favorite_border,
+        //                 color: Colors.blueGrey,
+        //               ),
+        //         onPressed: () {
+        //           setState(() {
+        //             // message.isLiked=!message.isLiked;
+        //           });
+        //         }),
       ],
     );
   }
 
   _buildMessageComposer() {
-    File _image;
+    XFile _image;
     final _picker = ImagePicker();
-    Future getImage() async{
-      final image = await _picker.getImage(source: ImageSource.gallery);
-      // _image=image;
+    Future getImage() async {
+      final image = await _picker.pickImage(source: ImageSource.gallery);
+      _image=image;
     }
+
+    TextEditingController messageTextController;
+    var message;
+
     return Container(
       // margin: EdgeInsets.symmetric(horizontal: 50.0,vertical: 25.0),
       padding: EdgeInsets.symmetric(horizontal: 8.0),
@@ -129,11 +176,14 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             iconSize: 25.0,
             onPressed: () {
-              getImage();
+              // getImage();
+              messagesStream();
             },
           ),
           Expanded(
               child: TextField(
+                onChanged: (value){message=value;},
+                controller: messageTextController,
             style: TextStyle(
               color: Colors.white,
               // color: Theme.of(context).primaryColor,
@@ -155,6 +205,12 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             iconSize: 25.0,
             onPressed: () {
+              // print(message);
+
+              _firestore.collection('messages').add({
+                'text':message,
+                'sender':loggedIn.email,
+              });
             },
           ),
         ],
@@ -225,16 +281,36 @@ class _ChatScreenState extends State<ChatScreen> {
                   topRight: Radius.circular(30.0),
                   topLeft: Radius.circular(30.0),
                 ),
-                child: ListView.builder(
-                  reverse: true,
-                  padding: EdgeInsets.only(top: 15.0),
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final message = messages[index];
-                    final bool isMe = message.sender.id == currentUser.id;
-                    return _buildMessage(message, isMe);
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _firestore.collection('messages').snapshots(),
+                  builder: (context,snapshot){
+                    if(!snapshot.hasData){
+                      return Center(child: CircularProgressIndicator());
+                    }
+                      final messages = snapshot.data.docs;
+                      List<Text> messageWidgets = [];
+                      for(var message in messages){
+
+
+                        final dataHolder = Map.from(message.data());
+                        final messageText = dataHolder['text'];
+                        final messageSender = dataHolder['sender'];
+                        final messageWidget = Text('$messageText from $messageSender');
+                        messageWidgets.add(messageWidget);
+                      }
+                      return ListView(children: messageWidgets,);
                   },
                 ),
+                // ListView.builder(
+                //   reverse: true,
+                //   padding: EdgeInsets.only(top: 15.0),
+                //   itemCount: messages.length,
+                //   itemBuilder: (BuildContext context, int index) {
+                //     final message = messages[index];
+                //     final bool isMe = message.sender.id == currentUser.id;
+                //     return _buildMessage(message, isMe);
+                //   },
+                // ),
               ),
             ),
           ),

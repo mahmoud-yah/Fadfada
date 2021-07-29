@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,6 +32,7 @@ class ProfileV4 extends StatefulWidget {
 }
 
 class _ProfileV4State extends State<ProfileV4> {
+  final _auth = FirebaseAuth.instance;
   final panelController = PanelController();
 
   // UserProfile profile = UserProfile();
@@ -242,6 +244,11 @@ class _ProfileV4State extends State<ProfileV4> {
                 GestureDetector(
                   onTap: () {
                     ctrl.logout();
+                    try {
+                      _auth.signOut();
+                    }catch(e){
+                      print(e);
+                    }
                     Get.off(() => Login());
                   },
                   child: ListTile(
@@ -448,18 +455,24 @@ class _ProfileV4State extends State<ProfileV4> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              ctrl.currentUserProfile.bio,
-                              style: TextStyle(
-                                // color: Colors.white,
-                                color: Theme.of(context).primaryColor,
-                                letterSpacing: 0.5,
-                                fontSize: 14.5,
-                                height: 1.25,
-                                // fontWeight: FontWeight.w400,
-                                // textBaseline: TextBaseline.ideographic,
+                            SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Container(
+                                constraints: BoxConstraints(maxHeight: 100),
+                                child: Text(
+                                  ctrl.currentUserProfile.bio+' dslfdlfkl dskfl kfsdl kfsdl kflsd kflsdk lsd klsk ldskfl sdk lksl ksdlfk skdfkgd fdkj gkdjg kdfjgkdjf kdfj kgdjgk djk gjfdk gjdk jgfdkj gkdfj kdf jkd jkd jfdk jdk jdkfjgdkjfs sakflsdkfgdk lgjdlk ldkf lsdk flsdk lfdsk flskd lfksd lksdl ksdlfk ls kfls kfsdl kfdlkfdsl kslksdl',
+                                  style: TextStyle(
+                                    // color: Colors.white,
+                                    color: Theme.of(context).primaryColor,
+                                    letterSpacing: 0.5,
+                                    fontSize: 14.5,
+                                    height: 1.25,
+                                    // fontWeight: FontWeight.w400,
+                                    // textBaseline: TextBaseline.ideographic,
+                                  ),
+                                  maxLines: 8,
+                                ),
                               ),
-                              maxLines: 8,
                             ),
                           ],
                         ),

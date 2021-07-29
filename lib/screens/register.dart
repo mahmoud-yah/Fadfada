@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intro_app/config/controller.dart';
 import 'package:intro_app/models/normal_post.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // import 'login.dart';
 // import 'package:intro_app/screens/login.dart';
@@ -21,6 +22,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+  final _auth = FirebaseAuth.instance;
   Controller ctrl = Get.find();
   TextEditingController nameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -48,11 +50,33 @@ class _RegisterState extends State<Register> {
     print(token);
     if (jsonDecode(response.body)['success'] == true) {
       await getPosts();
-      setState(() {
-        inProgress = false;
-      });
-      Get.to(() => NavScreen());
+      getProfile();
+      // setState(() {
+      //   inProgress = false;
+      // });
+      Get.off(() => NavScreen());
     }
+  }
+
+  Future getProfile() async {
+    // var url = Uri.parse('http://10.0.2.2:8000/api/profile');
+    var url = Uri.parse('http://192.168.1.2:8000/api/profile');
+    http.Response response = await http.get(url,
+        headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+    var data = jsonDecode(response.body);
+    var dataHolder = data['data'];
+    ctrl.addProfileInfo(
+        dataHolder['id'].toString(),
+        dataHolder['user_id'].toString(),
+        dataHolder['first_name'],
+        dataHolder['second_name'],
+        dataHolder['image'],
+        dataHolder['address'],
+        dataHolder['gender'],
+        dataHolder['phone'],
+        dataHolder['bio'],
+        dataHolder['date_of_birth']);
+    print(ctrl.currentUserProfile.userID);
   }
 
   Future getPosts() async {
@@ -264,7 +288,7 @@ class _RegisterState extends State<Register> {
                         Padding(
                           padding: const EdgeInsets.all(25.0),
                           child: TextButton(
-                            onPressed: () {
+                            onPressed: () async{
                               print(nameController.text);
                               print(emailController.text);
                               print(passwordController.text);
@@ -275,11 +299,18 @@ class _RegisterState extends State<Register> {
                               //     builder: (context) => NavScreen(),
                               //   ),
                               // );
+
                               getData(
                                   nameController.text,
                                   emailController.text,
                                   passwordController.text,
                                   cPasswordController.text);
+
+                              try{
+                                final newUser = await _auth.createUserWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                              }catch(e){
+                                print(e);
+                              }
                             },
                             child: Padding(
                               padding: const EdgeInsets.symmetric(

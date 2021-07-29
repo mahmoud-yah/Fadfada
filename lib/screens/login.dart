@@ -15,6 +15,7 @@ import 'package:intro_app/textField.dart';
 import 'package:intro_app/screens/screens.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -26,6 +27,8 @@ class _LoginState extends State<Login> {
   void initState() {
     super.initState();
   }
+
+  final _auth = FirebaseAuth.instance;
 
   final ctrl = Get.put(Controller());
   TextEditingController emailController = TextEditingController();
@@ -281,7 +284,7 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Navigator.pushReplacement(
                             //   context,
                             //   MaterialPageRoute(
@@ -290,6 +293,13 @@ class _LoginState extends State<Login> {
                             // );
                             getData(
                                 emailController.text, passwordController.text);
+                            try{
+                              final user = await _auth.signInWithEmailAndPassword(email: emailController.text, password: passwordController.text);
+                              print(user);
+                            }catch(e){
+                              print(e);
+                            }
+
                             // Get.to(()=>NavScreen());
                           },
                           child: Padding(

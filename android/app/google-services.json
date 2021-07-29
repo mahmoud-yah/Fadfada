@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "581818620233",
+    "project_id": "fadfada-chat",
+    "storage_bucket": "fadfada-chat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581818620233:android:522d297acb165a5b5b2298",
+        "android_client_info": {
+          "package_name": "com.fadfada.intro_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "581818620233-mn1a5gip5dno0m2qad9sh5k84qo705mu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUtBvpKofMrqkWJKLFtDVcS1FCMUadvkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "581818620233-mn1a5gip5dno0m2qad9sh5k84qo705mu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

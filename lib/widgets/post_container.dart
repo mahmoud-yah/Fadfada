@@ -258,25 +258,31 @@ class _PostContainerState extends State<PostContainer> {
       //     padding: EdgeInsets.only(bottom: 10),
       //   ),
       // );
-      setState(() {
-        if (widget.post.isLiked == false) {
-          widget.post.likes = widget.post.likes + 1;
-        } else
-          widget.post.likes = widget.post.likes - 1;
-        widget.post.isLiked = !widget.post.isLiked;
-      });
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            'Something went wrong.',
-            style: TextStyle(color: Theme.of(context).primaryColor),
-          ),
-          backgroundColor: Theme.of(context).backgroundColor,
-          padding: EdgeInsets.only(bottom: 10),
-        ),
-      );
+
     }
+    else unlikePost();
+    setState(() {
+      if (widget.post.isLiked == false) {
+        widget.post.likes = widget.post.likes + 1;
+      } else
+        widget.post.likes = widget.post.likes - 1;
+      widget.post.isLiked = !widget.post.isLiked;
+    });
+  }
+
+  unlikePost() async {
+    var url = Uri.parse('http://192.168.1.2:8000/api/like/${ctrl.currentUserProfile.userID}');
+    var request = http.Request("DELETE", url);
+    request.body = jsonEncode({'post_id':widget.post.postID,'like':false});
+    request.headers[HttpHeaders.authorizationHeader] = 'Bearer ${ctrl.token}';
+    request.headers[HttpHeaders.acceptHeader] = 'application/json';
+    request.headers[HttpHeaders.contentTypeHeader]='application/json';
+    request.headers[HttpHeaders.acceptEncodingHeader]='gzip, deflate, br';
+    var response = await request.send();
+    if(response.statusCode==200){
+      print('Disliked');
+    }
+    else print(response.statusCode);
   }
 }
 

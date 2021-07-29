@@ -64,6 +64,7 @@ class _SavedState extends State<Saved> {
         posts.add(post);
         print(post);
       }
+      posts=List.from(posts.reversed);
     } catch (e) {
       print(e);
     }

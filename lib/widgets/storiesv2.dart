@@ -228,8 +228,8 @@ class StoriesTest extends StatelessWidget {
                         index == 0
                             ? Text('Add a story')
                             : Padding(
-                                padding: index == favorites.length
-                                    ? EdgeInsets.only(bottom: 8.0)
+                                padding: index == stories.length
+                                    ? EdgeInsets.only(bottom: 160.0)
                                     : EdgeInsets.zero,
                                 child: Text(
                                   stories[index - 1].firstName,

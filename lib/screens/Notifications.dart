@@ -38,35 +38,44 @@ class _NotificationsState extends State<Notifications> {
 
   Future<String> getNotifications() async {
     notifications.clear();
+
     // ctrl.posts
+    print(ctrl.currentUserProfile.userID);
     // var url = Uri.parse('http://10.0.2.2:8000/api/notification/${ctrl.currentUserProfile.userID.toString()}');
-    var url = Uri.parse('http://192.168.1.2:8000/api/notification/${ctrl.currentUserProfile.userID.toString()}');
+    var url = Uri.parse(
+        'http://192.168.1.2:8000/api/notification/${ctrl.currentUserProfile.userID}');
     http.Response response = await http.get(url,
         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
-    var data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
 
-    var dataHolder = data['data'];
-    // print(dataHolder[0]['text']);
-    for (var i = 0; i < dataHolder.length; i++) {
-      PostNotification notification = PostNotification(
-        notificationID: dataHolder[i]['id'].toString(),
-        postID: dataHolder[i]['post_id'].toString(),
-        userID: dataHolder[i]['user_id'].toString(),
-        likeID: dataHolder[i]['like_id'].toString(),
-        commentID: dataHolder[i]['comment_id'].toString(),
-        imageUrl: dataHolder[i]['image'],
-        firstName: dataHolder[i]['first_name'],
-        lastName: dataHolder[i]['second_name'],
-        type: dataHolder[i]['description'],
-        fromUserID: dataHolder[i]['from_user_id'].toString(),
-        time: dataHolder[i]['created_at'],
-        seen: dataHolder[i]['seen'] == 'false' ? false : true,
-      );
-      // ctrl.addPost(post);
-      notifications.add(notification);
-      // print(data['data'][i]['text']);
+      var dataHolder = data['data'];
+      // print(dataHolder[0]['text']);
+      print(response.statusCode);
+      for (var i = 0; i < dataHolder.length; i++) {
+        PostNotification notification = PostNotification(
+          notificationID: dataHolder[i]['id'].toString(),
+          postID: dataHolder[i]['post_id'].toString(),
+          userID: dataHolder[i]['user_id'].toString(),
+          likeID: dataHolder[i]['like_id'].toString(),
+          commentID: dataHolder[i]['comment_id'].toString(),
+          imageUrl: dataHolder[i]['image'],
+          firstName: dataHolder[i]['first_name'],
+          lastName: dataHolder[i]['second_name'],
+          type: dataHolder[i]['description'],
+          fromUserID: dataHolder[i]['from_user_id'].toString(),
+          time: dataHolder[i]['created_at'],
+          seen: dataHolder[i]['seen'] == 'false' ? false : true,
+        );
+        // ctrl.addPost(post);
+
+        notifications.add(notification);
+        // print(data['data'][i]['text']);
+      }
+      notifications = List.from(notifications.reversed);
+    } else {
+      print('no notifications');
     }
-    notifications = List.from(notifications.reversed);
     // ctrl.posts = List.from(ctrl.posts.reversed);
     // print(ctrl.posts.length);
     return 'ok';
@@ -204,18 +213,19 @@ class NotificationContainer extends StatelessWidget {
         // mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: CircleAvatar(
-              radius: 28,
-              backgroundImage: CachedNetworkImageProvider('http://192.168.1.2:8000/${notification.imageUrl}'),
-            )
-            // ProfileAvatar(
-            //   // imageUrl: notification.imageUrl,
-            //   imageUrl:
-            //       'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
-            //   // radius: 35,
-            // ),
-          ),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: CircleAvatar(
+                radius: 28,
+                backgroundImage: CachedNetworkImageProvider(
+                    'http://192.168.1.2:8000/${notification.imageUrl}'),
+              )
+              // ProfileAvatar(
+              //   // imageUrl: notification.imageUrl,
+              //   imageUrl:
+              //       'https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png',
+              //   // radius: 35,
+              // ),
+              ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -250,7 +260,9 @@ class NotificationContainer extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Text(
                 notification.time,
                 style: TextStyle(fontSize: 13.0, color: Colors.white),

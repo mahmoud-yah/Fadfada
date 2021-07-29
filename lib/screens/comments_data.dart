@@ -132,6 +132,7 @@ class _GetCommentsState extends State<GetComments> {
           AppLocalizations.of(context).translate("comments"),
           style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 25),
         ),
+        iconTheme: Theme.of(context).iconTheme,
         centerTitle: true,
       ),
 
