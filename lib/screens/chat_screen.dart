@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +13,11 @@ import 'package:intro_app/app_localizations.dart';
 import 'package:intro_app/models/message_model.dart';
 import 'package:intro_app/models/user_model.dart' as userModel;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intro_app/screens/Notifications.dart';
+import 'package:http/http.dart' as http;
+
+final _firestore = FirebaseFirestore.instance;
+User loggedIn;
 
 class ChatScreen extends StatefulWidget {
   final userModel.User user;
@@ -23,20 +29,19 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-
   @override
   void initState() {
     super.initState();
     getCurrentUser();
   }
-  final _firestore = FirebaseFirestore.instance;
+
   final _auth = FirebaseAuth.instance;
-  User loggedIn;
+
 
   void getCurrentUser() async {
     try {
       final user = _auth.currentUser;
-      if(user!=null) {
+      if (user != null) {
         loggedIn = user;
         print(loggedIn.email);
       }
@@ -54,9 +59,9 @@ class _ChatScreenState extends State<ChatScreen> {
   //    }
   // }
 
-  void messagesStream() async{
-    await for (var snapshot in _firestore.collection('messages').snapshots()){
-      for(var message in  snapshot.docs){
+  void messagesStream() async {
+    await for (var snapshot in _firestore.collection('messages').snapshots()) {
+      for (var message in snapshot.docs) {
         print(message.data());
       }
     }
@@ -143,10 +148,10 @@ class _ChatScreenState extends State<ChatScreen> {
     final _picker = ImagePicker();
     Future getImage() async {
       final image = await _picker.pickImage(source: ImageSource.gallery);
-      _image=image;
+      _image = image;
     }
 
-    TextEditingController messageTextController;
+    TextEditingController messageTextController = TextEditingController();
     var message;
 
     return Container(
@@ -171,7 +176,7 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
             icon: Icon(
               Icons.photo,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               // color: Colors.white,
             ),
             iconSize: 25.0,
@@ -182,8 +187,10 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Expanded(
               child: TextField(
-                onChanged: (value){message=value;},
-                controller: messageTextController,
+            onChanged: (value) {
+              message = value;
+            },
+            controller: messageTextController,
             style: TextStyle(
               color: Colors.white,
               // color: Theme.of(context).primaryColor,
@@ -193,23 +200,26 @@ class _ChatScreenState extends State<ChatScreen> {
               hintText: AppLocalizations.of(context).translate("sendMessage"),
               hintStyle: TextStyle(
                 // color: Colors.white,
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           )),
           IconButton(
             icon: Icon(
               Icons.send,
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).primaryColor,
               // color: Colors.white,
             ),
             iconSize: 25.0,
             onPressed: () {
               // print(message);
-
+              messageTextController.clear();
               _firestore.collection('messages').add({
-                'text':message,
-                'sender':loggedIn.email,
+                'text': message,
+                'id': ctrl.currentUserProfile.userID,
+                'image':ctrl.currentUserProfile.imageUrl,
+                'date':DateTime.now(),
+
               });
             },
           ),
@@ -242,7 +252,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text(
           widget.user.name,
           style: TextStyle(
-            color: Theme.of(context).accentColor,
+            color: Theme.of(context).primaryColor,
             fontSize: 28.0,
             fontWeight: FontWeight.bold,
           ),
@@ -281,26 +291,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   topRight: Radius.circular(30.0),
                   topLeft: Radius.circular(30.0),
                 ),
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: _firestore.collection('messages').snapshots(),
-                  builder: (context,snapshot){
-                    if(!snapshot.hasData){
-                      return Center(child: CircularProgressIndicator());
-                    }
-                      final messages = snapshot.data.docs;
-                      List<Text> messageWidgets = [];
-                      for(var message in messages){
-
-
-                        final dataHolder = Map.from(message.data());
-                        final messageText = dataHolder['text'];
-                        final messageSender = dataHolder['sender'];
-                        final messageWidget = Text('$messageText from $messageSender');
-                        messageWidgets.add(messageWidget);
-                      }
-                      return ListView(children: messageWidgets,);
-                  },
-                ),
+                child: MessagesStream(),
                 // ListView.builder(
                 //   reverse: true,
                 //   padding: EdgeInsets.only(top: 15.0),
@@ -315,6 +306,92 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
           ),
           _buildMessageComposer(),
+        ],
+      ),
+    );
+  }
+}
+
+class MessagesStream extends StatelessWidget {
+  const MessagesStream({Key key}) : super(key: key);
+
+   Future<String> getImageUrl(id) async{
+     var url = Uri.parse('http://192.168.1.2:8000/api/profile/$id');
+     http.Response response = await http.get(url,
+         headers: {HttpHeaders.authorizationHeader: 'Bearer ${ctrl.token}'});
+     var data = jsonDecode(response.body);
+     var dataHolder = data['data'];
+     if(response.statusCode==200)
+       return dataHolder['image'];
+     else return "profile\\image\\160Hf.png";
+   }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('messages').orderBy('date').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(child: CircularProgressIndicator());
+        }
+        final messages = snapshot.data.docs.reversed;
+        List<MessageBubble> messageBubbles = [];
+        for (var message in messages) {
+          final dataHolder = Map.from(message.data());
+          final messageText = dataHolder['text'];
+          final messageSender = dataHolder['id'];
+          final img = dataHolder['image'];
+          final messageBubble = MessageBubble(
+            text: messageText,
+            sender: messageSender,
+            isMe: messageSender==ctrl.currentUserProfile.userID,
+            imageUrl: img,
+          );
+          messageBubbles.add(messageBubble);
+        }
+        return ListView(
+          reverse: true,
+          children: messageBubbles,
+        );
+      },
+    );
+  }
+}
+
+class MessageBubble extends StatelessWidget {
+  const MessageBubble({Key key, this.sender, this.text,this.isMe,this.imageUrl}) : super(key: key);
+
+  final String imageUrl;
+  final String sender;
+  final String text;
+  final bool isMe;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(10.0),
+      child: Column(
+        crossAxisAlignment: isMe?CrossAxisAlignment.end:CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: isMe?MainAxisAlignment.end:MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              isMe?SizedBox.shrink():CircleAvatar(radius: 10,backgroundImage: CachedNetworkImageProvider('http://192.168.1.2:8000/$imageUrl'),),
+              SizedBox(width: 10.0),
+              Material(
+                color: isMe?Color(0xFF9008A6): Color(0xFF3E40450),
+                borderRadius: isMe? BorderRadius.only(topLeft: Radius.circular(30.0),bottomLeft: Radius.circular(30.0),bottomRight: Radius.circular(30.0)) : BorderRadius.only(topRight: Radius.circular(30.0), topLeft: Radius.circular(30.0) ,bottomLeft: Radius.circular(30.0),bottomRight: Radius.circular(30.0)),
+                elevation: 5.0,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+                  child: Text(
+                    text,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );

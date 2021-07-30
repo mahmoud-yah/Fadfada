@@ -460,7 +460,7 @@ class _ProfileV4State extends State<ProfileV4> {
                               child: Container(
                                 constraints: BoxConstraints(maxHeight: 100),
                                 child: Text(
-                                  ctrl.currentUserProfile.bio+' dslfdlfkl dskfl kfsdl kfsdl kflsd kflsdk lsd klsk ldskfl sdk lksl ksdlfk skdfkgd fdkj gkdjg kdfjgkdjf kdfj kgdjgk djk gjfdk gjdk jgfdkj gkdfj kdf jkd jkd jfdk jdk jdkfjgdkjfs sakflsdkfgdk lgjdlk ldkf lsdk flsdk lfdsk flskd lfksd lksdl ksdlfk ls kfls kfsdl kfdlkfdsl kslksdl',
+                                  ctrl.currentUserProfile.bio,
                                   style: TextStyle(
                                     // color: Colors.white,
                                     color: Theme.of(context).primaryColor,

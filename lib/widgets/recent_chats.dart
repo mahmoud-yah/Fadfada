@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_app/screens/chat_screen.dart';
@@ -61,7 +62,7 @@ class RecentChats extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 35.0,
-                              backgroundImage: AssetImage(chat.sender.imageUrl),
+                              backgroundImage: CachedNetworkImageProvider('https://scontent-frt3-1.xx.fbcdn.net/v/t1.6435-9/122464299_114797577087656_2560421644886291278_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=I3wh-R1OFE0AX-xeg9X&_nc_ht=scontent-frt3-1.xx&oh=8e51be0efb21c00f1ebec924a97e8185&oe=6122AD39'),
                             ),
                             SizedBox(
                               width: 10.0,
