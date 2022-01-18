@@ -1,3 +1,8 @@
+The aim of this project is to deliver multi-platform system to help people share their thoughts in a safe community free of any kind of criticism, as well as helping people interact with each other and learn from one another.
+
+
+System Screenshots:
+
 <p>Register screen</p>
 <img src="images/screenshots/Screenshot2.jpg" height="300">
 <p>صفحة انشاء حساب جديد</p>
